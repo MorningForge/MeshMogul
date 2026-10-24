@@ -1,22 +1,17 @@
-# Complete the GitHub Pages launch
+# GitHub Pages publication
 
-Repository creation was rejected by the task's GitHub integration. There is no authorized alternate public repository in this task. The website is complete in this isolated Git checkout; no product files were modified.
+The public website repository is `MorningForge/MeshMogul`. Keep website work separate from the private product repository.
 
-A GitHub identity with repository-creation permission needs to:
+## Review candidates
 
-1. Create **MorningForge/MeshMogul**, **Public**, with no README, license, or gitignore initialization. If that repository now exists, stop and inspect it before pushing; do not overwrite existing work.
-2. From this reviewed website checkout, publish the candidate as its initial `main`:
+Prepare and validate candidate content on a dedicated review branch. Run `python3 tools/check_site.py` and `git diff --check` before committing. A push to a review branch preserves the candidate; it is not a live Pages release. The 1.1.1 reconciliation does not merge, modify, or deploy `main`.
 
-   ```sh
-   git remote add origin https://github.com/MorningForge/MeshMogul.git
-   git push -u origin HEAD:main
-   ```
+## Authorized publication
 
-   Alternatively, download the task's Git bundle, clone it, then run the two commands above from the clone. A bundle preserves the commit and task branch without needing cloud-workspace persistence.
+Publication is a separate action requiring authorization. The existing `.github/workflows/pages.yml` runs on pushes to `main` and on manual workflow dispatch; it checks the site, stages public web files, and deploys with official GitHub Pages Actions. Do not manually dispatch it as part of candidate review.
 
-3. Open the new repository's **Settings → Pages → Build and deployment → Source → GitHub Actions**. If the first workflow ran before this was set, open **Actions → Deploy public website to GitHub Pages → Run workflow → main** (or rerun the failed run).
-4. Wait for the Pages workflow to succeed and use the URL returned by its deployment environment. Verify the home, a nested guide, navigation, and an unknown-path 404 there. No live URL is asserted until that succeeds.
+For an authorized release, verify **Settings → Pages → Build and deployment → Source → GitHub Actions**. After the authorized publication, wait for the Pages workflow to succeed and use its deployment URL to verify the home page, a nested guide, navigation, and an unknown-path 404. Repository existence or a branch push alone does not establish a live deployment.
 
-The intended default host is `https://morningforge.github.io/MeshMogul/`. There is no custom domain configuration. If the returned address differs, reconcile the sitemap and custom 404 paths before launch.
+The configured project address is `https://morningforge.github.io/MeshMogul/`; this document does not claim to have verified live hosting. There is no custom domain configuration. If the deployed address differs, reconcile the sitemap, custom 404 links, and project-path checks before publication.
 
-No installation, product change, secret, paid plan, or new hosting architecture is needed to complete this launch. A repository-creation failure does not authorize pushing into another repository.
+The site needs no installation or build step. The public website deployment is separate from publishing mesh assets in Roblox Studio.
