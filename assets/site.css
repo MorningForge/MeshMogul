@@ -4,6 +4,9 @@
 h1,h2,h3{overflow-wrap:anywhere}
 
 /* Release details stay readable without screenshots or runtime scripts. */
+.hero-visual{min-width:0}
+.hero-mascot{width:144px;margin:0 auto 16px}
+@media(max-width:760px){.hero-mascot{width:112px;margin-bottom:14px}}
 .release-link{display:inline-block;margin-top:4px;color:var(--gold)}
 .release-section{display:grid;grid-template-columns:1fr 1fr;gap:70px;padding:56px 0 64px;border-top:1px solid var(--line)}
 .release-section p{color:var(--muted)}.release-details h3:first-child{margin-top:0}

@@ -2,8 +2,10 @@
 
 Use only supplied, approved originals. Preserve transparency for the MeshMogul
 mascot; do not regenerate or substitute it. Keep the geometric favicon for small
-contexts. The supplied mascot is intended for restrained header and supporting
-home use once its original image file is available to this workspace.
+contexts. `meshmogul-mascot.png` is the approved tipping character with both
+gloves, a bow tie, no cane and no wordmark. It supports the home hero only.
+The original RGBA pixels and transparency are preserved; nonessential embedded
+metadata has been removed.
 
 No current Studio screenshot has been supplied as a downloadable file. The home
 therefore uses the labeled concept diagram and factual release details, without
