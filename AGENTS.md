@@ -1,21 +1,27 @@
 # MeshMogul Public Repository Agent Rules
 
-This repository owns the public MeshMogul website and related public documentation. Product capability claims remain subordinate to the canonical MeshMogul product repository and accepted release evidence.
+This repository owns the public MeshMogul website and public documentation. Product capability claims remain subordinate to the accepted product release evidence.
 
-## Git identity / privacy
+## Git identity
 
-- Every commit created by an agent, Codex task, local worker, or automated MorningForge workflow must use the **MorningForge** identity only. Personal names and personal email addresses are forbidden in Git author or committer metadata unless Will explicitly authorizes that exact identity for that exact commit.
-- Before any commit, do not trust inherited Git, Windows, IDE, container, or workspace identity. Inspect identity sources with `git config --show-origin --show-scope --get-regexp '^user\\.(name|email)$' || true` and inspect any `GIT_AUTHOR_*` / `GIT_COMMITTER_*` environment overrides.
-- For ordinary agent/local Git commits, explicitly pin this worktree/repository before committing:
+- Every agent or automated commit must use exactly `MorningForge <311570204+MorningForge@users.noreply.github.com>` for both author and committer. Alternate names and email addresses are not authorized.
+- Before committing, inspect identity configuration and environment overrides without printing personal values. Pin this repository with:
   - `git config --local user.name "MorningForge"`
   - `git config --local user.email "311570204+MorningForge@users.noreply.github.com"`
-- Immediately before commit, `git var GIT_AUTHOR_IDENT` and `git var GIT_COMMITTER_IDENT` must both resolve to MorningForge with a MorningForge-controlled address. After commit, verify `git show -s --format='author=%an <%ae>%ncommitter=%cn <%ce>%nsha=%H' HEAD`.
-- Approved MorningForge-controlled addresses are the GitHub noreply address above and brand-owned MorningForge mailboxes such as `morningforge@proton.me` / `morningforge@protonmail.com`. A personal mailbox is never acceptable merely because authentication succeeded.
-- Authentication and authorship are separate. GitHub login, Windows credentials, IDE state, or repository ownership do not authorize personal commit metadata.
-- After push, verify the remote commit's author and committer metadata before declaring PASS. If a personal identity appears, STOP; do not merge, release, or continue publication until that commit is rewritten or otherwise removed from reachable branch/tag history as appropriate.
+- Immediately before commit, verify `git var GIT_AUTHOR_IDENT` and `git var GIT_COMMITTER_IDENT` resolve to that exact identity. After commit and push, verify author and committer metadata again. Authentication does not establish authorship.
+- Preserve unrelated work. Stage only task-owned files. Never force-push or rewrite history without explicit authorization.
 
+## Public content and privacy
 
-## Public-content privacy
+- Public identity may use only MorningForge, MeshMogul, or MeshMogul by MorningForge. Refer to a decision maker neutrally as Product Owner.
+- The only authorized public contact email is `morningforge@proton.me`, where intentionally needed. It is not an alternate Git author or committer address.
+- Never publish personal/legal/account names, personal email addresses, personal usernames, machine paths, private workspace URLs, private repository locations, private specifications or internal investigations.
+- Review all tracked text, image content, image metadata and candidate Git metadata before publication. Do not repeat removed personal information in reports, comments or commit messages.
+- Keep third-party license attributions intact; they identify their respective contributors, not MorningForge's public identity.
 
-- Public content must identify the product/company as **MeshMogul** and/or **MorningForge**. Do not publish Will's personal/legal/account name or personal contact information unless he explicitly authorizes that exact public use.
-- Before any public-site release, sweep both content and Git metadata for personal identity leakage.
+## Site and release boundaries
+
+- Preserve semantic HTML, CSS, keyboard access, responsive layout and reduced-motion behavior. No framework, backend, analytics, accounts or unnecessary JavaScript/runtime dependency.
+- Keep supported-input limitations and explicit guided Studio Command Bar publication visible. Do not promise universal conversion, arbitrary texture/PBR baking, automatic publishing, same-ID updates, cloud sync or guaranteed optimization.
+- Run `python3 tools/check_site.py` and perform bounded desktop/mobile review for site changes.
+- Do not modify product source, Creator Store, public main or deploy Pages unless explicitly authorized for that operation. A task-branch push is not merge or deployment authorization.

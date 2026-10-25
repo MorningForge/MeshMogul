@@ -1,7 +1,16 @@
-# Product media
+# Approved public media
 
-Place approved public screenshots and demos here. None have been supplied yet.
+Use only supplied, approved originals. Preserve transparency for the MeshMogul
+mascot; do not regenerate or substitute it. Keep the geometric favicon for small
+contexts. The supplied mascot is intended for restrained header and supporting
+home use once its original image file is available to this workspace.
 
-Replace the clearly labeled home-page placeholder only with a real, reviewed capture. Remove private place names, asset destinations, source paths, account information, and unpublished work before committing. Add useful alt text, a caption identifying what is shown, explicit image dimensions, and compressed web formats. Keep recordings optional so the workflow remains understandable without video.
+No current Studio screenshot has been supplied as a downloadable file. The home
+therefore uses the labeled concept diagram and factual release details, without
+an empty screenshot placeholder or invented runtime capture. Do not present old
+Store posters as evidence of the 1.1.1 interface.
 
-The original `../workflow.svg` is explanatory artwork, not a screenshot or proof of a converted fixture.
+Before adding captures, review visible account/destination/place/source labels
+and image metadata. Remove personal identities, personal paths and unpublished
+work. Add useful alt text, dimensions and factual captions. Self-host compressed
+web images so the site has no external image runtime dependency.

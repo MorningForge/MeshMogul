@@ -4,17 +4,24 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit, unquote
 import re
+import argparse
+import hashlib
+import subprocess
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT_BASE = '/MeshMogul/'
 ORIGIN = 'https://morningforge.github.io'
+STORE = 'https://create.roblox.com/store/asset/126445067739142'
+PUBLIC_EMAIL = 'morningforge@proton.me'
+GIT_EMAIL = '311570204+MorningForge@users.noreply.github.com'
 
 class Document(HTMLParser):
     def __init__(self, source):
         super().__init__(convert_charrefs=True)
         self.links, self.ids, self.headings, self.meta = [], set(), [], {}
         self.errors, self.title, self.language, self.main = [], False, False, False
+        self.resources, self.canonical = [], None
         self.feed(source)
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -28,11 +35,18 @@ class Document(HTMLParser):
             self.ids.add(a['id'])
         if tag == 'img' and 'alt' not in a: self.errors.append('Image missing alt attribute')
         if tag == 'script': self.errors.append('Unexpected JavaScript; this site is script-free')
+        if 'src' in a: self.resources.append(a['src'])
+        if tag == 'link' and a.get('rel') in ('stylesheet', 'icon', 'preload'):
+            self.resources.append(a.get('href', ''))
+        if tag == 'link' and a.get('rel') == 'canonical': self.canonical = a.get('href')
         for key in ('href', 'src'):
             if key in a: self.links.append(a[key])
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check-git-identity', action='store_true', help='Check effective author and committer identity immediately before committing')
+    args = parser.parse_args()
     errors = []
     files = sorted(p for p in ROOT.rglob('*') if p.is_file() and not any(x in p.relative_to(ROOT).parts for x in ('.git', '.local', '_site', '__pycache__')))
     documents = {p: Document(p.read_text()) for p in files if p.suffix == '.html'}
@@ -47,11 +61,20 @@ def main():
         for prev, current in zip(doc.headings, doc.headings[1:]):
             if current > prev + 1: errors.append(name + ': skipped heading level')
         request = PROJECT_BASE + (name[:-10] if name.endswith('index.html') else name)
+        if name != '404.html' and (doc.canonical != ORIGIN + request or doc.meta.get('og:url') != ORIGIN + request):
+            errors.append(name + ': canonical or Open Graph URL does not match route')
+        if not any(ref.endswith('legal/') for ref in doc.links): errors.append(name + ': missing legal footer link')
+        if STORE not in doc.links: errors.append(name + ': missing verified Creator Store CTA')
+        for ref in doc.resources:
+            if urlsplit(ref).scheme or urlsplit(ref).netloc: errors.append(name + ': external runtime resource')
         for ref in doc.links:
             link_count += 1
             parsed = urlsplit(ref)
             if parsed.scheme or parsed.netloc:
+                if ref == 'mailto:' + PUBLIC_EMAIL: continue
                 if parsed.scheme != 'https': errors.append(name + ': unexpected external link scheme')
+                if 'create.roblox.com/store/asset/' in ref and ref != STORE:
+                    errors.append(name + ': unexpected Store asset destination')
                 continue
             url = urlsplit(urljoin(ORIGIN + request, ref))
             if not url.path.startswith(PROJECT_BASE):
@@ -76,7 +99,47 @@ def main():
                 errors.append(name + ': possible credential')
             if p.suffix == '.html' and re.search(r'/workspace/|[A-Z]:\\|docs/product-spec|Codex/Investigations|MeshLab[A-Z]', content):
                 errors.append(name + ': private implementation reference')
+            if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt'):
+                emails = set(re.findall(r'[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}', content))
+                if emails - {PUBLIC_EMAIL, GIT_EMAIL}: errors.append(name + ': unapproved email (value omitted)')
+                if re.search(r'(?:[A-Z]:[\\/]|/(?:Users|home|workspace)/|docs/product-spec|Codex/Investigations)', content):
+                    errors.append(name + ': private location or source reference (value omitted)')
+                repositories = re.findall(r'MorningForge/([A-Za-z0-9_.-]+)', content)
+                if any(repo != 'MeshMogul' for repo in repositories):
+                    errors.append(name + ': unapproved repository reference (value omitted)')
+            if p.suffix == '.html' and '1.1.0' in content and name != 'changelog/index.html':
+                errors.append(name + ': stale version outside historical release notes')
+    for rel in ('index.html', 'changelog/index.html', 'README.md'):
+        if '1.1.1' not in (ROOT / rel).read_text(): errors.append(rel + ': missing current version')
+    css = (ROOT / 'assets/site.css').read_text()
+    if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
+    if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')
+    legal = (ROOT / 'legal/index.html').read_text()
+    notices = (ROOT / 'THIRD_PARTY_NOTICES.md').read_text()
+    canonical_notice = '# MeshMogul — third-party software notices' + notices.split('# MeshMogul — third-party software notices', 1)[1]
+    if hashlib.sha256(canonical_notice.encode()).hexdigest() != '3f230d0ab0c1c21eec8dc62e655149aea942cfe357032c8b25f5e5556b5e0cf6':
+        errors.append('Release notice text differs from the approved full notice document')
+    blocks = re.findall(r'```text\n(.*?)\n```', notices, re.S)
+    rendered = re.findall(r'<pre class="license-text">(.*?)</pre>', legal, re.S)
+    from html import unescape
+    if len(blocks) != 3 or blocks != [unescape(block) for block in rendered]:
+        errors.append('Legal page does not reproduce the three complete notice blocks')
+    expected_notices = {'Copyright (c) 2025 EgoMoose', 'Copyright (c) 2026 EgoMoose', 'Copyright (c) 2025 RiskoZoSlovenska'}
+    if {block.splitlines()[2] for block in blocks} != expected_notices:
+        errors.append('Notice copyright identities or years differ')
+    for block in blocks:
+        if 'Permission is hereby granted' not in block or 'SOFTWARE.' not in block or 'THE SOFTWARE IS PROVIDED "AS IS"' not in block:
+            errors.append('Incomplete MIT permission or disclaimer')
+    workflow = (ROOT / '.github/workflows/pages.yml').read_text()
+    if 'LICENSE.md THIRD_PARTY_NOTICES.md _site/' not in workflow or 'privacy legal _site/' not in workflow:
+        errors.append('Pages staging omits legal documents or route')
+    if 'cp -R . ' in workflow or 'cp -R *' in workflow: errors.append('Pages staging is too broad')
+    if args.check_git_identity:
+        for role in ('AUTHOR', 'COMMITTER'):
+            ident = subprocess.check_output(['git', 'var', 'GIT_' + role + '_IDENT'], cwd=ROOT, text=True)
+            if not ident.startswith('MorningForge <' + GIT_EMAIL + '> '):
+                errors.append('Unapproved Git ' + role.lower() + ' identity (value omitted)')
     if errors: raise SystemExit('\n'.join(errors))
-    print(f'PASS: {len(documents)} HTML pages, {link_count} links/assets, {len(urls)} sitemap entries; project-path, anchors, metadata, headings, alt attributes, and public-file checks.')
+    print(f'PASS: {len(documents)} HTML pages, {link_count} links/assets, {len(urls)} sitemap entries; project-path, anchors, metadata, headings, alt attributes, release/legal/privacy/static-resource checks.')
 
 if __name__ == '__main__': main()
