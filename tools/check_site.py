@@ -109,8 +109,29 @@ def main():
                     errors.append(name + ': unapproved repository reference (value omitted)')
             if p.suffix == '.html' and '1.1.0' in content and name != 'changelog/index.html':
                 errors.append(name + ': stale version outside historical release notes')
-    for rel in ('index.html', 'changelog/index.html', 'README.md'):
-        if '1.1.1' not in (ROOT / rel).read_text(): errors.append(rel + ': missing current version')
+    # The current release must be explicit; historical 1.1.1/1.1.0 notes remain valid.
+    home = (ROOT / 'index.html').read_text(encoding='utf-8')
+    changelog = (ROOT / 'changelog/index.html').read_text(encoding='utf-8')
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    if 'Founding · 1.2.0' not in home or 'changelog/#release-1-2-0' not in home:
+        errors.append('index.html: missing current 1.2.0 identity or release link')
+    if 'Current release: **Founding 1.2.0**' not in readme:
+        errors.append('README.md: missing current 1.2.0 identity')
+    for rel in ('index.html', 'changelog/index.html'):
+        doc = documents[ROOT / rel]
+        page_source = (ROOT / rel).read_text(encoding='utf-8')
+        if (not re.search(r'<title>[^<]*1\.2\.0[^<]*</title>', page_source)
+                or any('1.2.0' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description'))):
+            errors.append(rel + ': title or metadata does not identify 1.2.0')
+    sections = re.findall(r'<section id="release-(1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
+    if [version for version, _ in sections] != ['1-2-0', '1-1-1', '1-1-0']:
+        errors.append('changelog/index.html: current and historical releases must be newest first')
+    elif 'Current release' not in sections[0][1] or 'Earlier release' not in sections[1][1] or 'Earlier notes' not in sections[2][1]:
+        errors.append('changelog/index.html: incorrect current or historical release label')
+    for path in documents:
+        content = path.read_text(encoding='utf-8')
+        if re.search(r'(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)[^<.]{0,120}1\.2\.0|1\.2\.0[^<.]{0,120}(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)', content, re.I):
+            errors.append(path.relative_to(ROOT).as_posix() + ': 1.2.0 is described as unreleased')
     css = (ROOT / 'assets/site.css').read_text()
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')

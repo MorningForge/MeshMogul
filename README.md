@@ -2,7 +2,7 @@
 
 This repository owns the public MeshMogul marketing website and public notices.
 The plugin source is private and is not published or licensed by this website.
-Current advertised release: **Founding 1.1.1**. This branch prepares a **provisional 1.2.0 candidate**; it is not deployed or confirmed as the distributed version. The candidate highlights bounded DoubleSided MeshPart fidelity, including one textured publication and fresh-session reuse case.
+Current release: **Founding 1.2.0**. It improves supported DoubleSided MeshPart fidelity, including a verified textured publication and fresh-session reuse case.
 
 The site uses semantic HTML, CSS and original SVG artwork. It has no framework,
 runtime JavaScript, backend, analytics, visitor accounts or external font/image
