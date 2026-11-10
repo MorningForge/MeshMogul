@@ -2,7 +2,7 @@
 
 **Turn supported Roblox Studio builds into inspectable, publishable, reusable mesh assets.** MeshMogul keeps your original source, gives you a Preview to inspect, and helps you reuse confirmed results from a local Assets library.
 
-> **1.2.1 site candidate:** Creator Store delivery is still awaiting verification. The candidate describes the admitted 1.2.1 product changes; it is not a statement that the Store listing already serves 1.2.1.
+> **Current release: MeshMogul Founding 1.2.1**, available on the Roblox Creator Store.
 
 [Official website](https://morningforge.github.io/MeshMogul/) · [Creator Store listing](https://create.roblox.com/store/asset/126445067739142) · [Product guides](https://morningforge.github.io/MeshMogul/guides/) · [Compatibility](https://morningforge.github.io/MeshMogul/supported-inputs/) · [Report a bug or suggest a feature](https://github.com/MorningForge/MeshMogul/issues)
 
