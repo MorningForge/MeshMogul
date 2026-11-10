@@ -4,13 +4,12 @@
 workflow. Repository creation is not pending. This document does not authorize
 merging, pushing to main, workflow dispatch or deployment.
 
-The established origin is `https://morningforge.github.io/MeshMogul/`. The refresh
-branch is a candidate; its legal page and other changes must not be described
-as live until the deployed revision has been verified.
+The established origin is `https://morningforge.github.io/MeshMogul/`. The release content describes MeshMogul Founding 1.2.1. Website changes must not
+be described as live until the deployed revision has been verified.
 
-## Candidate verification
+## Pre-deployment verification
 
-1. Run `python3 tools/check_site.py`; review the candidate diff and Git identity.
+1. Run `python3 tools/check_site.py`; review the proposed diff and Git identity.
 2. Preview under `/MeshMogul/`. Inspect desktop and narrow home, legal, a nested
    guide, FAQ disclosures, keyboard focus and 404 recovery links.
 3. Review approved media for identity/privacy and confirm its captions do not

@@ -55,7 +55,7 @@ def main():
         name = path.relative_to(ROOT).as_posix()
         errors.extend(name + ': ' + e for e in doc.errors)
         if not (doc.title and doc.language and doc.main): errors.append(name + ': missing title, language, or main')
-        for key in ('description', 'viewport', 'og:title', 'og:description', 'og:type'):
+        for key in ('description', 'viewport', 'og:title', 'og:description', 'og:type', 'twitter:title', 'twitter:description'):
             if not doc.meta.get(key): errors.append(name + ': missing ' + key)
         if doc.headings.count(1) != 1 or not doc.headings or doc.headings[0] != 1: errors.append(name + ': expected one leading H1')
         for prev, current in zip(doc.headings, doc.headings[1:]):
@@ -109,25 +109,40 @@ def main():
                     errors.append(name + ': unapproved repository reference (value omitted)')
             if p.suffix == '.html' and '1.1.0' in content and name != 'changelog/index.html':
                 errors.append(name + ': stale version outside historical release notes')
-    # The current release must be explicit; historical 1.1.1/1.1.0 notes remain valid.
+    # The current release must be explicit; historical release notes remain intact.
     home = (ROOT / 'index.html').read_text(encoding='utf-8')
     changelog = (ROOT / 'changelog/index.html').read_text(encoding='utf-8')
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
-    if 'Founding · 1.2.0' not in home or 'changelog/#release-1-2-0' not in home:
-        errors.append('index.html: missing current 1.2.0 identity or release link')
-    if 'Current release: **Founding 1.2.0**' not in readme:
-        errors.append('README.md: missing current 1.2.0 identity')
+    if 'Current release · Founding 1.2.1' not in home or 'changelog/#release-1-2-1' not in home:
+        errors.append('index.html: missing current Founding 1.2.1 identity or release link')
+    if 'Current release: MeshMogul Founding 1.2.1' not in readme:
+        errors.append('README.md: missing current Founding 1.2.1 identity')
+    for link in (
+        'https://morningforge.github.io/MeshMogul/',
+        STORE,
+        'https://morningforge.github.io/MeshMogul/guides/',
+        'https://morningforge.github.io/MeshMogul/supported-inputs/',
+        'https://github.com/MorningForge/MeshMogul/issues',
+    ):
+        if link not in readme: errors.append('README.md: missing customer link')
+    if not re.search(r'available on (?:the )?Roblox Creator Store', changelog, re.I) or not re.search(r'available on (?:the )?Roblox Creator Store', home, re.I):
+        errors.append('current release pages must state Creator Store availability')
     for rel in ('index.html', 'changelog/index.html'):
         doc = documents[ROOT / rel]
         page_source = (ROOT / rel).read_text(encoding='utf-8')
-        if (not re.search(r'<title>[^<]*1\.2\.0[^<]*</title>', page_source)
-                or any('1.2.0' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description'))):
-            errors.append(rel + ': title or metadata does not identify 1.2.0')
-    sections = re.findall(r'<section id="release-(1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
-    if [version for version, _ in sections] != ['1-2-0', '1-1-1', '1-1-0']:
+        if (not re.search(r'<title>[^<]*Founding 1\.2\.1[^<]*</title>', page_source)
+                or any('Founding 1.2.1' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description'))):
+            errors.append(rel + ': title or metadata does not identify Founding 1.2.1')
+    sections = re.findall(r'<section id="release-(1-2-1|1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
+    if [version for version, _ in sections] != ['1-2-1', '1-2-0', '1-1-1', '1-1-0']:
         errors.append('changelog/index.html: current and historical releases must be newest first')
-    elif 'Current release' not in sections[0][1] or 'Earlier release' not in sections[1][1] or 'Earlier notes' not in sections[2][1]:
+    elif ('Current release' not in sections[0][1]
+            or 'Earlier release' not in sections[1][1] or 'Earlier release' not in sections[2][1] or 'Earlier notes' not in sections[3][1]):
         errors.append('changelog/index.html: incorrect current or historical release label')
+    provisional_121 = re.compile(r'(?:candidate|pending|unverified|not yet released|awaiting verification)[^<.]{0,120}1\.2\.1|1\.2\.1[^<.]{0,120}(?:candidate|pending|unverified|not yet released|awaiting verification)', re.I)
+    for path in [*documents, ROOT / 'README.md']:
+        if provisional_121.search(path.read_text(encoding='utf-8')):
+            errors.append(path.relative_to(ROOT).as_posix() + ': Founding 1.2.1 is described as provisional')
     for path in documents:
         content = path.read_text(encoding='utf-8')
         if re.search(r'(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)[^<.]{0,120}1\.2\.0|1\.2\.0[^<.]{0,120}(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)', content, re.I):
