@@ -1,0 +1,55 @@
+AI ASSET BRIEF — replace the bracketed fields
+
+PURPOSE
+Build [asset or kit] for [gameplay use, viewing distance, target devices].
+Visual target: [shape, style, colors, references I have rights to use].
+
+SIZE AND CONSTRUCTION
+Use [dimensions in studs]. Up is [axis]; front is [axis].
+Build with [Studio Parts / procedural generation / generated meshes /
+external modeling and import]. State what your available tools can do.
+Propose the plan before changing existing work. Work in one new, named
+container; leave unrelated objects alone. Do not publish anything yet.
+
+STRUCTURE AND MOVEMENT
+Use a root named [name], with these functional components:
+[list component names and the job of each].
+Keep [components] independently movable or editable.
+Set the root pivot at [location]. Set each moving component pivot at
+[axle, hinge, rotation center, or stated location].
+Do not merge across these component boundaries just to reduce mesh count.
+
+APPEARANCE AND TEXTURES
+Appearance domains: [surfaces, materials, colors, transparency].
+Keep this list separate from the component hierarchy.
+Texture route: [built-in materials / existing maps / native Texture
+Generator / external UV and texture preparation]. Report missing or
+incompatible UVs and maps; do not pretend they are ready.
+If texturing changes geometry or UVs, keep a separate derivative and
+record its mesh and image references together.
+
+REUSE AND SOURCE
+Reusable prototypes: [repeated pieces and allowed variations].
+Preserve editable source and generator/settings where available.
+Name source and derivatives separately. Report the actual MeshPart count
+and how outputs map to functional components and appearance domains.
+
+COLLISION AND BEHAVIOR
+Collision intent: [walkable areas, openings, simple blockers].
+Behavior needed later: [scripts, joints, constraints, animation, or none].
+List what is visual-only and what is implemented and tested.
+
+BUDGET AND PUBLICATION
+Provisional budgets: [geometry, output count, textures, repeated copies].
+If no budget is agreed, propose one; distinguish estimates from readings.
+Do not claim an FPS improvement without a representative comparison.
+Reuse destination and owner: [place, model/package, creator or group].
+Ask before uploads or replacement. A Preview is not a published asset.
+
+ACCEPTANCE AND FAILURE REPORT
+Compare requested versus actual: hierarchy, component independence,
+dimensions, orientation, pivots, appearance, output count, UVs/maps,
+reused geometry, collision, source retention, and publication state.
+Show what you inspected and how. Mark untested behavior and unavailable
+measurements UNVERIFIED. Report failures and unsupported requirements;
+do not silently omit parts, invent IDs, or claim a test was performed.

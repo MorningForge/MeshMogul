@@ -49,7 +49,7 @@ def main():
     args = parser.parse_args()
     errors = []
     files = sorted(p for p in ROOT.rglob('*') if p.is_file() and not any(x in p.relative_to(ROOT).parts for x in ('.git', '.local', '_site', '__pycache__')))
-    documents = {p: Document(p.read_text()) for p in files if p.suffix == '.html'}
+    documents = {p: Document(p.read_text(encoding='utf-8')) for p in files if p.suffix == '.html'}
     link_count = 0
     for path, doc in documents.items():
         name = path.relative_to(ROOT).as_posix()
@@ -94,7 +94,7 @@ def main():
         if p.suffix.lower() in ('.luau', '.lua', '.rbxl', '.rbxmx', '.rbxm', '.pem', '.key'):
             errors.append(name + ': non-marketing file type')
         if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt', '.py'):
-            content = p.read_text()
+            content = p.read_text(encoding='utf-8')
             if re.search(r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----', content):
                 errors.append(name + ': possible credential')
             if p.suffix == '.html' and re.search(r'/workspace/|[A-Z]:\\|docs/product-spec|Codex/Investigations|MeshLab[A-Z]', content):
@@ -113,10 +113,10 @@ def main():
     home = (ROOT / 'index.html').read_text(encoding='utf-8')
     changelog = (ROOT / 'changelog/index.html').read_text(encoding='utf-8')
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
-    if 'Current release · Founding 1.2.1' not in home or 'changelog/#release-1-2-1' not in home:
-        errors.append('index.html: missing current Founding 1.2.1 identity or release link')
-    if 'Current release: MeshMogul Founding 1.2.1' not in readme:
-        errors.append('README.md: missing current Founding 1.2.1 identity')
+    if 'Current release · MeshMogul 1.3.0' not in home or 'changelog/#release-1-3-0' not in home:
+        errors.append('index.html: missing current MeshMogul 1.3.0 identity or release link')
+    if 'Current release: MeshMogul 1.3.0' not in readme:
+        errors.append('README.md: missing current MeshMogul 1.3.0 identity')
     for link in (
         'https://morningforge.github.io/MeshMogul/',
         STORE,
@@ -130,28 +130,67 @@ def main():
     for rel in ('index.html', 'changelog/index.html'):
         doc = documents[ROOT / rel]
         page_source = (ROOT / rel).read_text(encoding='utf-8')
-        if (not re.search(r'<title>[^<]*Founding 1\.2\.1[^<]*</title>', page_source)
-                or any('Founding 1.2.1' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description'))):
-            errors.append(rel + ': title or metadata does not identify Founding 1.2.1')
-    sections = re.findall(r'<section id="release-(1-2-1|1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
-    if [version for version, _ in sections] != ['1-2-1', '1-2-0', '1-1-1', '1-1-0']:
+        if (not re.search(r'<title>[^<]*MeshMogul 1\.3\.0[^<]*</title>', page_source)
+                or any('1.3.0' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description', 'twitter:title', 'twitter:description'))):
+            errors.append(rel + ': title or social metadata does not identify MeshMogul 1.3.0')
+    sections = re.findall(r'<section id="release-(1-3-0|1-2-1|1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
+    if [version for version, _ in sections] != ['1-3-0', '1-2-1', '1-2-0', '1-1-1', '1-1-0']:
         errors.append('changelog/index.html: current and historical releases must be newest first')
     elif ('Current release' not in sections[0][1]
-            or 'Earlier release' not in sections[1][1] or 'Earlier release' not in sections[2][1] or 'Earlier notes' not in sections[3][1]):
+            or any('Earlier release' not in sections[i][1] for i in (1, 2, 3))
+            or 'Earlier notes' not in sections[4][1]):
         errors.append('changelog/index.html: incorrect current or historical release label')
+    if sections:
+        current_notes = sections[0][1]
+        for required in ('solid Union/CSG', 'transparent Glass Union', 'frame-sliced', 'cancellation', 'predate 1.3'):
+            if required not in current_notes:
+                errors.append('changelog/index.html: missing bounded 1.3 release distinction: ' + required)
+    compatibility = (ROOT / 'supported-inputs/index.html').read_text(encoding='utf-8')
+    for required in ('Glass support is bounded', 'Editor responsiveness:', 'Conversion time:', 'Mesh complexity:', 'Runtime performance:'):
+        if required not in compatibility:
+            errors.append('supported-inputs/index.html: missing compatibility or measurement distinction: ' + required)
     provisional_121 = re.compile(r'(?:candidate|pending|unverified|not yet released|awaiting verification)[^<.]{0,120}1\.2\.1|1\.2\.1[^<.]{0,120}(?:candidate|pending|unverified|not yet released|awaiting verification)', re.I)
     for path in [*documents, ROOT / 'README.md']:
+        content = path.read_text(encoding='utf-8')
+        if path != ROOT / 'changelog/index.html':
+            if '1.2.1' in content:
+                errors.append(path.relative_to(ROOT).as_posix() + ': stale 1.2.1 outside historical release notes')
+            for stale in ('Glass is refused', 'MeshMogul excludes direct Union conversion', 'Direct Union/CSG conversion is excluded'):
+                if stale in content:
+                    errors.append(path.relative_to(ROOT).as_posix() + ': stale blanket Union/Glass refusal')
         if provisional_121.search(path.read_text(encoding='utf-8')):
             errors.append(path.relative_to(ROOT).as_posix() + ': Founding 1.2.1 is described as provisional')
     for path in documents:
         content = path.read_text(encoding='utf-8')
         if re.search(r'(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)[^<.]{0,120}1\.2\.0|1\.2\.0[^<.]{0,120}(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)', content, re.I):
             errors.append(path.relative_to(ROOT).as_posix() + ': 1.2.0 is described as unreleased')
-    css = (ROOT / 'assets/site.css').read_text()
+    guide_index = (ROOT / 'guides/index.html').read_text(encoding='utf-8')
+    for route in ('proceduralmodel-assistant-output-to-mesh', 'roblox-studio-texture-generator', 'compare-roblox-meshes-before-and-after', 'how-to-prompt-ai-for-roblox-3d-models'):
+        if route + '/' not in guide_index:
+            errors.append('guides/index.html: missing practical guide navigation: ' + route)
+        guide = ROOT / 'guides' / route / 'index.html'
+        if not guide.is_file() or 'https://create.roblox.com/docs/' not in guide.read_text(encoding='utf-8'):
+            errors.append('guides/' + route + ': missing guide or official Roblox references')
+    brief_dir = ROOT / 'guides/how-to-prompt-ai-for-roblox-3d-models'
+    brief_page = (brief_dir / 'index.html').read_text(encoding='utf-8')
+    brief_field = re.search(r'<textarea\b[^>]*id="asset-brief"[^>]*>(.*?)</textarea>', brief_page, re.S)
+    from html import unescape
+    if not brief_field or unescape(brief_field[1]) != (brief_dir / 'ai-asset-brief.txt').read_text(encoding='utf-8'):
+        errors.append('Foundations: selectable and downloadable asset briefs differ')
+    if 'id="foundations"' not in guide_index:
+        errors.append('guides/index.html: missing Foundations discovery point')
+    for track in ('build-with-ai', 'understand-3d', 'finish-and-publish', 'test-and-optimize'):
+        if track not in documents[ROOT / 'guides/index.html'].ids:
+            errors.append('guides/index.html: missing Foundations track: ' + track)
+    card_routes = re.findall(r'<li><a href="([^"]+/)">', guide_index)
+    guide_routes = {p.parent.name + '/' for p in (ROOT / 'guides').glob('*/index.html')}
+    if set(card_routes) != guide_routes or len(card_routes) != len(guide_routes):
+        errors.append('Foundations tracks must discover every guide exactly once')
+    css = (ROOT / 'assets/site.css').read_text(encoding='utf-8')
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')
-    legal = (ROOT / 'legal/index.html').read_text()
-    notices = (ROOT / 'THIRD_PARTY_NOTICES.md').read_text()
+    legal = (ROOT / 'legal/index.html').read_text(encoding='utf-8')
+    notices = (ROOT / 'THIRD_PARTY_NOTICES.md').read_text(encoding='utf-8')
     canonical_notice = '# MeshMogul — third-party software notices' + notices.split('# MeshMogul — third-party software notices', 1)[1]
     if hashlib.sha256(canonical_notice.encode()).hexdigest() != '3f230d0ab0c1c21eec8dc62e655149aea942cfe357032c8b25f5e5556b5e0cf6':
         errors.append('Release notice text differs from the approved full notice document')
@@ -166,7 +205,7 @@ def main():
     for block in blocks:
         if 'Permission is hereby granted' not in block or 'SOFTWARE.' not in block or 'THE SOFTWARE IS PROVIDED "AS IS"' not in block:
             errors.append('Incomplete MIT permission or disclaimer')
-    workflow = (ROOT / '.github/workflows/pages.yml').read_text()
+    workflow = (ROOT / '.github/workflows/pages.yml').read_text(encoding='utf-8')
     if 'LICENSE.md THIRD_PARTY_NOTICES.md _site/' not in workflow or 'privacy legal _site/' not in workflow:
         errors.append('Pages staging omits legal documents or route')
     if 'cp -R . ' in workflow or 'cp -R *' in workflow: errors.append('Pages staging is too broad')
