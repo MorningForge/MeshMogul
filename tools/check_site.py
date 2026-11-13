@@ -165,12 +165,20 @@ def main():
         if re.search(r'(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)[^<.]{0,120}1\.2\.0|1\.2\.0[^<.]{0,120}(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)', content, re.I):
             errors.append(path.relative_to(ROOT).as_posix() + ': 1.2.0 is described as unreleased')
     guide_index = (ROOT / 'guides/index.html').read_text(encoding='utf-8')
-    for route in ('proceduralmodel-assistant-output-to-mesh', 'roblox-studio-texture-generator', 'compare-roblox-meshes-before-and-after'):
+    for route in ('proceduralmodel-assistant-output-to-mesh', 'roblox-studio-texture-generator', 'compare-roblox-meshes-before-and-after', 'how-to-prompt-ai-for-roblox-3d-models'):
         if route + '/' not in guide_index:
             errors.append('guides/index.html: missing practical guide navigation: ' + route)
         guide = ROOT / 'guides' / route / 'index.html'
         if not guide.is_file() or 'https://create.roblox.com/docs/' not in guide.read_text(encoding='utf-8'):
             errors.append('guides/' + route + ': missing guide or official Roblox references')
+    brief_dir = ROOT / 'guides/how-to-prompt-ai-for-roblox-3d-models'
+    brief_page = (brief_dir / 'index.html').read_text(encoding='utf-8')
+    brief_field = re.search(r'<textarea\b[^>]*id="asset-brief"[^>]*>(.*?)</textarea>', brief_page, re.S)
+    from html import unescape
+    if not brief_field or unescape(brief_field[1]) != (brief_dir / 'ai-asset-brief.txt').read_text(encoding='utf-8'):
+        errors.append('Foundations: selectable and downloadable asset briefs differ')
+    if 'id="foundations"' not in guide_index:
+        errors.append('guides/index.html: missing Foundations discovery point')
     css = (ROOT / 'assets/site.css').read_text(encoding='utf-8')
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')
