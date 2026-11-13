@@ -179,6 +179,13 @@ def main():
         errors.append('Foundations: selectable and downloadable asset briefs differ')
     if 'id="foundations"' not in guide_index:
         errors.append('guides/index.html: missing Foundations discovery point')
+    for track in ('build-with-ai', 'understand-3d', 'finish-and-publish', 'test-and-optimize'):
+        if track not in documents[ROOT / 'guides/index.html'].ids:
+            errors.append('guides/index.html: missing Foundations track: ' + track)
+    card_routes = re.findall(r'<li><a href="([^"]+/)">', guide_index)
+    guide_routes = {p.parent.name + '/' for p in (ROOT / 'guides').glob('*/index.html')}
+    if set(card_routes) != guide_routes or len(card_routes) != len(guide_routes):
+        errors.append('Foundations tracks must discover every guide exactly once')
     css = (ROOT / 'assets/site.css').read_text(encoding='utf-8')
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')

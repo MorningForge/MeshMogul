@@ -28,6 +28,8 @@ Confirmed outputs are remembered in local Studio plugin settings. A multi-output
 
 - [See how the workflow works](https://morningforge.github.io/MeshMogul/how-it-works/)
 - [Check supported inputs and limits](https://morningforge.github.io/MeshMogul/supported-inputs/)
+- [Explore MeshMogul Foundations: 3D Building for the AI Era](https://morningforge.github.io/MeshMogul/guides/#foundations)
+- [Write and inspect a reusable AI asset brief](https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/)
 - [Prepare generated models for reuse](https://morningforge.github.io/MeshMogul/guides/proceduralmodel-assistant-output-to-mesh/)
 - [Use Studio Texture Generator](https://morningforge.github.io/MeshMogul/guides/roblox-studio-texture-generator/)
 - [Compare meshes before and after conversion](https://morningforge.github.io/MeshMogul/guides/compare-roblox-meshes-before-and-after/)

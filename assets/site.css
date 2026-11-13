@@ -7,7 +7,10 @@ h1,h2,h3{overflow-wrap:anywhere}
 .brief-label{display:block;font-weight:650;color:var(--text);margin:24px 0 12px}
 .asset-brief{display:block;width:100%;max-width:100%;min-height:34rem;resize:vertical;background:var(--panel);color:var(--body);border:1px solid var(--line);border-radius:4px;padding:20px;font: .88rem/1.65 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
 .asset-brief:focus-visible{outline:3px solid var(--teal);outline-offset:5px}
-.foundations-entry{margin-bottom:38px}
+.guide-grid h3{font-size:1.45rem;line-height:1.35;margin:18px 0}
+.guide-track .guide-grid li:only-child{grid-column:1/-1}
+.foundations-tracks{padding-bottom:20px;border-bottom:1px solid var(--line)}
+.foundations-tracks a{display:inline-flex;align-items:center;min-height:44px}
 @media(max-width:760px){.asset-brief{padding:14px;font-size:.82rem;min-height:30rem}}
 
 /* Release details stay readable without screenshots or runtime scripts. */

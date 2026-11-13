@@ -67,3 +67,14 @@ Native texturing and downstream textured derivatives remain separate workflows;
 do not infer automatic tracking from geometry publication. Review public text,
 media, metadata and Git identity for privacy. Merge and Pages deployment remain
 separately authorized actions.
+
+## Foundations routes and review
+
+The existing `/guides/` page is the Foundations entry, with four tracks and one
+new cornerstone route: `/guides/how-to-prompt-ai-for-roblox-3d-models/`. The
+existing recursive Guides allowlist includes its downloadable
+`ai-asset-brief.txt`; no workflow or hosting change is needed. Confirm that the
+field and download match, keyboard selection works, and both fit narrow layouts.
+The root `FOUNDATIONS.md` is a source-only editorial/handoff document and is not
+part of the Pages staging allowlist. These intended routes are not live merely
+because they exist on the PR branch.
