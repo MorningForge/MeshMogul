@@ -36,3 +36,23 @@ be described as live until the deployed revision has been verified.
 
 The workflow uses an explicit public-file allowlist and official GitHub Pages
 Actions. No paid hosting, build framework or runtime dependency is needed.
+
+## Copy checklist for the 1.3 website update
+
+Keep the current 1.2.1 identity until the Product Owner confirms the actual
+Creator Store release. A source change or successful candidate test is not
+release confirmation. This editorial candidate does not announce 1.3.
+
+| Surface | Smallest change after release confirmation |
+| --- | --- |
+| Home and README | Update the current version, release link, and matching social metadata. Describe only the capabilities included in the delivered plugin. |
+| Compatibility | Replace individual Union/CSG or Glass refusal rows only for the accepted, released input scope. Keep unreadable-content, overlay, permission, fidelity, and size limits explicit. |
+| How it works and FAQ | Match the delivered controls and workflow. Preserve approval of the exact retained Preview, manual Command Bar publication, source retention, and local Assets boundaries. |
+| Changelog | Add a current release section with accepted customer changes; retain earlier versions as history. |
+| Guides | Update version-specific compatibility statements. Describe native texturing separately from any explicitly released derivative tracking; do not infer tracking from geometry publication. |
+| Site checker and sitemap | Update the deliberate version guard and release assertions together with the copy. Change the sitemap only when routes change. |
+
+Before deployment, review the release wording and run the existing checks plus
+desktop/mobile and keyboard review. Union/CSG, Glass, and textured-derivative
+lifecycle claims each need their own accepted scope; none is inferred from the
+release number. Merge and Pages deployment remain separately authorized actions.

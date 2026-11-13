@@ -49,7 +49,7 @@ def main():
     args = parser.parse_args()
     errors = []
     files = sorted(p for p in ROOT.rglob('*') if p.is_file() and not any(x in p.relative_to(ROOT).parts for x in ('.git', '.local', '_site', '__pycache__')))
-    documents = {p: Document(p.read_text()) for p in files if p.suffix == '.html'}
+    documents = {p: Document(p.read_text(encoding='utf-8')) for p in files if p.suffix == '.html'}
     link_count = 0
     for path, doc in documents.items():
         name = path.relative_to(ROOT).as_posix()
@@ -94,7 +94,7 @@ def main():
         if p.suffix.lower() in ('.luau', '.lua', '.rbxl', '.rbxmx', '.rbxm', '.pem', '.key'):
             errors.append(name + ': non-marketing file type')
         if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt', '.py'):
-            content = p.read_text()
+            content = p.read_text(encoding='utf-8')
             if re.search(r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----', content):
                 errors.append(name + ': possible credential')
             if p.suffix == '.html' and re.search(r'/workspace/|[A-Z]:\\|docs/product-spec|Codex/Investigations|MeshLab[A-Z]', content):
@@ -141,17 +141,27 @@ def main():
         errors.append('changelog/index.html: incorrect current or historical release label')
     provisional_121 = re.compile(r'(?:candidate|pending|unverified|not yet released|awaiting verification)[^<.]{0,120}1\.2\.1|1\.2\.1[^<.]{0,120}(?:candidate|pending|unverified|not yet released|awaiting verification)', re.I)
     for path in [*documents, ROOT / 'README.md']:
+        # Release copy changes only after the Creator Store release is confirmed.
+        if re.search(r'\b1\.3(?:\.\d+)?\b', path.read_text(encoding='utf-8')):
+            errors.append(path.relative_to(ROOT).as_posix() + ': 1.3 release copy requires confirmed publication and checker update')
         if provisional_121.search(path.read_text(encoding='utf-8')):
             errors.append(path.relative_to(ROOT).as_posix() + ': Founding 1.2.1 is described as provisional')
     for path in documents:
         content = path.read_text(encoding='utf-8')
         if re.search(r'(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)[^<.]{0,120}1\.2\.0|1\.2\.0[^<.]{0,120}(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)', content, re.I):
             errors.append(path.relative_to(ROOT).as_posix() + ': 1.2.0 is described as unreleased')
-    css = (ROOT / 'assets/site.css').read_text()
+    guide_index = (ROOT / 'guides/index.html').read_text(encoding='utf-8')
+    for route in ('proceduralmodel-assistant-output-to-mesh', 'roblox-studio-texture-generator', 'compare-roblox-meshes-before-and-after'):
+        if route + '/' not in guide_index:
+            errors.append('guides/index.html: missing practical guide navigation: ' + route)
+        guide = ROOT / 'guides' / route / 'index.html'
+        if not guide.is_file() or 'https://create.roblox.com/docs/' not in guide.read_text(encoding='utf-8'):
+            errors.append('guides/' + route + ': missing guide or official Roblox references')
+    css = (ROOT / 'assets/site.css').read_text(encoding='utf-8')
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')
-    legal = (ROOT / 'legal/index.html').read_text()
-    notices = (ROOT / 'THIRD_PARTY_NOTICES.md').read_text()
+    legal = (ROOT / 'legal/index.html').read_text(encoding='utf-8')
+    notices = (ROOT / 'THIRD_PARTY_NOTICES.md').read_text(encoding='utf-8')
     canonical_notice = '# MeshMogul — third-party software notices' + notices.split('# MeshMogul — third-party software notices', 1)[1]
     if hashlib.sha256(canonical_notice.encode()).hexdigest() != '3f230d0ab0c1c21eec8dc62e655149aea942cfe357032c8b25f5e5556b5e0cf6':
         errors.append('Release notice text differs from the approved full notice document')
@@ -166,7 +176,7 @@ def main():
     for block in blocks:
         if 'Permission is hereby granted' not in block or 'SOFTWARE.' not in block or 'THE SOFTWARE IS PROVIDED "AS IS"' not in block:
             errors.append('Incomplete MIT permission or disclaimer')
-    workflow = (ROOT / '.github/workflows/pages.yml').read_text()
+    workflow = (ROOT / '.github/workflows/pages.yml').read_text(encoding='utf-8')
     if 'LICENSE.md THIRD_PARTY_NOTICES.md _site/' not in workflow or 'privacy legal _site/' not in workflow:
         errors.append('Pages staging omits legal documents or route')
     if 'cp -R . ' in workflow or 'cp -R *' in workflow: errors.append('Pages staging is too broad')

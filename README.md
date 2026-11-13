@@ -1,10 +1,12 @@
 # MeshMogul
 
-**Turn supported Roblox Studio builds into inspectable, publishable, reusable mesh assets.** MeshMogul keeps your original source, gives you a Preview to inspect, and helps you reuse confirmed results from a local Assets library.
+**Make reusable mesh assets from supported Roblox Studio builds.** Keep your original, inspect and approve a Preview, then publish and reuse confirmed results from a local Assets library.
+
+This repository contains the **MeshMogul website and documentation**. The paid, proprietary Studio plugin is available through Creator Store; its source is not included here.
 
 > **Current release: MeshMogul Founding 1.2.1**, available on the Roblox Creator Store.
 
-[Official website](https://morningforge.github.io/MeshMogul/) · [Creator Store listing](https://create.roblox.com/store/asset/126445067739142) · [Product guides](https://morningforge.github.io/MeshMogul/guides/) · [Compatibility](https://morningforge.github.io/MeshMogul/supported-inputs/) · [Report a bug or suggest a feature](https://github.com/MorningForge/MeshMogul/issues)
+[Official website](https://morningforge.github.io/MeshMogul/) · [Creator Store listing](https://create.roblox.com/store/asset/126445067739142) · [Product guides](https://morningforge.github.io/MeshMogul/guides/)
 
 ## What MeshMogul does
 
@@ -22,7 +24,9 @@ Confirmed outputs are remembered in local Studio plugin settings. A multi-output
 
 - [See how the workflow works](https://morningforge.github.io/MeshMogul/how-it-works/)
 - [Check supported inputs and limits](https://morningforge.github.io/MeshMogul/supported-inputs/)
-- [Browse practical Roblox Studio guides](https://morningforge.github.io/MeshMogul/guides/)
+- [Prepare generated models for reuse](https://morningforge.github.io/MeshMogul/guides/proceduralmodel-assistant-output-to-mesh/)
+- [Use Studio Texture Generator](https://morningforge.github.io/MeshMogul/guides/roblox-studio-texture-generator/)
+- [Compare meshes before and after conversion](https://morningforge.github.io/MeshMogul/guides/compare-roblox-meshes-before-and-after/)
 - [Read common questions](https://morningforge.github.io/MeshMogul/faq/)
 - [Read release history](https://morningforge.github.io/MeshMogul/changelog/)
 - [Report a bug or request a feature](https://github.com/MorningForge/MeshMogul/issues)
