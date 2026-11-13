@@ -113,10 +113,10 @@ def main():
     home = (ROOT / 'index.html').read_text(encoding='utf-8')
     changelog = (ROOT / 'changelog/index.html').read_text(encoding='utf-8')
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
-    if 'Current release · Founding 1.2.1' not in home or 'changelog/#release-1-2-1' not in home:
-        errors.append('index.html: missing current Founding 1.2.1 identity or release link')
-    if 'Current release: MeshMogul Founding 1.2.1' not in readme:
-        errors.append('README.md: missing current Founding 1.2.1 identity')
+    if 'Current release · MeshMogul 1.3.0' not in home or 'changelog/#release-1-3-0' not in home:
+        errors.append('index.html: missing current MeshMogul 1.3.0 identity or release link')
+    if 'Current release: MeshMogul 1.3.0' not in readme:
+        errors.append('README.md: missing current MeshMogul 1.3.0 identity')
     for link in (
         'https://morningforge.github.io/MeshMogul/',
         STORE,
@@ -130,20 +130,34 @@ def main():
     for rel in ('index.html', 'changelog/index.html'):
         doc = documents[ROOT / rel]
         page_source = (ROOT / rel).read_text(encoding='utf-8')
-        if (not re.search(r'<title>[^<]*Founding 1\.2\.1[^<]*</title>', page_source)
-                or any('Founding 1.2.1' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description'))):
-            errors.append(rel + ': title or metadata does not identify Founding 1.2.1')
-    sections = re.findall(r'<section id="release-(1-2-1|1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
-    if [version for version, _ in sections] != ['1-2-1', '1-2-0', '1-1-1', '1-1-0']:
+        if (not re.search(r'<title>[^<]*MeshMogul 1\.3\.0[^<]*</title>', page_source)
+                or any('1.3.0' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description', 'twitter:title', 'twitter:description'))):
+            errors.append(rel + ': title or social metadata does not identify MeshMogul 1.3.0')
+    sections = re.findall(r'<section id="release-(1-3-0|1-2-1|1-2-0|1-1-1|1-1-0)">(.*?)</section>', changelog, re.S)
+    if [version for version, _ in sections] != ['1-3-0', '1-2-1', '1-2-0', '1-1-1', '1-1-0']:
         errors.append('changelog/index.html: current and historical releases must be newest first')
     elif ('Current release' not in sections[0][1]
-            or 'Earlier release' not in sections[1][1] or 'Earlier release' not in sections[2][1] or 'Earlier notes' not in sections[3][1]):
+            or any('Earlier release' not in sections[i][1] for i in (1, 2, 3))
+            or 'Earlier notes' not in sections[4][1]):
         errors.append('changelog/index.html: incorrect current or historical release label')
+    if sections:
+        current_notes = sections[0][1]
+        for required in ('solid Union/CSG', 'transparent Glass Union', 'frame-sliced', 'cancellation', 'predate 1.3'):
+            if required not in current_notes:
+                errors.append('changelog/index.html: missing bounded 1.3 release distinction: ' + required)
+    compatibility = (ROOT / 'supported-inputs/index.html').read_text(encoding='utf-8')
+    for required in ('Glass support is bounded', 'Editor responsiveness:', 'Conversion time:', 'Mesh complexity:', 'Runtime performance:'):
+        if required not in compatibility:
+            errors.append('supported-inputs/index.html: missing compatibility or measurement distinction: ' + required)
     provisional_121 = re.compile(r'(?:candidate|pending|unverified|not yet released|awaiting verification)[^<.]{0,120}1\.2\.1|1\.2\.1[^<.]{0,120}(?:candidate|pending|unverified|not yet released|awaiting verification)', re.I)
     for path in [*documents, ROOT / 'README.md']:
-        # Release copy changes only after the Creator Store release is confirmed.
-        if re.search(r'\b1\.3(?:\.\d+)?\b', path.read_text(encoding='utf-8')):
-            errors.append(path.relative_to(ROOT).as_posix() + ': 1.3 release copy requires confirmed publication and checker update')
+        content = path.read_text(encoding='utf-8')
+        if path != ROOT / 'changelog/index.html':
+            if '1.2.1' in content:
+                errors.append(path.relative_to(ROOT).as_posix() + ': stale 1.2.1 outside historical release notes')
+            for stale in ('Glass is refused', 'MeshMogul excludes direct Union conversion', 'Direct Union/CSG conversion is excluded'):
+                if stale in content:
+                    errors.append(path.relative_to(ROOT).as_posix() + ': stale blanket Union/Glass refusal')
         if provisional_121.search(path.read_text(encoding='utf-8')):
             errors.append(path.relative_to(ROOT).as_posix() + ': Founding 1.2.1 is described as provisional')
     for path in documents:
