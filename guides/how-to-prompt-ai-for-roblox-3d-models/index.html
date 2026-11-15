@@ -1,71 +1,84 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>How to Prompt AI to Build Better Roblox 3D Models — MeshMogul Foundations</title><meta name="description" content="Write a reusable AI asset brief for Roblox: separate components, materials, mesh outputs, pivots and behavior, then inspect what was actually built."><meta property="og:title" content="How to Prompt AI to Build Better Roblox 3D Models — MeshMogul Foundations"><meta property="og:description" content="Write a reusable AI asset brief for Roblox: separate components, materials, mesh outputs, pivots and behavior, then inspect what was actually built."><meta property="og:type" content="article"><meta property="og:site_name" content="MeshMogul"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="How to Prompt AI to Build Better Roblox 3D Models — MeshMogul Foundations"><meta name="twitter:description" content="Write a reusable AI asset brief for Roblox: separate components, materials, mesh outputs, pivots and behavior, then inspect what was actually built."><link rel="icon" href="../../assets/favicon.png" type="image/png"><link rel="stylesheet" href="../../assets/site.css?v=1.3.0-foundations-2"><link rel="canonical" href="https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/"><meta property="og:url" content="https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/"></head><body><a class="skip-link" href="#main">Skip to content</a><div class="site-shell"><header class="site-header"><a class="brand" href="../../" aria-label="MeshMogul home"><img src="../../assets/favicon.png" width="30" height="30" alt=""><span>MeshMogul</span></a><nav aria-label="Main navigation"><a href="../../">Home</a><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Compatibility</a><a href="../" aria-current="page">Guides</a><a href="../../faq/">FAQ</a></nav><a class="header-cta" href="https://create.roblox.com/store/asset/126445067739142">Get MeshMogul on Creator Store <span aria-hidden="true">→</span></a></header><main id="main" tabindex="-1">
-<header class="page-heading">
-<p class="eyebrow"><a href="../#foundations">MeshMogul Foundations</a> / Build with AI</p>
-<h1>How to Prompt AI to Build Better Roblox 3D Models</h1>
-<p class="lead">From a good-looking model to an editable, reusable asset.</p>
-<p>Describe what must survive the next edit, not just what should appear in the first screenshot. This guide gives you a reusable asset brief and a way to check the result. You do not need MeshMogul to follow it.</p>
-<p class="fine">Reviewed November 13, 2026. Tool features can change.</p>
-</header>
-<div class="article-layout">
-<nav class="on-this-page" aria-label="On this page">
-<span class="eyebrow">On this page</span>
-<a href="#five-concepts">Five distinct concepts</a>
-<a href="#size-and-pivots">Size, names &amp; pivots</a>
-<a href="#appearance">Materials &amp; textures</a>
-<a href="#asset-brief">Copy the asset brief</a>
-<a href="#examples">Three example briefs</a>
-<a href="#inspection">Inspect the actual output</a>
-<a href="#finish">Finish &amp; reuse</a>
-<a href="#source-boundaries">Which rules transfer?</a>
-</nav>
-<article class="prose">
-<aside class="notice"><strong>How to read the evidence.</strong> <strong>DOCUMENTED</strong> means a linked source describes a feature. <strong>OBSERVED</strong> means a check was actually performed on a particular output. <strong>RECOMMENDED</strong> means workflow advice. <strong>UNVERIFIED</strong> means it has not been established. The briefs and examples here are recommended starting points, not experimentally validated prompts or observed model results. Different assistants and generation tools may follow them differently.</aside>
-<section>
-<h2>Specify the job before the look</h2>
-<p>“Make a detailed off-road vehicle” tells an assistant about appearance. It does not say whether the wheels should move, whether the body stays editable, where the pivots belong, or how the result will be saved. A convincing screenshot can hide all of those omissions.</p>
-<p>First name the asset’s job: a static background prop, an editable kit, or the visual parts for a functioning vehicle. Ask for a plan and a list of unsupported requirements before generation. Then inspect a small representative piece before requesting the full build.</p>
-</section>
-<section id="five-concepts">
-<h2>Keep five concepts separate</h2>
-<div class="table-wrap"><table>
-<caption>Five decisions to describe in your brief</caption>
-<thead><tr><th scope="col">Concept</th><th scope="col">Decision and vehicle example</th></tr></thead>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>How to Prompt AI to Build Better Roblox 3D Models — MeshMogul Foundations</title><meta name="description" content="Write AI asset briefs that keep moving pieces separate, align pivots with joints, specify stud scale, and respect MeshPart material and appearance boundaries."><meta property="og:title" content="How to Prompt AI to Build Better Roblox 3D Models — MeshMogul Foundations"><meta property="og:description" content="Write AI asset briefs that keep moving pieces separate, align pivots with joints, specify stud scale, and respect MeshPart material and appearance boundaries."><meta property="og:type" content="article"><meta property="og:site_name" content="MeshMogul"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="How to Prompt AI to Build Better Roblox 3D Models — MeshMogul Foundations"><meta name="twitter:description" content="Write AI asset briefs that keep moving pieces separate, align pivots with joints, specify stud scale, and respect MeshPart material and appearance boundaries."><link rel="icon" href="../../assets/favicon.png" type="image/png"><link rel="stylesheet" href="../../assets/site.css?v=foundations-20261115"><link rel="canonical" href="https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/"><meta property="og:url" content="https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/"></head><body><a class="skip-link" href="#main">Skip to content</a><div class="site-shell"><header class="site-header"><a class="brand" href="../../" aria-label="MeshMogul home"><img src="../../assets/favicon.png" width="30" height="30" alt=""><span>MeshMogul</span></a><nav aria-label="Main navigation"><a href="../../">Home</a><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Compatibility</a><a href="../" aria-current="page">Guides</a><a href="../../faq/">FAQ</a></nav><a class="header-cta" href="https://create.roblox.com/store/asset/126445067739142">Get MeshMogul on Creator Store <span aria-hidden="true">→</span></a></header><main id="main" tabindex="-1">
+<header class="page-heading article-heading"><p class="eyebrow"><a href="../#foundations">MeshMogul Foundations</a> / <a href="../#build-with-ai">Build with AI</a></p><h1>How to Prompt AI to Build Better Roblox 3D Models</h1><p class="lead">From a convincing first screenshot to an editable, reusable Studio asset.</p><div class="article-meta"><span>Beginner–advanced</span><span>12 min read</span><span>Engine Fundamentals</span></div><p class="review-date">Documentation reviewed <time datetime="2026-11-15">November 15, 2026</time> · Next review <time datetime="2027-02-15">2027-02-15</time></p></header><div class="article-layout"><details class="article-toc"><summary>On this page</summary><nav aria-label="On this page"><a href="#quick-takeaways">Quick Takeaways</a><a href="#specify-the-job-before-the-look">Specify the Job Before the Look</a><a href="#five-concepts">Keep Five Concepts Separate</a><a href="#size-and-pivots">Give the Asset a Coordinate Plan</a><a href="#appearance">Group Materials Without Losing Components</a><a href="#brief">Copy a Production-Aware AI Asset Brief</a><a href="#examples">Three Example Briefs and How to Inspect Them</a><a href="#inspection">Inspect Actual Output Against the Brief</a><a href="#finish">Finish, Publish, and Measure Deliberately</a><a href="#source-boundaries">Use Industry Guidance in the Right Context</a><a href="#references">Sources and technical references</a></nav></details><article class="prose"><details class="evidence-note"><summary>About this guide’s evidence</summary><p>Reviewed against the linked Roblox documentation and published MeshMogul product limits. Recommendations and example scenes are guidance, not measured results. This review date does not represent a new native Studio test. Current UI details that still need confirmation are called out in the text.</p></details><section class="takeaways" aria-label="Quick takeaways"><h2 id="quick-takeaways">Quick Takeaways</h2>
+<ul>
+<li><strong>Why it matters:</strong> A single <code>MeshPart</code> in Roblox behaves as one rigid body with one local pivot, one collision hull setting, and at most one <code>Material</code> plus one <code>TextureID</code> or <code>SurfaceAppearance</code> .</li>
+<li><strong>How it affects your creations:</strong> Asking for <em>"one single mesh"</em> fuses wheels to chassis, welds gates into walls, and forces unrelated surfaces into the same material slot.</li>
+<li><strong>What you can actually do about it:</strong> Separate five production decisions in the copyable <strong>AI Asset Brief</strong> below, require a build plan before edits, and test component rotation, <code>MeshId</code> reuse, and collision hulls on a copy in Studio.</li>
+</ul></section><p>Imagine asking an AI assistant or 3D generator to <em>"make a detailed sci-fi off-road buggy,"</em> and receiving a great-looking preview. The tires look rugged, the fenders hug the frame, and the rear mount looks ready for a boss fight.</p>
+<p>Then you drop it into Roblox Studio, try to spin a wheel, and hit a wall.</p>
+<p>The four tires are fused straight into the fenders as one rigid block of triangles. When you grab the Rotate tool on the rear mount, it swings around a point ten studs below the floor. And when you try to darken the tires from grey to black, the windshield turns black right along with them.</p>
+<p>That happens because <strong>a visual prompt can leave production requirements unspecified.</strong> If you only describe what an object should <em>look like</em>, an assistant has no reason to keep moving pieces independent, align pivots with hinges, or separate materials cleanly. Describe what must survive into your experience before a single part or triangle is generated—and verify what the tool actually built afterward.</p>
+
+<h2 id="specify-the-job-before-the-look">Specify the Job Before the Look</h2>
+<p>Before you write a single adjective about weathered paint or sci-fi trim, name the asset's job in your game. A background rock sitting 300 studs off a path needs almost no internal hierarchy. A modular corridor kit needs strict grid pivots and reusable wall bays. A drivable vehicle needs separate wheels, steering pivots, and room for physics constraints later.</p>
+<p>Ask your assistant for a short construction plan and a list of anything its tools cannot support <em>before</em> it generates the full assembly. Testing one small representative component first saves far more time than repairing a fused 200-part build after the fact.</p>
+<h2 id="five-concepts">Keep Five Concepts Separate</h2>
+<p>Think of a game asset like a stage prop built for a play. Which parts need hinges so stagehands can swing them open? Which surfaces are painted from the same bucket? Which repeated props were stamped from the same mold?</p>
+<p>Keeping those questions separate in your brief prevents the classic <em>"make everything one mesh"</em> trap:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable comparison table"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">The Engineering Question</th>
+<th style="text-align: left;">Off-Road Buggy Example</th>
+</tr>
+</thead>
 <tbody>
-<tr><th scope="row">Functional components</th><td>What must move, be replaced, or remain independently editable? For the vehicle: body/chassis, four wheel assemblies, and a rotating rear mount.</td></tr>
-<tr><th scope="row">Appearance domains</th><td>Which surfaces need different materials, images, or transparency? Rubber, painted panels, and exposed metal are appearance domains. One wheel can contain more than one.</td></tr>
-<tr><th scope="row">Physical mesh outputs</th><td>How many actual MeshParts does this route produce? A wheel assembly might contain several. Count the actual output; a material list is not a mesh-count guarantee.</td></tr>
-<tr><th scope="row">Reusable prototypes</th><td>Which repeated pieces should share one source design or geometry resource? Four wheel instances may reuse one wheel prototype while keeping separate transforms.</td></tr>
-<tr><th scope="row">Runtime behavior</th><td>What scripts, joints, constraints, collision, and animation are required? A visible wheel is not a working suspension, steering system, or drive controller.</td></tr>
-</tbody></table></div>
-<p>A component is not necessarily one Part or one MeshPart. A Model can organize several pieces without merging their geometry. Likewise, two surfaces that look alike do not have to become one component.</p>
-<p><strong>“Make everything one mesh” is usually the wrong first requirement.</strong> It can fuse a wheel into the body, a gate into its wall, or a replaceable panel into a corridor. Request independence first. Allow merging only within a boundary that does not need separate movement or editing.</p>
-</section>
-<section id="size-and-pivots">
-<h2>Give the asset a coordinate plan</h2>
+<tr>
+<td style="text-align: left;"><strong>1. Functional components</strong></td>
+<td style="text-align: left;"><em>What must move, rotate, open, swap out, or stay independently editable?</em></td>
+<td style="text-align: left;"><code>BodyChassis</code>, four wheel assemblies (<code>Wheel_FrontLeft</code>, <code>Wheel_FrontRight</code>, <code>Wheel_RearLeft</code>, <code>Wheel_RearRight</code>), and <code>RearMount</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. Appearance domains</strong></td>
+<td style="text-align: left;"><em>Which surfaces need distinct materials, PBR maps, or transparency?</em></td>
+<td style="text-align: left;">Matte rubber tires, painted body panels, bare metal suspension arms, and tinted windshield glass.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. Physical mesh outputs</strong></td>
+<td style="text-align: left;"><em>How many actual <code>MeshPart</code> instances does this route create in Explorer?</em></td>
+<td style="text-align: left;">Because each <code>MeshPart</code> holds only one material or texture state , a single wheel <code>Model</code> may contain <strong>2 <code>MeshPart</code>s</strong> (rubber tire + metal rim).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4. Reusable prototypes</strong></td>
+<td style="text-align: left;"><em>Which repeated shapes should share one underlying geometry (<code>MeshId</code> or generator)?</em></td>
+<td style="text-align: left;">All four wheels reuse <strong>one</strong> wheel prototype placed at four transforms so the engine can instance identical geometry.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5. Runtime behavior</strong></td>
+<td style="text-align: left;"><em>What scripts, constraints, joints, collision rules, and animations make it work in-game?</em></td>
+<td style="text-align: left;">Visual wheels do not steer or spin themselves; <code>HingeConstraint</code>s, <code>CylindricalConstraint</code>s, and drive scripts are separate engineering steps.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A functional component does not have to be a single <code>Part</code> or <code>MeshPart</code>. A <code>Model</code> container lets a rubber tire and a steel rim rotate together around one axle without fusing their materials into one mesh. Request <strong>component independence first</strong>, and allow geometry merging only inside boundaries that will never need to move or swap separately.</p>
+<h2 id="size-and-pivots">Give the Asset a Coordinate Plan</h2>
+<p>Reference images never tell a generator how tall a Roblox character is or which direction your game treats as forward. Lock down four spatial rules in every brief:</p>
 <ol>
-<li><strong>State dimensions and units.</strong> Specify width, height, length, and any required clear openings in studs. Name the target player or object that must fit. A reference image alone does not establish scale.</li>
-<li><strong>Declare orientation.</strong> For example, use +Y up and −Z forward in Studio. Treat this as the chosen convention for your brief; an external tool may use different axes and units. Check the imported result.</li>
-<li><strong>Name the hierarchy.</strong> Use meaningful names such as <code>BodyChassis</code>, <code>Wheel_FrontLeft</code>, and <code>RearMount</code>. Ask for one root with these independently selectable children.</li>
-<li><strong>Specify pivots by purpose.</strong> Put a wheel’s rotation center on its axle, a gate’s on its hinge, and a kit piece’s at a consistent snap point. Give the root a useful placement pivot too.</li>
+<li><strong>State dimensions and clearances in studs:</strong> Give outer width, height, and length in studs, plus any openings players must pass through . A standard R15 character is roughly 5 studs tall and 4 studs wide, and third-person cameras need headroom—so give doorways and hallways generous clear width and height (for example, 8–10 studs wide by 9–10 studs tall) and test with an actual character.</li>
+<li><strong>Declare orientation:</strong> State <code>+Y</code> up and <code>-Z</code> forward as your Studio convention. External modeling apps and file formats sometimes default to <code>+Z</code> up or different unit scales, so always check orientation after import.</li>
+<li><strong>Name the hierarchy:</strong> Ask for one clearly named root container (such as <code>Buggy_Root</code>) and meaningful child names (<code>BodyChassis</code>, <code>Wheel_FrontLeft</code>, <code>RearMount</code>) instead of twenty <code>MeshPart</code> siblings.</li>
+<li><strong>Specify pivots by purpose:</strong> Roblox's <a href="https://create.roblox.com/docs/studio/pivot-tools">Pivot Tools</a> (<code>PivotOffset</code> on a <code>BasePart</code> and <code>WorldPivot</code> or <code>PrimaryPart</code> on a <code>Model</code>) control where Studio's Move/Rotate handles sit and how <code>PVInstance:PivotTo()</code> transforms an object:</li>
+<li>Put a <strong>wheel's pivot</strong> on its axle center.</li>
+<li>Put a <strong>gate or door's pivot</strong> on its hinge pin edge, never in the center of the door panel.</li>
+<li>Put a <strong>modular wall or floor's pivot</strong> on a consistent bottom-corner or bottom-center grid snap point.</li>
+<li>Keep in mind: a clean pivot makes rotation and placement painless, <strong>but it does not create a physics joint or hinge constraint</strong> .</li>
 </ol>
-<p>Roblox’s <a href="https://create.roblox.com/docs/studio/pivot-tools">pivot tools</a> let you adjust a Part or Model pivot. A correctly placed pivot helps editing; it does not create a mechanical joint or working behavior.</p>
-<p>Choose a construction route explicitly: Studio Parts, a procedural generator, generated mesh geometry, or an external model imported into Studio. Different routes can produce different hierarchies. Roblox’s <a href="https://create.roblox.com/docs/studio/importer">Importer documentation</a> describes format-dependent hierarchy, including multiple MeshParts within a glTF mesh’s Model. Inspect the result rather than equating one authoring object with one MeshPart.</p>
-</section>
-<section id="appearance">
-<h2>Group materials without losing components</h2>
-<p>Write two lists: <em>components that must stay independent</em> and <em>surfaces that need each appearance</em>. A painted chassis and painted rear mount can share an appearance without being fused. A wheel can remain one functional assembly while containing rubber and metal mesh outputs. Ask the tool to report that mapping.</p>
-<p>For image texturing, describe the downstream route and required UV layout. UVs tell a texture where to land on the surface. Inspect seams, stretching, repeated patterns, and the back of the object. A generated color preview does not prove compatible UVs or saved texture references.</p>
-<p><strong>DOCUMENTED:</strong> Roblox’s <a href="https://create.roblox.com/docs/studio/texture-generator">Texture Generator</a> accepts a mesh or a coherent Model of meshes. It supports Fast diffuse and Quality PBR workflows. Multiple MeshParts do not become one shared atlas simply because they are selected together. Avoid texturing a scattered kit or several identical copies in one operation; start with a representative assembled piece.</p>
-<p><strong>UNVERIFIED across current Studio versions:</strong> the <a href="https://devforum.roblox.com/t/texture-generator-beta/2880635/1">original official announcement</a> documents Smart UV Unwrap, but the current Creator Hub page does not describe that control. Check your version’s options. Do not assume automatic unwrapping is available, enabled, or suitable for a layout you need to preserve. This is separate from Blender’s Smart UV Project.</p>
-<p>UV changes can require a different geometry reference; keep the resulting mesh and image references together. Follow the <a href="../roblox-studio-texture-generator/">Texture Generator guide</a> for the qualified workflow, then save and reopen the complete textured derivative. MeshMogul does not supply general UV authoring or automatically generate texture maps.</p>
-</section>
-<section id="brief">
-<h2>Copy a production-aware AI asset brief</h2>
-<p>Replace the brackets, remove irrelevant requirements, and give the brief to your chosen assistant. Start with a plan, not an upload. This is a plain-language brief, <strong>not an official Roblox GenerationService schema</strong> or executable code. An assistant with no Studio tools can propose a design; that is not proof it built one.</p>
-<label class="brief-label" for="asset-brief">Reusable AI asset brief</label>
-<p id="brief-copy-help" class="fine">Click or focus the field, then use Ctrl+A and Ctrl+C (Command+A and Command+C on macOS). Paste into your own document to edit. You can also <a href="ai-asset-brief.txt" download>download the plain-text brief</a>.</p>
-<textarea class="asset-brief" id="asset-brief" readonly rows="24" spellcheck="false" aria-describedby="brief-copy-help">AI ASSET BRIEF — replace the bracketed fields
+<p>Choose your construction route explicitly—Studio <code>Part</code>s, a <code>ProceduralModel</code> script, generated mesh geometry, or an external model imported into Studio. Roblox's <a href="https://create.roblox.com/docs/studio/importer">3D Importer</a> builds format-dependent hierarchies (for example, importing multiple <code>MeshPart</code>s inside a <code>Model</code> for glTF assets), so inspect Explorer rather than assuming one source file equals one <code>MeshPart</code>.</p>
+<h2 id="appearance">Group Materials Without Losing Components</h2>
+<p>Write two separate lists in your brief: <strong>components that must stay independent</strong> and <strong>surfaces that need each appearance</strong>. A painted chassis and a painted rear turret mount can share the same paint appearance without being fused into one static piece. Conversely, one wheel <code>Model</code> can contain separate rubber and metal <code>MeshPart</code>s so both materials stay crisp. Ask the assistant to report how actual <code>MeshPart</code> outputs map back to those two lists.</p>
+<p>If you plan to generate or apply image textures later, specify the UV and texture plan upfront:</p>
+<ul>
+<li>Roblox's <a href="https://create.roblox.com/docs/studio/texture-generator">Texture Generator</a> accepts a single <code>MeshPart</code> or a coherent <code>Model</code> of <code>MeshPart</code>s using <strong>Fast</strong> (1K diffuse) or <strong>Quality</strong> (4K PBR) modes. Selecting multiple <code>MeshPart</code>s together does <strong>not</strong> pack them into one shared texture atlas; each <code>MeshPart</code> gets its own texture output.</li>
+<li><strong>Current Studio UI not verified:</strong> The <a href="https://devforum.roblox.com/t/texture-generator-beta/2880635/1">original Texture Generator beta announcement</a> documented a <strong>Smart UV Unwrap</strong> option under Advanced Options, whereas the current Creator Hub documentation does not list that control. Check the options visible in your Studio build instead of assuming automatic unwrapping is present or right for your UV layout.</li>
+<li>When texturing modifies or generates a mesh's UV layout, Roblox creates a <strong>new <code>MeshId</code></strong> (<a href="https://devforum.roblox.com/t/texture-generator-beta/2880635/44">Roblox staff confirmation</a>). Always record and keep the new <code>MeshId</code> together with its <code>TextureID</code> or <code>SurfaceAppearance</code> maps as a separate derivative. See the <a href="../roblox-studio-texture-generator/">Texture Generator guide</a> for the full walkthrough. MeshMogul does not include general UV unwrapping or AI texture generation.</li>
+</ul>
+<h2 id="brief">Copy a Production-Aware AI Asset Brief</h2>
+<p>Replace the bracketed fields, delete anything your asset doesn't need, and hand this specification to your assistant before it changes your place. This is a plain-language engineering brief (), <strong>not</strong> an official Roblox <code>GenerationService</code> schema or executable code—and an assistant without Studio tools can propose a design without proving it actually built it. You can also download the exact text as <a href="ai-asset-brief.txt"><code>ai-asset-brief.txt</code></a>.</p>
+<p><label class="brief-label" for="asset-brief">Select and copy the AI asset brief</label></p>
+<p id="brief-copy-help">Use your browser’s select-all and copy commands inside this field, or <a href="ai-asset-brief.txt" download>download the plain-text brief</a>.</p>
+<textarea id="asset-brief" class="asset-brief" readonly aria-describedby="brief-copy-help">AI ASSET BRIEF — replace the bracketed fields
 
 PURPOSE
 Build [asset or kit] for [gameplay use, viewing distance, target devices].
@@ -121,64 +134,90 @@ Show what you inspected and how. Mark untested behavior and unavailable
 measurements UNVERIFIED. Report failures and unsupported requirements;
 do not silently omit parts, invent IDs, or claim a test was performed.
 </textarea>
-<p>When a requirement cannot be met, ask for an explanation and a proposed alternative. Agree to a changed brief explicitly; a silent omission is not a successful result.</p>
-</section>
-<section id="examples">
-<h2>Three examples to adapt</h2>
-<p>The dimensions below are illustrative choices, not Roblox requirements. These examples extend the brief; they are not tested recipes. Use original designs and references you have rights to use.</p>
-<h3>A. Sci-fi off-road vehicle</h3>
-<p><strong>Brief:</strong> “Create an original vehicle visual asset, about 14 studs wide, 10 high, and 24 long, with +Y up and −Z forward. Keep <code>BodyChassis</code>, four named wheel assemblies, and <code>RearMount</code> separate. Place wheel pivots at axle centers and the mount pivot at its intended rotation center. Use rubber tires, painted bodywork, and exposed metal surfaces. Reuse one wheel prototype where geometry matches; place four independent instances. Do not merge moving assemblies into the chassis.”</p>
-<p><strong>Inspect:</strong> select and rotate each wheel assembly on a test copy. Check that only that assembly moves, the center stays on its axle, and the rear mount rotates independently. Report actual MeshParts and appearance domains per assembly. A complete vehicle rig still needs a separate decision about joints, suspension, collision, scripts, and testing.</p>
-<h3>B. Modular castle</h3>
-<p><strong>Brief:</strong> “Build an original modular castle kit with a 16-stud wall span and 12-stud wall height, plus compatible towers and a gatehouse. Keep stone, wood, and metal appearances distinct. Gates must remain separate, with pivots on their hinges. Use one consistent grid and snap-pivot convention. Reuse a wall prototype instead of independently regenerating every wall. State gate opening dimensions and keep the editable modules.”</p>
-<p><strong>Inspect:</strong> duplicate and snap two wall sections, fit a tower, and rotate a gate on a copy. Check seams, matching heights, and a genuinely open passage. Inspect collision separately; a visible arch is not proof that a player can traverse it. Do not finalize the entire castle into one irreversible visual assembly.</p>
-<h3>C. Sci-fi corridor kit</h3>
-<p><strong>Brief:</strong> “Create original 8-stud-long corridor bays with 12-stud clear width and 10-stud clear height. Supply compatible wall, floor, ceiling, and corner modules. Use consistent snap pivots and orientation. Keep replacement panels and one moving door independent. Reuse matching geometry; make texture variation intentional and identify whether it needs another image or geometry derivative. Preserve the source kit.”</p>
-<p><strong>Inspect:</strong> assemble two straight bays and a corner, replace one panel, and move the door. Check floor continuity, corners, clearances, and texture scale. Test whether instances really share geometry references; similar appearance alone does not prove reuse. Add door behavior and collision deliberately after the visual layout passes.</p>
-</section>
-<section id="inspection">
-<h2>Inspect actual output against the brief</h2>
-<p>Keep the brief next to Explorer and the viewport. Use a copy for movement and collision experiments. A correct image is not sufficient evidence for hierarchy, pivots, permissions, or durable references.</p>
-<div class="table-wrap"><table>
-<caption>Record requested → actual → evidence → pass, fail, or UNVERIFIED</caption>
-<thead><tr><th scope="col">Check</th><th scope="col">Practical inspection</th></tr></thead>
-<tbody>
-<tr><th scope="row">Components</th><td>Expand the root in Explorer. Match names and roles to the brief. Select each required component and check what geometry it actually contains.</td></tr>
-<tr><th scope="row">Independence and pivots</th><td>Move or rotate each required assembly on a copy. Check its center, axis, and whether unrelated pieces move with it. Names alone are not evidence.</td></tr>
-<tr><th scope="row">Dimensions and alignment</th><td>Measure bounds and clear openings in studs; check up/front direction. Duplicate a kit piece to test a real seam and snap point.</td></tr>
-<tr><th scope="row">Appearance and output count</th><td>List actual MeshParts inside each component and their materials/maps. Explain extra outputs or fused components rather than forcing the requested count.</td></tr>
-<tr><th scope="row">Geometry and topology</th><td>Inspect silhouette, holes, normals, shading and thin faces from all sides. Check geometry statistics where your tools expose them; report unavailable counts honestly.</td></tr>
-<tr><th scope="row">UVs and images</th><td>Inspect seams and stretching. Record geometry and image references together for every textured piece, including any SurfaceAppearance maps and explicit version pins.</td></tr>
-<tr><th scope="row">Prototypes and source</th><td>Compare geometry references on repeated MeshParts. Verify that the editable source, generator/settings where available, and separately named derivatives still exist.</td></tr>
-<tr><th scope="row">Collision and behavior</th><td>Inspect collision bounds and intended openings. Run authorized, controlled interaction tests separately. Mark scripts, joints, and behavior untested until exercised.</td></tr>
-<tr><th scope="row">Persistence and reuse</th><td>Save the full intended object. Reopen and insert or load a fresh copy through the chosen workflow. Check every dependency in the destination under its actual owner/group permissions.</td></tr>
-<tr><th scope="row">Performance</th><td>Compare representative scenes and devices. Record measurements and conditions; do not replace unknown readings with an assistant’s estimate.</td></tr>
-</tbody></table></div>
-<p>Only label a result <strong>OBSERVED</strong> when you performed the named check. Separate a proposed test from a passed test. If a component, image, or behavior is missing, revise the source or brief before approving a derivative.</p>
-</section>
-<section id="finish">
-<h2>Finish, publish, and measure deliberately</h2>
-<p>Set a provisional geometry, texture, and output budget for the asset’s use and expected number of copies. Revise it using real results. Platform limits and plugin limits are constraints, not ideal targets. There is no universal triangle count or FPS rule that makes every prop, vehicle, or environment efficient.</p>
-<p>Editor responsiveness while inspecting a selection, conversion processing time, resulting mesh complexity, and game runtime performance are different measurements. Fewer Parts can still mean expensive textures or collision. Use the <a href="../compare-roblox-meshes-before-and-after/">fair comparison guide</a> and Roblox’s <a href="https://create.roblox.com/docs/performance-optimization/microprofiler">MicroProfiler</a> before claiming an improvement.</p>
-<p>Keep editable source separate from generated derivatives. A temporary Preview or a filename is not proof of cloud publication. Preserve all mesh/image dependencies and confirm permissions; for reusable hierarchies, consider Roblox <a href="https://create.roblox.com/docs/projects/assets/packages">Packages</a>. Follow the <a href="../publish-a-mesh-from-roblox-studio/">publication guide</a> for the distinction between temporary content and durable assets.</p>
-<p>MeshMogul fits when supported Studio geometry needs an inspected visual mesh derivative. Check its <a href="../../supported-inputs/">current compatibility</a>, retain and approve the exact Preview, and review and manually run the Studio Command Bar publication command. Its local Assets record is not cloud sync or a backup of later texture edits. Visual finalization does not preserve arbitrary scripts, joints, constraints, rigging, animation, or gameplay behavior.</p>
-<p>If a wheel, gate, or door must stay independent, finalize only the intended static component at a time, then assemble and rig the results separately. MeshMogul’s appearance grouping is not a preserved functional-component hierarchy.</p>
-</section>
-<section id="source-boundaries" class="references">
-<h2>Use industry guidance in the right context</h2>
-<p><strong>DOCUMENTED:</strong> the Khronos Group’s current <a href="https://github.com/KhronosGroup/3DC-Asset-Creation/blob/main/asset-creation-guidelines/RealtimeAssetCreationGuidelines.md">Real-time Asset Creation Guidelines</a> identify version 2.0.0, updated August 2025. Their discussion of scale, origins, reusable geometry, UVs and materials is useful background. The following are recommended adaptations, not a Roblox certification or a claim that every commerce convention fits a game.</p>
+
+<p>If a tool cannot meet a requirement—for example, if a generator cannot keep wheels separate—ask for an honest explanation and an alternative plan before proceeding. A silent omission is a broken spec, not a pass.</p>
+<h2 id="examples">Three Example Briefs and How to Inspect Them</h2>
+<p>The stud dimensions below are starting examples, not engine rules. Always test movement and deletion on a duplicate copy (<code>Ctrl+D</code> / <code>⌘D</code>) so your main build stays safe.</p>
+<h3 id="a-sci-fi-off-road-vehicle">A. Sci-Fi Off-Road Vehicle</h3>
 <ul>
-<li><strong>General 3D principles:</strong> decide scale, useful pivots, editability, appearance, reuse and validation before delivery.</li>
-<li><strong>glTF-specific details:</strong> meter-based units, triangle storage and material extensions are format rules. They do not define Studio stud dimensions, MeshPart counts, Glass fidelity, or gameplay collision.</li>
-<li><strong>Blender-specific steps:</strong> transform application, exporter settings and Smart UV Project are tool operations. They are not commands that every Studio-connected assistant can perform.</li>
-<li><strong>Substance-specific steps:</strong> baking and export presets belong to a texture-authoring pipeline. Do not assume a shader graph or packed texture will transfer unchanged.</li>
-<li><strong>Roblox-specific requirements:</strong> check the current <a href="https://create.roblox.com/docs/art/modeling/specifications">modeling specifications</a>, <a href="https://create.roblox.com/docs/art/modeling/texture-specifications">texture specifications</a>, and importer. Verify units, hierarchy, maps and pivots after import.</li>
+<li><strong>Brief:</strong> <em>"Create an original vehicle visual asset, about 14 studs wide, 10 high, and 24 long, with +Y up and −Z forward. Keep <code>BodyChassis</code>, four named wheel assemblies, and <code>RearMount</code> separate. Place wheel pivots at axle centers and the mount pivot at its intended rotation center. Use rubber tires, painted bodywork, and exposed metal surfaces. Reuse one wheel prototype where geometry matches; place four independent instances. Do not merge moving assemblies into the chassis."</em></li>
+<li><strong>Studio check:</strong> On a duplicate copy, expand the root in <strong>Explorer</strong>, select <code>Wheel_FrontLeft</code>, switch to <strong>Rotate</strong> (<code>Ctrl+4</code> / <code>⌘4</code>) in <strong>Local</strong> space (<code>Ctrl+L</code> / <code>⌘L</code>), and spin around its axle. Confirm only that wheel moves, it doesn't wobble off-center, and <code>RearMount</code> rotates on its own. Drive constraints, suspension, and collision remain separate work.</li>
 </ul>
-<p>The Khronos reference is published under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; this guide paraphrases selected principles and adapts them to a Roblox workflow. No reference artwork or example assets are reproduced. Official Roblox pages are living documentation; features and limits can change.</p>
-</section>
-<section class="guide-next">
-<h2>Choose your next step</h2>
-<p><a href="../proceduralmodel-assistant-output-to-mesh/">Prepare Assistant or procedural output</a> · <a href="../roblox-studio-texture-generator/">Prepare and save native texturing</a> · <a href="../compare-roblox-meshes-before-and-after/">Compare the result fairly</a> · <a href="../#foundations">Back to Foundations</a></p>
-</section>
-</article></div>
+<h3 id="b-modular-castle-kit">B. Modular Castle Kit</h3>
+<ul>
+<li><strong>Brief:</strong> <em>"Build an original modular castle kit with a 16-stud wall span and 12-stud wall height, plus compatible towers and a gatehouse with a clear 10×10 stud opening. Keep stone, wood, and metal appearances distinct. Gates must remain separate, with pivots on their hinges. Use one consistent grid and snap-pivot convention. Reuse a wall prototype instead of independently regenerating every wall. State gate opening dimensions and keep the editable modules."</em></li>
+<li><strong>Studio check:</strong> Duplicate two wall bays, snap them 16 studs apart against a tower, and swing the gate around its hinge Y-axis. Then click <strong>Visualization Options</strong> in the top-right corner of the 3D viewport and toggle <strong>Collision fidelity</strong> to verify the gatehouse opening isn't sealed by a solid convex hull.</li>
+</ul>
+<h3 id="c-sci-fi-corridor-kit">C. Sci-Fi Corridor Kit</h3>
+<ul>
+<li><strong>Brief:</strong> <em>"Create original 8-stud-long corridor bays with 12-stud clear width and 10-stud clear height. Supply compatible wall, floor, ceiling, and corner modules. Use consistent snap pivots and orientation. Keep replacement panels and one moving door independent. Reuse matching geometry; make texture variation intentional and identify whether it needs another image or geometry derivative. Preserve the source kit."</em></li>
+<li><strong>Studio check:</strong> Snap two straight bays and a corner module together, swap out one wall panel, and slide the door. Select two matching wall ribs in Explorer and compare <strong>Properties → <code>MeshId</code></strong>—identical appearance does not guarantee geometry instancing unless their <code>MeshId</code>s actually match.</li>
+</ul>
+<h2 id="inspection">Inspect Actual Output Against the Brief</h2>
+<p>Keep your brief open beside <strong>Explorer</strong> and <strong>Properties</strong>. Only mark a check after you run it yourself:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable comparison table"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Check</th>
+<th style="text-align: left;">Practical Studio Inspection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Components</strong></td>
+<td style="text-align: left;">Expand the root in Explorer. Match child names and roles to the brief and select each group to verify what geometry lives inside.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Independence &amp; pivots</strong></td>
+<td style="text-align: left;">Rotate or move each assembly in Local space (<code>Ctrl+L</code> / <code>⌘L</code>) on a duplicate copy. Confirm the pivot location, axis direction, and zero neighbor drag.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dimensions &amp; alignment</strong></td>
+<td style="text-align: left;">Measure outer size and walkable clearances in studs; snap two duplicate modules together to test seam alignment.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Appearance &amp; output count</strong></td>
+<td style="text-align: left;">Count actual <code>MeshPart</code>s per component and inspect their materials and maps. Explain extra material splits rather than forcing one mesh.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Geometry &amp; topology</strong></td>
+<td style="text-align: left;">Orbit 360°, including underneath and inside openings, to spot missing backfaces, holes, or dark shading smudges under low sunlight.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UVs &amp; images</strong></td>
+<td style="text-align: left;">Inspect seams and stretched corners. Record <code>MeshId</code> alongside <code>TextureID</code> or <code>SurfaceAppearance</code> map IDs for every textured piece.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Prototypes &amp; source</strong></td>
+<td style="text-align: left;">Confirm repeated <code>MeshPart</code>s share one <code>MeshId</code> and verify your editable source or <code>ProceduralModel</code> generator is safely archived.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Collision &amp; behavior</strong></td>
+<td style="text-align: left;">Toggle <strong>Visualization Options → Collision fidelity</strong> and walk-test openings in Play mode. Leave untested scripts and joints marked <strong>not yet tested</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Persistence &amp; reuse</strong></td>
+<td style="text-align: left;">Save, reopen Studio, and insert a fresh copy in your target place under the intended creator or group permissions.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Performance</strong></td>
+<td style="text-align: left;">Test matched before/after scenes with <a href="https://create.roblox.com/docs/performance-optimization/microprofiler">MicroProfiler</a> instead of guessing from triangle counts or assistant estimates.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="finish">Finish, Publish, and Measure Deliberately</h2>
+<p>Set a provisional budget for triangles, outputs, and textures based on viewing distance and copy count—not an arbitrary "magic poly limit." Remember that Studio responsiveness while selecting objects, conversion processing time, resulting mesh complexity, and live runtime frame times are four separate measurements. Fewer <code>Part</code>s can still cost more if you add oversized textures or expensive collision hulls. Use the <a href="../compare-roblox-meshes-before-and-after/">fair comparison guide</a> before declaring an optimization win.</p>
+<p>Keep your editable source separate from published visual derivatives. For reusable hierarchies that include scripts, lights, or constraints, consider Roblox <a href="https://create.roblox.com/docs/projects/assets/packages">Packages</a>. When supported Studio geometry needs a clean visual mesh derivative, check <a href="../../supported-inputs/">MeshMogul 1.3.0 compatibility</a>, inspect and approve the retained Preview, and manually run the Studio Command Bar publication handoff.</p>
+<ul>
+<li><strong>Important MeshMogul boundary:</strong> MeshMogul groups outputs by <strong>visual appearance</strong>, not by mechanical function. If a wheel, gate, or door needs to move independently, finalize one static component at a time and assemble or rig the pieces afterward. Visual finalization does not copy scripts, joints, constraints, rigging, or gameplay behavior.</li>
+</ul>
+<h2 id="source-boundaries">Use Industry Guidance in the Right Context</h2>
+<p>The Khronos Group's <a href="https://github.com/KhronosGroup/3DC-Asset-Creation/blob/main/asset-creation-guidelines/RealtimeAssetCreationGuidelines.md">Real-Time Asset Creation Guidelines (v2.0.0, August 2025, CC BY 4.0)</a> provide solid cross-engine habits for scale, origins, geometry reuse, UVs, and materials. When adapting general 3D guidance to Roblox:</p>
+<ul>
+<li><strong>General principles transfer:</strong> Decide scale, useful pivots, editability, appearance domains, reuse, and verification before delivery.</li>
+<li><strong>glTF conventions don't define Studio behavior:</strong> Meter units and glTF material extensions are format rules, not Roblox stud dimensions, <code>MeshPart</code> limits, <code>Glass</code> behavior, or <code>CollisionFidelity</code> hulls.</li>
+<li><strong>Blender and Substance steps are tool-specific:</strong> Apply Transforms, Smart UV Project, and external shader graphs are external pipeline actions—not commands every Studio assistant can execute.</li>
+<li><strong>Roblox rules win at import:</strong> Check Roblox's <a href="https://create.roblox.com/docs/art/modeling/specifications">modeling specifications</a>, <a href="https://create.roblox.com/docs/art/modeling/texture-specifications">texture specifications</a>, and <a href="https://create.roblox.com/docs/studio/importer">3D Importer</a>, then verify units, hierarchy, maps, and pivots inside Studio.</li>
+</ul>
+<p><em>(Paraphrased and adapted from Khronos Real-Time Asset Creation Guidelines v2.0.0 under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; no Khronos artwork or sample assets are reproduced).</em></p><h2 id="references">Sources and technical references</h2><ul><li><a href="https://create.roblox.com/docs/studio/pivot-tools">Pivot tools</a></li><li><a href="https://create.roblox.com/docs/studio/importer">Importer</a></li><li><a href="https://create.roblox.com/docs/studio/texture-generator">Texture generator</a></li><li><a href="https://devforum.roblox.com/t/texture-generator-beta/2880635/1">Texture Generator beta: historical UI announcement</a></li><li><a href="https://devforum.roblox.com/t/texture-generator-beta/2880635/44">Texture Generator beta: MeshId and UV behavior</a></li><li><a href="https://create.roblox.com/docs/art/modeling/specifications">Specifications</a></li><li><a href="https://create.roblox.com/docs/art/modeling/texture-specifications">Texture specifications</a></li><li><a href="https://create.roblox.com/docs/projects/assets/packages">Packages</a></li><li><a href="https://create.roblox.com/docs/performance-optimization/microprofiler">Microprofiler</a></li><li><a href="https://github.com/KhronosGroup/3DC-Asset-Creation/blob/main/asset-creation-guidelines/RealtimeAssetCreationGuidelines.md">Khronos Real-Time Asset Creation Guidelines</a></li><li><a href="https://morningforge.github.io/MeshMogul/supported-inputs/">Supported inputs</a></li></ul><section class="guide-next"><h2>Keep building</h2><p class="next-step">Next recommended → <a href="../proceduralmodel-assistant-output-to-mesh/">Assistant &amp; ProceduralModel to Mesh</a></p><h3>Related reading</h3><ul><li><a href="../proceduralmodel-assistant-output-to-mesh/">Assistant &amp; ProceduralModel to Mesh</a></li><li><a href="../preparing-studio-builds-for-finalization/">Preparing Studio Builds for Finalization</a></li><li><a href="../why-models-split-into-multiple-meshparts/">Why Models Split Into Multiple MeshParts</a></li><li><a href="../roblox-studio-texture-generator/">Roblox Studio Texture Generator Guide</a></li></ul><nav class="path-progress" aria-label="From AI Prompt to Reusable Mesh Asset"><p><a href="../#beginner-ai-to-asset">From AI Prompt to Reusable Mesh Asset</a> · Step 1 of 5</p><span>Next: <a href="../proceduralmodel-assistant-output-to-mesh/">Assistant &amp; ProceduralModel to Mesh</a></span></nav><p><a href="../#library">Browse all 16 guides →</a> · <a href="#main">Back to top ↑</a></p></section></article></div>
 </main><footer class="site-footer"><div><a class="brand" href="../../">MeshMogul<span class="brand-period">.</span></a><p>From Studio build to reusable mesh.</p><p class="fine">An independent tool by MorningForge.<br>Not affiliated with or endorsed by Roblox.</p><p class="fine">Copyright © 2026 MorningForge, to the extent of rights held by MorningForge. Third-party terms apply.</p></div><nav aria-label="Footer navigation"><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Supported inputs &amp; limits</a><a href="../">Guides</a><a href="../../faq/">FAQ</a><a href="../../changelog/">What’s New</a><a href="../../privacy/">Privacy &amp; data</a><a href="../../legal/">Legal &amp; third-party notices</a></nav><div class="footer-note"><span class="eyebrow">Built for builders.</span><p>Supported source.<br>Inspectable output.<br>Explicit publication.</p></div></footer></div></body></html>

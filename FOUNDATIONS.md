@@ -1,128 +1,123 @@
-# MeshMogul Foundations — editorial plan and candidate handoff
+# MeshMogul Foundations candidate
 
-Foundations is a free educational collection inside the existing static Guides
-section: **3D Building for the AI Era**. It serves creators with or without
-MeshMogul. It is not a separate company, certification, membership, or product.
+This candidate expands the existing Guides section into a free, 16-article
+Roblox engineering library. It is ready for Lead website technical and visual
+review; **final visual acceptance remains blocked by eight native Studio
+captures**. Merge, Pages deployment, and Roblox asset publication are not part
+of this candidate.
 
-## Current candidate
+## Implemented
 
-- [Foundations entry](https://morningforge.github.io/MeshMogul/guides/#foundations)
-- [Cornerstone AI asset brief and inspection guide](https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/)
-- [Downloadable plain-text brief](guides/how-to-prompt-ai-for-roblox-3d-models/ai-asset-brief.txt)
+- All 16 complete articles across four subjects, preserving the ten existing
+  routes and adding six guide routes. Every article is in the sitemap with a
+  matching canonical URL and social metadata.
+- Three guided learning paths with ordered steps, article-level progress,
+  previous/next links, prerequisites, and related reading.
+- Symptom discovery, subject navigation, difficulty metadata, and full-text
+  search by title, technical terminology, symptoms, tags, and article content.
+- Responsive article typography, collapsible contents, keyboard-scrollable
+  comparison tables and Luau examples, a selectable AI brief, and the unchanged
+  downloadable brief. All legacy fragment anchors remain, including the brief
+  field and its help text.
+- Documentation review dates from the editorial review of November 15, 2026,
+  with next-review dates. These dates do not claim fresh native Studio tests.
+  Evidence notes and primary references replace repetitive paragraph badges.
+  Current Smart UV UI uncertainty remains explicit.
+- One deferred, same-origin search script and one generated static index.
+  Search words stay in memory on the page. No cookies, telemetry, fingerprinting,
+  external runtime dependencies, URL query transmission, or browser storage.
+  The full library remains browsable with JavaScript disabled or the index
+  unavailable. Privacy copy explains this bounded enhancement.
 
-The website URLs above describe intended routes. This candidate has **not been
-merged or deployed**. Review the files on PR #5's branch until release is
-separately authorized. The existing nine guides remain; only one article and
-its reusable brief are new.
+The existing site branding, commercial pages, pricing, product limitations,
+release history, license notices, and legal page are preserved. Shared CSS adds
+Foundations components and improves containment of long article content.
+No native Studio screenshot, observed benchmark, or generated asset is claimed.
 
-The four tracks are Build with AI, Understand 3D, Finish and publish, and Test
-and optimize. Existing articles do the detailed work; do not create competing
-pages to fill a navigation category.
+## Verification
 
-## Next three priorities
+Completed in Chromium on the local project-path preview:
 
-1. **Observe a component-preservation exercise.** Try one wheel or hinged gate
-   on an authorized disposable example. Compare a vague visual request with the
-   structured brief. Record the actual hierarchy, pivots, independent movement,
-   output count and source retention, including failures. Extend the cornerstone
-   with observed results only after running the exercise; do not claim the
-   current three prompts are validated.
-2. **Verify one UV-to-publication handoff.** Extend the existing Texture
-   Generator and reference guides with a controlled before/after case. Record
-   the Studio version and available Smart UV controls, geometry and image
-   references, permissions, and save/reopen behavior. A new mesh reference and
-   its images must stay together. Any upload needs separate authorization.
-3. **Add a measured collision/performance case.** Extend the existing comparison
-   guide with matched source and derivative scenes, traversable openings,
-   representative devices and repeatable measurements. Separate inspection
-   responsiveness, conversion time, mesh complexity and runtime cost. Publish
-   conditions and limitations rather than a universal triangle or FPS rule.
+- `python3 tools/check_site.py`: 25 HTML pages, 1,093 links/assets, 24 sitemap
+  entries; route, canonical, anchor, heading, alt, release, legal, privacy,
+  public-content, and runtime-resource checks pass.
+- `python3 tools/build_search_index.py --check`: generated index matches all
+  article HTML and public metadata. The public catalog contains no private
+  manuscript locations or editorial production instructions.
+- `python3 tools/test_search_policy.py`: the exact deferred script is allowed
+  only on the hub. External and protocol-relative scripts, other local scripts,
+  inline script bodies, duplicate scripts, extra execution attributes, and
+  inline event handlers are rejected. The checker pins the inspected search
+  implementation by SHA-256; this is not a general local-JavaScript waiver.
+- `node tools/check_foundations_browser.cjs`: search terms including
+  `CollisionPrecision`, `MikkTSpace`, `GenerationError`, `WorldPivot`, `MeshId`,
+  and dark-smudge symptoms find the expected guides. Combined subject/difficulty
+  filters, zero results, reset, safe handling of markup-like input, subject
+  jumps after filtering, keyboard tab order, labelled controls, and live result
+  announcements pass.
+- The hub and every direct article URL return successfully at 1280, 390, and
+  320 pixels without page-level horizontal overflow. Tables and code scroll
+  within their containers. Representative screenshots were visually inspected.
+- JavaScript-disabled browsing exposes all 16 articles, all three path
+  sequences, and the exact selectable/downloadable brief. Failed-network and
+  malformed-index checks also preserve the complete static catalog.
+- Browser requests stay on the local site origin; no cookies or browser storage
+  are created, and no page errors occur. Accessible names and status roles were
+  inspected through Chromium's accessibility tree. A spoken screen-reader
+  session and native Studio runtime tests have not been performed.
 
-A small requested-versus-actual worksheet or revised prompt template may follow
-those exercises. Consider an agent skill only after repeated use reveals a
-stable task and its failure cases; first inspect existing tooling and ownership.
-No skill, agent integration or new execution permission is supplied by this
-editorial plan.
+Browser screenshots are website evidence, not Roblox Studio evidence:
 
-## Evidence and content boundaries
+| Width | Hub | Search | Article |
+| --- | --- | --- | --- |
+| 1280 | [View](review/foundations/hub-1280.png) | [View](review/foundations/search-1280.png) | [View](review/foundations/article-1280.png) |
+| 390 | [View](review/foundations/hub-390.png) | [View](review/foundations/search-390.png) | [View](review/foundations/article-390.png) |
+| 320 | [View](review/foundations/hub-320.png) | [View](review/foundations/search-320.png) | [View](review/foundations/article-320.png) |
 
-- DOCUMENTED: linked primary sources describe behavior. OBSERVED: an actual
-  check on a named output. RECOMMENDED: editorial advice. UNVERIFIED: not yet
-  established. Preserve those distinctions when updating articles.
-- The cornerstone examples are untested starting points. No Studio generation,
-  asset publication, benchmark, or prompt-success experiment was performed for
-  this website assignment.
-- Current Khronos GitHub guidance identifies version 2.0.0, updated August 2025.
-  Distinguish its general principles from glTF, Blender, Substance and Roblox
-  conventions. The older Khronos registry still lists version 1.0.0.
-- Smart UV controls are documented in the original Roblox announcement but not
-  described on the current Creator Hub Texture Generator page. Current native
-  availability across Studio versions remains unverified.
-- This work does not add plugin capabilities, cloud synchronization, arbitrary
-  mesh/appearance support, automatic publication or same-ID updates.
+These review files and this report are outside the Pages staging allowlist.
 
-## Files and verification record — November 13, 2026
+## Native visuals outstanding
 
-Release corrections: `index.html`, `README.md`, `how-it-works/index.html`,
-`supported-inputs/index.html`, `faq/index.html`, `changelog/index.html`,
-`guides/index.html`, the Parts-to-mesh, no-Blender and Assistant/ProceduralModel
-guides, `DEPLOYMENT.md`, and `tools/check_site.py`.
+No official native Roblox Studio tool is available in the implementation
+session. Existing website media does not establish any of these eight specific
+comparisons. No protected place was modified, no paid generation was initiated,
+and no Roblox assets were published. Missing captures are omitted from the
+article layout, rather than represented by simulated UI or evidence placeholders.
 
-Foundations: `guides/index.html`,
-`guides/how-to-prompt-ai-for-roblox-3d-models/index.html`, its
-`ai-asset-brief.txt`, `assets/site.css`, `sitemap.xml`, README and
-Assistant/ProceduralModel crosslinks, deployment/checker updates, and this plan.
+| Required visual | What remains to capture | Specific blocker |
+| --- | --- | --- |
+| spec-01 · AI asset brief | Gate center pivot versus hinge pivot, matched rotation | Native Studio viewport and pivot tools unavailable |
+| spec-02 · Texture Generator | Same geometry, Fast 1K versus Quality 4K PBR, Properties and Explorer; verify current UV-control wording | Native Texture Generator UI and authorized generation session unavailable |
+| spec-03 · Rendering | Stacked-block cutaway versus stretched block, paired with genuine MicroProfiler indicators | Native scene/wireframe and profiler capture unavailable |
+| spec-04 · Collision | Hull/Default, precise decomposition, and three simple doorway colliders; current Tunable visualization check | Native collision overlay and disposable scene unavailable |
+| spec-05 · Surface data | Split/welded normals, Y+/Y− lighting comparison, and texture tiers | Native controlled shading and normal-map comparison unavailable |
+| spec-06 · Grouping | Mixed-color Plastic, Wood, and Glass source versus three grouped outputs with Explorer inset | Native current MeshMogul Preview and Explorer unavailable |
+| spec-07 · Preflight | Primitive budgets and retained blank-MeshId Preview beside a genuine stale-source warning | Native current MeshMogul preflight/freshness UI unavailable |
+| spec-08 · Preparation | Deliberate Model pivot/PrimaryPart alignment versus wrong origin, matched rotation | Native Studio pivot/viewport comparison unavailable |
 
-- Both checker modes pass: **19 HTML pages, 550 links/assets, 18 sitemap
-  entries**. Checks include project-path links and fragments, sitemap,
-  canonical/social metadata, heading hierarchy, static resources, release
-  assertions, approved legal notices, privacy and effective Git identity.
-- `git diff --check` passes. All four earlier release bodies are preserved;
-  only the current/historical label changed for 1.2.1. No stale 1.2.1 current
-  copy remains outside the changelog history.
-- Release review sampled 11 desktop routes at 1280 px and five representative
-  routes at both 390 and 320 px. Foundations entry/guide and homepage were
-  rechecked at all three widths after integration: no document overflow,
-  clipped headings or broken images in those samples. Acquisition and track
-  navigation targets are 44 px high. This is bounded review, not full
-  accessibility certification.
-- Keyboard checks: visible skip-link focus and Enter-to-main, FAQ disclosure
-  activation, track-anchor activation, guide navigation, and whole-field
-  selection in the read-only brief with visible focus. The field wraps on
-  narrow screens. Reduced-motion CSS remains intact.
-- The download returns HTTP 200 and is byte-identical to the source brief;
-  the displayed field matches the same text. All ten guides appear once in
-  the four track card lists. Only one new indexable HTML route was added.
-- All ten source/license links in the cornerstone returned HTTP 200. Its
-  intended canonical URL is not deployed yet. For existing references,
-  AssetService returned HTTP 502 through the local client but was retrieved
-  successfully through web browsing; an all-references-HTTP-200 result is not
-  claimed.
-- Public text and PNG metadata were reviewed. No private locations,
-  credentials or internal test IDs were introduced. Existing explicitly
-  illustrative URI numbers and third-party license attributions are retained.
-  New commits use MorningForge author and committer with the authorized
-  GitHub noreply address, verified before commit and against remote metadata.
+The authoritative production brief and manuscripts differ in example scenes
+for spec-06 and spec-08. The capture queue above follows the production brief;
+no replacement scene has been asserted as native proof. Do not treat the
+candidate as visually complete until the captures are reviewed and integrated.
 
-## Durable checkpoints and takeover
+## Maintenance and rerunning checks
 
-Existing branch: `codex/meshmogul-public-1-3-site-editorial-v1`.
-Existing review: [PR #5](https://github.com/MorningForge/MeshMogul/pull/5).
+Article HTML is the served content. Edit it directly, update the public
+`assets/foundations-catalog.json` when discovery metadata changes, and run:
 
-- Release accuracy: `e35232b16f96aabd0f65b966857a8ad2cf77990a`.
-- Cornerstone guide and brief: `2ca459d40abca050566aa92949cadd09aa7a8dad`.
-- Track integration and editorial plan: the commit containing this record.
+```sh
+python3 tools/build_search_index.py
+python3 tools/check_site.py
+python3 tools/test_search_policy.py
+```
 
-The PR description was deliberately left unchanged at the Product Owner's
-request after an unavailable edit form. Use the current branch files and
-commits for review; do not rely on its older description of the release.
+No build step or package installation is needed to serve the site. Browser
+verification additionally uses Playwright and Chromium as development tools;
+these are not loaded by the website. Serve the repository under `/MeshMogul/`
+and run `node tools/check_foundations_browser.cjs`. Set `FOUNDATIONS_BASE_URL`
+and `CHROMIUM_PATH` when using a different local preview or Chromium location.
+The browser check writes temporary screenshots to ignored `.local/`.
 
-Before takeover, verify the remote branch/HEAD and local dirty state. Preserve
-unrelated work. One mutating owner at a time. Run both site-checker modes and
-recheck affected layouts and primary sources after any further change. Commit
-and push only coherent verified work to this existing branch.
-
-The next owner is the Lead/Product Owner for candidate review and a later
-publication decision. Merge to main, GitHub Pages deployment, Creator Store
-changes, plugin-source edits and Roblox asset publication are not authorized by
-this handoff.
+Search is intentionally plain text, case-insensitive and punctuation-tolerant;
+all words must match within an article. It does not use fuzzy or semantic
+ranking. Difficulty ranges include their intermediate levels.

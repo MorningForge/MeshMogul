@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>Collision Fidelity and Invisible Doorways in Roblox — MeshMogul Foundations</title><meta name="description" content="Compare all 5 CollisionFidelity modes (including Tunable), stop Hull/Default from blocking doorways with the Box + 3 invisible Block Parts pattern, and cut PhysicsParts memory."><meta property="og:title" content="Collision Fidelity and Invisible Doorways in Roblox — MeshMogul Foundations"><meta property="og:description" content="Compare all 5 CollisionFidelity modes (including Tunable), stop Hull/Default from blocking doorways with the Box + 3 invisible Block Parts pattern, and cut PhysicsParts memory."><meta property="og:type" content="article"><meta property="og:site_name" content="MeshMogul"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Collision Fidelity and Invisible Doorways in Roblox — MeshMogul Foundations"><meta name="twitter:description" content="Compare all 5 CollisionFidelity modes (including Tunable), stop Hull/Default from blocking doorways with the Box + 3 invisible Block Parts pattern, and cut PhysicsParts memory."><link rel="icon" href="../../assets/favicon.png" type="image/png"><link rel="stylesheet" href="../../assets/site.css?v=foundations-20261115"><link rel="canonical" href="https://morningforge.github.io/MeshMogul/guides/collision-fidelity-and-invisible-doorways/"><meta property="og:url" content="https://morningforge.github.io/MeshMogul/guides/collision-fidelity-and-invisible-doorways/"></head><body><a class="skip-link" href="#main">Skip to content</a><div class="site-shell"><header class="site-header"><a class="brand" href="../../" aria-label="MeshMogul home"><img src="../../assets/favicon.png" width="30" height="30" alt=""><span>MeshMogul</span></a><nav aria-label="Main navigation"><a href="../../">Home</a><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Compatibility</a><a href="../" aria-current="page">Guides</a><a href="../../faq/">FAQ</a></nav><a class="header-cta" href="https://create.roblox.com/store/asset/126445067739142">Get MeshMogul on Creator Store <span aria-hidden="true">→</span></a></header><main id="main" tabindex="-1">
+<header class="page-heading article-heading"><p class="eyebrow"><a href="../#foundations">MeshMogul Foundations</a> / <a href="../#test-and-optimize">Test &amp; Optimize</a></p><h1>Collision Fidelity and Invisible Doorways in Roblox</h1><p class="lead">Why players slam into invisible walls inside open archways, why <code>CanCollide = false</code> doesn&#x27;t erase physics memory, and how separating visual meshes from simple colliders fixes both.</p><div class="article-meta"><span>Beginner–advanced</span><span>9 min read</span><span>Engine Fundamentals</span></div><p class="review-date">Documentation reviewed <time datetime="2026-11-15">November 15, 2026</time> · Next review <time datetime="2027-05-15">2027-05-15</time></p></header><div class="article-layout"><details class="article-toc"><summary>On this page</summary><nav aria-label="On this page"><a href="#quick-takeaways">Quick Takeaways</a><a href="#1-the-five-collisionfidelity-modes-explained">1. The Five <code>CollisionFidelity</code> Modes Explained</a><a href="#2-three-collision-traps-that-surprise-builders">2. Three Collision Traps That Surprise Builders</a><a href="#3-the-gold-standard-fix-box-3-invisible-block-parts-for-doorways">3. The Gold-Standard Fix: "Box + 3 Invisible Block Parts" for Doorways</a><a href="#4-auditing-high-cost-collision-in-10-seconds">4. Auditing High-Cost Collision in 10 Seconds</a><a href="#5-how-meshmogul-handles-invisible-collider-parts">5. How MeshMogul Handles Invisible Collider Parts</a><a href="#references">Sources and technical references</a></nav></details><article class="prose"><details class="evidence-note"><summary>About this guide’s evidence</summary><p>Reviewed against the linked Roblox documentation and published MeshMogul product limits. Recommendations and example scenes are guidance, not measured results. This review date does not represent a new native Studio test. Current UI details that still need confirmation are called out in the text.</p></details><section class="takeaways" aria-label="Quick takeaways"><h2 id="quick-takeaways">Quick Takeaways</h2>
+<ul>
+<li><strong>Why it matters:</strong> <code>CollisionFidelity</code> controls how Roblox simplifies your triangle geometry into physics shapes, and non-<code>Box</code> hulls still consume <strong><code>PhysicsParts</code> memory</strong> even when <code>CanCollide = false</code> .</li>
+<li><strong>How it affects your creations:</strong> <code>Hull</code> and <code>Default</code> can shrink-wrap straight across doorways and concave trim, <code>PreciseConvexDecomposition</code> raises physics/memory overhead when overused, and <code>TriangleMeshPart.CollisionFidelity</code> cannot simply be reassigned on an existing mesh by a normal runtime script .</li>
+<li><strong>What you can actually do about it:</strong> Inspect hulls with Studio's <strong>Collision fidelity</strong> visualizer, use <strong><code>Box</code> + invisible Block colliders</strong> for doorways and trim, and let MeshMogul's default <code>Transparency = 1</code> exclusion keep helper colliders out of visual mesh bakes .</li>
+</ul></section><p>It is the oldest rite of passage in Roblox building: you model or convert a gorgeous stone archway, hit <strong>Play</strong>, sprint straight toward the opening, and bounce off thin air like a mime trapped in a glass box.</p>
+<p>Your visual mesh is fine. The culprit is almost always <strong>CollisionFidelity</strong>—Roblox's invisible physics shape wrapped around <code>MeshPart</code>s and <code>UnionOperation</code>s—and trying to force a complex visual silhouette to also double as the game's physics hull.</p>
+
+<h2 id="1-the-five-collisionfidelity-modes-explained">1. The Five <code>CollisionFidelity</code> Modes Explained</h2>
+<p>Roblox exposes five <code>Enum.CollisionFidelity</code> values on <code>TriangleMeshPart</code> (<code>MeshPart</code> and <code>UnionOperation</code>) :</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable comparison table"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Mode</th>
+<th style="text-align: left;">How Roblox Builds the Physics Shape</th>
+<th style="text-align: left;">Best Used For</th>
+<th style="text-align: left;">Watch Out For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>Box</code></strong></td>
+<td style="text-align: left;">Single axis-aligned bounding box around the mesh</td>
+<td style="text-align: left;">Decorative props, distant architecture, or visual meshes paired with separate manual colliders</td>
+<td style="text-align: left;">Blocks openings completely if <code>CanCollide = true</code> on a doorway</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Hull</code></strong></td>
+<td style="text-align: left;">Single convex "gift-wrap" shell stretched around outer vertices</td>
+<td style="text-align: left;">Rounded boulders, crates, convex pillars, and simple sloped trim without interior holes</td>
+<td style="text-align: left;">Bridges straight across caves, arches, and L-shaped recesses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Default</code></strong></td>
+<td style="text-align: left;">Balanced automatic decomposition (faster than Precise, richer than Hull)</td>
+<td style="text-align: left;">General mid-complexity props that don't have tight walk-through tunnels</td>
+<td style="text-align: left;">Can still close narrow gaps or round sharp interior stairs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Tunable</code></strong></td>
+<td style="text-align: left;">Async customizable convex decomposition controlled via <code>CollisionPrecision</code> (<code>0</code> to <code>1</code>, Studio v744+)</td>
+<td style="text-align: left;">Tuning convex detail deliberately on concave architecture when you want middle ground between <code>Default</code> and <code>PreciseConvexDecomposition</code></td>
+<td style="text-align: left;">Not a one-click runtime toggle; verify generated hull in Studio</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PreciseConvexDecomposition</code></strong></td>
+<td style="text-align: left;">High-accuracy Hierarchical Approximate Convex Decomposition (HACD)</td>
+<td style="text-align: left;">Tight playable ramps, intricate stairways, or hero interiors where hull fidelity truly affects gameplay</td>
+<td style="text-align: left;">Expensive <strong><code>PhysicsParts</code> memory</strong> and slow collision build cost if spammed everywhere</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-three-collision-traps-that-surprise-builders">2. Three Collision Traps That Surprise Builders</h2>
+<h3 id="trap-1-cancollide-false-does-not-free-physicsparts-memory">Trap 1: <code>CanCollide = false</code> Does <em>Not</em> Free <code>PhysicsParts</code> Memory</h3>
+<p>Setting <code>CanCollide = false</code> stops characters from hitting a mesh, <strong>but Roblox still builds and stores the <code>CollisionFidelity</code> physics hulls in <code>PhysicsParts</code> memory</strong> so <code>CanQuery</code> (raycasts) and <code>CanTouch</code> (<code>Touched</code> events) can query them . If a decorative bush or hanging chandelier has <code>PreciseConvexDecomposition</code>, switching <code>CanCollide</code> off leaves the heavy collision hulls sitting in memory. Set decorative non-interactive visual meshes to <strong><code>CollisionFidelity = Enum.CollisionFidelity.Box</code></strong> (and turn off <code>CanCollide</code>, <code>CanQuery</code>, <code>CanTouch</code> when appropriate).</p>
+<h3 id="trap-2-sloped-trim-hull-vs-box">Trap 2: Sloped Trim (<code>Hull</code> vs. <code>Box</code>)</h3>
+<p>If you place a diagonal roof gable or angled trim mesh and leave it on <strong><code>Box</code></strong>, the bounding box sticks out far past the slope as a huge invisible rectangular ledge. Switching that angled beam to <strong><code>Hull</code></strong> hugs the diagonal triangle profile tightly—without needing <code>PreciseConvexDecomposition</code>.</p>
+<h3 id="trap-3-runtime-collisionfidelity-immutability">Trap 3: Runtime <code>CollisionFidelity</code> Immutability</h3>
+<p>You <strong>cannot</strong> dynamically mutate <code>myMeshPart.CollisionFidelity = Enum.CollisionFidelity.PreciseConvexDecomposition</code> inside a live LocalScript or Server Script like a color toggle. Because physics decompositions are baked structural properties, scripts must use APIs such as <code>AssetService:CreateMeshPartAsync</code> / <code>ApplyMesh</code> rather than assigning the enum property directly at runtime .</p>
+<h2 id="3-the-gold-standard-fix-box-3-invisible-block-parts-for-doorways">3. The Gold-Standard Fix: "Box + 3 Invisible Block Parts" for Doorways</h2>
+<p>Whenever you have a doorway, arch, tunnel, or hollowed wall frame, stop fighting convex decomposition altogether:</p>
+<ol>
+<li>Select the visual archway <code>MeshPart</code> and set:</li>
+<li><code>CollisionFidelity = Enum.CollisionFidelity.Box</code></li>
+<li><code>CanCollide = false</code>, <code>CanQuery = false</code>, <code>CanTouch = false</code> <em>(unless bullets/raycasts specifically need detailed hits)</em></li>
+<li>Inside the same <code>Model</code>, add <strong>3 plain <code>Part</code> (<code>Block</code>) colliders</strong> (<code>Transparency = 1</code>, <code>Anchored = true</code>, <code>CanCollide = true</code>):</li>
+<li><strong>Left pillar collider</strong></li>
+<li><strong>Right pillar collider</strong></li>
+<li><strong>Top lintel header collider</strong></li>
+</ol>
+<pre tabindex="0" aria-label="Workflow diagram"><code>[ Visual Arch MeshPart ]  --&gt; Box + CanCollide=false (zero invisible wall!)
+[ Left Block (T=1)     ]  --&gt; Clean rectangular wall collision
+[ Right Block (T=1)    ]  --&gt; Clean rectangular wall collision
+[ Top Lintel Block (T=1)] --&gt; Clean doorway clearance overhead
+</code></pre>
+<p>Why is this pattern superior to <code>PreciseConvexDecomposition</code>? Because three plain Roblox <code>Block</code> primitives cost negligible physics computation, give players crisp snag-free doorway shoulders, and leave zero complex convex decomposition memory on the archway mesh.</p>
+<h2 id="4-auditing-high-cost-collision-in-10-seconds">4. Auditing High-Cost Collision in 10 Seconds</h2>
+<p>Studio gives you two fast ways to hunt down accidental <code>PreciseConvexDecomposition</code> meshes before they quietly drain <code>PhysicsParts</code> memory:</p>
+<ol>
+<li><strong>Explorer Filter Bar:</strong> Type <code>CollisionFidelity=PreciseConvexDecomposition</code> right into Explorer's filter box to highlight matching instances.</li>
+<li><strong>Read-Only Command Bar Summary:</strong> Run this safe snippet in Studio's <strong>Command Bar</strong> (<code>View -&gt; Command Bar</code>) to count every <code>MeshPart</code> and <code>UnionOperation</code> by <code>CollisionFidelity</code> mode:</li>
+</ol>
+<p class="code-caption">Read-only Studio Command Bar inspection</p><pre tabindex="0" aria-label="Read-only Luau example"><code class="language-luau">-- Read-only: audits CollisionFidelity distribution across MeshParts and Unions in workspace
+local counts: { [string]: number } = {}
+local canCollideFalsePrecise = 0
+
+for _, inst in ipairs(workspace:GetDescendants()) do
+    if inst:IsA(&quot;TriangleMeshPart&quot;) then
+        local key = inst.CollisionFidelity.Name
+        counts[key] = (counts[key] or 0) + 1
+        if not inst.CanCollide and inst.CollisionFidelity == Enum.CollisionFidelity.PreciseConvexDecomposition then
+            canCollideFalsePrecise += 1
+        end
+    end
+end
+
+for mode, total in pairs(counts) do
+    print(string.format(&quot;[Collision Audit] %-28s : %d&quot;, mode, total))
+end
+
+if canCollideFalsePrecise &gt; 0 then
+    warn(string.format(
+        &quot;Found %d non-collidable meshes still using PreciseConvexDecomposition (switch decorative ones to Box to save PhysicsParts memory).&quot;,
+        canCollideFalsePrecise
+    ))
+end
+</code></pre>
+<h2 id="5-how-meshmogul-handles-invisible-collider-parts">5. How MeshMogul Handles Invisible Collider Parts</h2>
+<p>Here is why the "Box + 3 invisible Block Parts" convention works smoothly alongside MeshMogul:</p>
+<p>By default, MeshMogul <strong>excludes fully invisible parts (<code>Transparency = 1</code>)</strong> when baking a selection into visual mesh geometry (<a href="../preparing-studio-builds-for-finalization/">Preparing Your Studio Build for Finalization</a>) . That keeps your invisible doorway blocks, trigger volumes, and invisible trim colliders out of your visual triangles automatically—unless you explicitly disable invisible-part exclusion for a special case.</p>
+<p>Once your visual mesh is published, keep your simplified Block colliders inside the parent wrapper <code>Model</code> right alongside the published <code>MeshPart</code> and test walking through the opening with Studio's <strong>Collision fidelity</strong> view turned on.</p><h2 id="references">Sources and technical references</h2><ul><li><a href="https://create.roblox.com/docs/reference/engine/enums/CollisionFidelity">CollisionFidelity API reference</a></li><li><a href="https://create.roblox.com/docs/reference/engine/classes/TriangleMeshPart">TriangleMeshPart API reference</a></li><li><a href="https://create.roblox.com/docs/physics/collisions">Collisions</a></li><li><a href="https://create.roblox.com/docs/performance-optimization/performance-metrics">Performance metrics</a></li><li><a href="https://morningforge.github.io/MeshMogul/supported-inputs/">Supported inputs</a></li></ul><section class="guide-next"><h2>Keep building</h2><p>Before this guide: <a href="../draw-calls-instancing-and-hidden-faces/">Draw Calls, Instancing &amp; Hidden Faces</a></p><h3>Related reading</h3><ul><li><a href="../compare-roblox-meshes-before-and-after/">Compare Meshes Before &amp; After</a></li><li><a href="../preparing-studio-builds-for-finalization/">Preparing Studio Builds for Finalization</a></li><li><a href="../preflight-and-retained-previews/">Preflight &amp; Retained Previews</a></li></ul><nav class="path-progress" aria-label="Shading, Texture Budgets, Draw Calls &amp; Collisions"><p><a href="../#diagnosis-and-optimization">Shading, Texture Budgets, Draw Calls &amp; Collisions</a> · Step 5 of 5</p><span>Previous: <a href="../draw-calls-instancing-and-hidden-faces/">Draw Calls, Instancing &amp; Hidden Faces</a></span> </nav><p><a href="../#library">Browse all 16 guides →</a> · <a href="#main">Back to top ↑</a></p></section></article></div>
+</main><footer class="site-footer"><div><a class="brand" href="../../">MeshMogul<span class="brand-period">.</span></a><p>From Studio build to reusable mesh.</p><p class="fine">An independent tool by MorningForge.<br>Not affiliated with or endorsed by Roblox.</p><p class="fine">Copyright © 2026 MorningForge, to the extent of rights held by MorningForge. Third-party terms apply.</p></div><nav aria-label="Footer navigation"><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Supported inputs &amp; limits</a><a href="../">Guides</a><a href="../../faq/">FAQ</a><a href="../../changelog/">What’s New</a><a href="../../privacy/">Privacy &amp; data</a><a href="../../legal/">Legal &amp; third-party notices</a></nav><div class="footer-note"><span class="eyebrow">Built for builders.</span><p>Supported source.<br>Inspectable output.<br>Explicit publication.</p></div></footer></div></body></html>

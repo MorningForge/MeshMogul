@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>Preflight Validation, Triangle Budgets, and Retained Previews — MeshMogul Foundations</title><meta name="description" content="Understand Roblox&#x27;s 60,000-vertex / 20,000-triangle EditableMesh limits, primitive tessellation budgets, Cylinder/Ball min-axis scaling, bounded Union/Glass support, and stale-preview freshness checks."><meta property="og:title" content="Preflight Validation, Triangle Budgets, and Retained Previews — MeshMogul Foundations"><meta property="og:description" content="Understand Roblox&#x27;s 60,000-vertex / 20,000-triangle EditableMesh limits, primitive tessellation budgets, Cylinder/Ball min-axis scaling, bounded Union/Glass support, and stale-preview freshness checks."><meta property="og:type" content="article"><meta property="og:site_name" content="MeshMogul"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Preflight Validation, Triangle Budgets, and Retained Previews — MeshMogul Foundations"><meta name="twitter:description" content="Understand Roblox&#x27;s 60,000-vertex / 20,000-triangle EditableMesh limits, primitive tessellation budgets, Cylinder/Ball min-axis scaling, bounded Union/Glass support, and stale-preview freshness checks."><link rel="icon" href="../../assets/favicon.png" type="image/png"><link rel="stylesheet" href="../../assets/site.css?v=foundations-20261115"><link rel="canonical" href="https://morningforge.github.io/MeshMogul/guides/preflight-and-retained-previews/"><meta property="og:url" content="https://morningforge.github.io/MeshMogul/guides/preflight-and-retained-previews/"></head><body><a class="skip-link" href="#main">Skip to content</a><div class="site-shell"><header class="site-header"><a class="brand" href="../../" aria-label="MeshMogul home"><img src="../../assets/favicon.png" width="30" height="30" alt=""><span>MeshMogul</span></a><nav aria-label="Main navigation"><a href="../../">Home</a><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Compatibility</a><a href="../" aria-current="page">Guides</a><a href="../../faq/">FAQ</a></nav><a class="header-cta" href="https://create.roblox.com/store/asset/126445067739142">Get MeshMogul on Creator Store <span aria-hidden="true">→</span></a></header><main id="main" tabindex="-1">
+<header class="page-heading article-heading"><p class="eyebrow"><a href="../#foundations">MeshMogul Foundations</a> / <a href="../#finish-and-publish">Finish &amp; Publish</a></p><h1>Preflight Validation, Triangle Budgets, and Retained Previews</h1><p class="lead">Why <code>EditableMesh</code> has a hard 60,000-vertex / 20,000-triangle ceiling, how primitive shapes and CSG unions spend that budget, and why MeshMogul validates and previews locally before uploading a single byte.</p><div class="article-meta"><span>Intermediate–advanced</span><span>11 min read</span><span>MeshMogul Workflow</span></div><p class="review-date">Documentation reviewed <time datetime="2026-11-15">November 15, 2026</time> · Next review <time datetime="2027-02-15">2027-02-15</time></p></header><div class="article-layout"><details class="article-toc"><summary>On this page</summary><nav aria-label="On this page"><a href="#quick-takeaways">Quick Takeaways</a><a href="#1-the-hard-editablemesh-ceilingand-what-primitives-actually-cost">1. The Hard <code>EditableMesh</code> Ceiling—and What Primitives Actually Cost</a><a href="#2-preflight-refusals-what-fails-before-a-preview-is-built-and-why">2. Preflight Refusals: What Fails Before a Preview Is Built (and Why)</a><a href="#3-bounded-csg-unionoperation-and-glass-rules">3. Bounded CSG <code>UnionOperation</code> and <code>Glass</code> Rules</a><a href="#4-retained-local-previews-frame-slicing-and-the-freshness-gate">4. Retained Local Previews, Frame Slicing, and the Freshness Gate</a><a href="#references">Sources and technical references</a></nav></details><article class="prose"><details class="evidence-note"><summary>About this guide’s evidence</summary><p>Reviewed against the linked Roblox documentation and published MeshMogul product limits. Recommendations and example scenes are guidance, not measured results. This review date does not represent a new native Studio test. Current UI details that still need confirmation are called out in the text.</p></details><section class="takeaways" aria-label="Quick takeaways"><h2 id="quick-takeaways">Quick Takeaways</h2>
+<ul>
+<li><strong>Why it matters:</strong> Roblox's <code>EditableMesh</code> API caps each individual output mesh at <strong>60,000 vertices</strong> and <strong>20,000 triangles</strong>, and several Studio part features behave subtly when tessellated .</li>
+<li><strong>How it affects your creations:</strong> Rounded primitives (<code>Ball</code>, <code>Cylinder</code>), complex <code>UnionOperation</code>s, rigged meshes, unreadable cloud meshes, mapped <code>MaterialVariant</code>s, and <code>Decal</code>/<code>Texture</code> overlays can blow past limits or fail preflight unless you know where each boundary sits .</li>
+<li><strong>What you can actually do about it:</strong> Budget curved geometry intentionally, check MeshMogul's preflight notes before baking, inspect the retained local Preview (<code>Object</code>-backed <code>EditableMesh</code>) cleanly, and respect the freshness gate before publishing.</li>
+</ul></section><p>Publishing a broken or oversized mesh into your Roblox inventory is annoying. Worse is watching a tool chug for ten seconds, throw a vague engine error mid-bake, or silently upload stale geometry after you nudged a pillar two studs to the left.</p>
+<p>Preflight validation and retained local Previews exist to catch every one of those failures <strong>while your work is still free, local, and reversible inside Studio</strong>.</p>
+
+<h2 id="1-the-hard-editablemesh-ceilingand-what-primitives-actually-cost">1. The Hard <code>EditableMesh</code> Ceiling—and What Primitives Actually Cost</h2>
+<p>Roblox limits each <code>EditableMesh</code> instance to <strong>60,000 vertices</strong> and <strong>20,000 triangles</strong> (<code>EditableMesh:AddVertex</code> / <code>EditableMesh</code> API limits) . That means <strong>every single output appearance group</strong> in a MeshMogul bake must stay at or below both ceilings—not just the model as a whole, each individual resulting mesh group.</p>
+<p>What surprises builders is how quickly seemingly "simple" Studio parts eat triangles once tessellated:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable comparison table"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Studio Primitive (<code>PartType</code>)</th>
+<th style="text-align: left;">Vertices Per Part</th>
+<th style="text-align: left;">Triangles Per Part</th>
+<th style="text-align: left;">Why It Catches People Off Guard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>Block</code></strong></td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">Dirt cheap—until you stack 2,000 of them</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Wedge</code></strong></td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">Even cheaper than a block</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>CornerWedge</code></strong></td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Lightest polygonal wedge</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Cylinder</code></strong> (16 radial segments)</td>
+<td style="text-align: left;">66</td>
+<td style="text-align: left;">64</td>
+<td style="text-align: left;">One hundred "simple" fence posts = <strong>6,400 tris</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Ball</code></strong> (16 segments × 8 rings)</td>
+<td style="text-align: left;">114</td>
+<td style="text-align: left;">224</td>
+<td style="text-align: left;">Ninety decorative spheres = <strong>20,160 tris</strong>—already over the single-mesh limit!</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>(Primitive tessellation counts above reflect MeshMogul's documented Studio primitive mesh generation counts .)</em></p>
+<h3 id="two-primitive-sizing-traps-that-break-expectations">Two Primitive Sizing Traps That Break Expectations</h3>
+<ol>
+<li><strong><code>Part.Cylinder</code> diameter = <code>min(Y, Z)</code> along the X-axis:</strong> A Roblox <code>Part</code> with <code>Shape = Enum.PartType.Cylinder</code> always keeps a circular cross-section whose diameter is the <strong>smaller of its <code>Size.Y</code> and <code>Size.Z</code></strong> axes, oriented along X (unlike legacy <code>CylinderMesh</code>, which aligns along Y) . If you stretch <code>Size.Y = 10, Size.Z = 2</code>, the cylinder stays 2 studs wide—it does <strong>not</strong> become an oval column.</li>
+<li><strong><code>Part.Ball</code> diameter = <code>min(X, Y, Z)</code>:</strong> A <code>Ball</code> part always stays a true sphere sized to the smallest axis (<code>math.min(X, Y, Z)</code>) . Only a <code>SpecialMesh</code> with <code>MeshType = Sphere</code> stretches into an ellipsoid.</li>
+</ol>
+<blockquote>
+<p><strong>Budget check:</strong> If your prop has dozens of tiny spheres, rivets, or decorative cylinders and crosses 20,000 triangles, split the build into modular sub-assemblies or simplify unseen curves before baking.</p>
+</blockquote>
+<h2 id="2-preflight-refusals-what-fails-before-a-preview-is-built-and-why">2. Preflight Refusals: What Fails Before a Preview Is Built (and Why)</h2>
+<p>MeshMogul checks your selection before creating an <code>EditableMesh</code> Preview so you get an actionable diagnosis instead of half-baked nonsense. Here are the main cases that stop preflight:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable comparison table"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Input Condition</th>
+<th style="text-align: left;">What Happens in Preflight</th>
+<th style="text-align: left;">Why the Boundary Exists</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Empty or all-invisible assembly</strong> (with default invisible-part exclusion active)</td>
+<td style="text-align: left;">Refused (<code>Nothing visible</code>)</td>
+<td style="text-align: left;">Prevents uploading empty invisible boxes by mistake (<a href="../collision-fidelity-and-invisible-doorways/">Collision Fidelity and Invisible Doorways</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Skinned / rigged <code>MeshPart</code>s</strong></td>
+<td style="text-align: left;">Refused</td>
+<td style="text-align: left;"><code>EditableMesh</code> bind-pose/skinning workflows are outside static geometry baking (<a href="../../supported-inputs/">Supported inputs &amp; limits</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Unreadable / unowned source <code>MeshPart</code>s</strong></td>
+<td style="text-align: left;">Refused</td>
+<td style="text-align: left;">MeshMogul cannot read vertex/triangle data when asset permissions deny mesh read access</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>MaterialVariant</code> with texture maps</strong> (<code>ColorMap</code>, <code>NormalMap</code>, <code>RoughnessMap</code>, <code>MetalnessMap</code>)</td>
+<td style="text-align: left;">Refused</td>
+<td style="text-align: left;">Custom UV-mapped material assets cannot be reliably repacked as flat Studio part textures (<a href="../../supported-inputs/">Supported inputs &amp; limits</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mapless <code>MaterialVariant</code> (scalar overrides only)</strong></td>
+<td style="text-align: left;">Allowed—with warning requirement</td>
+<td style="text-align: left;">Supported as long as the destination place keeps that same <code>MaterialVariant</code> defined inside <code>MaterialService</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>Decal</code> or <code>Texture</code> overlays</strong></td>
+<td style="text-align: left;">Refused</td>
+<td style="text-align: left;">Planar child decals project onto part faces rather than forming baked vertex/UV geometry</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Nested <code>ProceduralModel</code>s</strong></td>
+<td style="text-align: left;">Refused</td>
+<td style="text-align: left;">Roblox's engine supports nested <code>ProceduralModel</code>s, whereas MeshMogul 1.3.0 converts flat single <code>ProceduralModel</code>s cleanly after <code>ForceGeneration</code> completes (<a href="../proceduralmodel-assistant-output-to-mesh/">From Assistant ProceduralModel to Mesh</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="note-on-runtime-editablemesh-memory-budgets">Note on Runtime <code>EditableMesh</code> Memory Budgets</h3>
+<p>Developers sometimes hear about strict <code>EditableMesh</code> / <code>EditableImage</code> memory limits and worry their Studio plugin bake is broken. Distinguish the two environments carefully: <strong>live gameplay clients</strong> enforce strict device-dependent memory budgets for dynamic <code>EditableMesh</code>/<code>EditableImage</code> instances, whereas <strong>Studio Edit mode, servers, and Studio plugins</strong> operate without that client gameplay cap while authoring (<a href="https://create.roblox.com/docs/reference/engine/classes/EditableMesh">EditableMesh API Reference</a>) . Once you publish a mesh, the resulting cloud <code>MeshPart</code> loads normally as standard mesh geometry rather than a dynamic <code>EditableMesh</code> runtime buffer.</p>
+<h2 id="3-bounded-csg-unionoperation-and-glass-rules">3. Bounded CSG <code>UnionOperation</code> and <code>Glass</code> Rules</h2>
+<p>Since version 1.3.0, MeshMogul supports solid <code>UnionOperation</code>s and mixed <code>Model</code>s combining <code>Part</code>, <code>WedgePart</code>, <code>CornerWedgePart</code>, and <code>UnionOperation</code>—<strong>strictly within a bounded plain-appearance profile</strong> (<a href="../../supported-inputs/">Supported inputs &amp; limits</a>).</p>
+<p>Think of that support as a precision contract rather than a blank check for every messy CSG history in Studio:</p>
+<ul>
+<li><strong>Allowed in bounded Union assemblies:</strong> Solid <code>UnionOperation</code>s and transparent <code>Glass</code> Unions (<code>0 &lt;= Transparency &lt; 1</code>), <code>SmoothingAngle = 0</code>, <code>Reflectance = 0</code>, <code>Archivable = true</code>, supported built-in Studio materials, no <code>MaterialVariant</code>, and no surface overlays (<code>Decal</code>, <code>Texture</code>, <code>SurfaceAppearance</code>).</li>
+<li><strong>Expected harmless omissions:</strong> Visual-only non-geometry children such as <code>PointLight</code>, <code>SpotLight</code>, <code>SurfaceLight</code>, <code>ParticleEmitter</code>, <code>Attachment</code>, <code>Beam</code>, <code>Trail</code>, <code>Fire</code>, <code>Smoke</code>, and <code>Sparkles</code> are automatically left out of mesh triangle baking so they do not block conversion of an otherwise clean prop .</li>
+<li><strong>Fallback recommendation when a CSG assembly is outside profile:</strong> If a Union uses custom <code>SmoothingAngle</code>, <code>MaterialVariant</code>, or intricate negative-cut histories outside bounds, separate or rebuild the troublesome sub-piece with plain parts or use Blender + <a href="https://create.roblox.com/docs/art/modeling/3d-importer">3D Importer</a>.</li>
+</ul>
+<h2 id="4-retained-local-previews-frame-slicing-and-the-freshness-gate">4. Retained Local Previews, Frame Slicing, and the Freshness Gate</h2>
+<p>Modern Studio sessions do not want a plugin freezing the viewport for ten seconds while walking a 1,500-part build. MeshMogul uses two safeguards to keep authoring smooth and trustworthy:</p>
+<ol>
+<li><strong>Frame-sliced selection inspection &amp; staged Preview progress (with cancellation):</strong> Inspecting large selections and generating Previews yields cleanly across frames so Studio stays responsive and you can cancel if you clicked the wrong folder .</li>
+<li><strong>Retained in-session Preview (<code>Object</code>-backed <code>EditableMesh</code>):</strong> Your Preview spawns directly in Studio without touching cloud quotas, and stays inspectable while you orbit, test lighting, and check pivots. Remember: because an in-session Preview uses temporary <code>Object</code>-backed <code>EditableMesh</code> content, its <code>MeshPart.MeshId</code> box stays empty until published (<a href="../meshid-vs-assetid-in-roblox/">MeshId vs AssetId in Roblox</a>) .</li>
+<li><strong>Freshness Verification Gate before publication:</strong> Ever baked a Preview, noticed a floating bracket on the original <code>Model</code>, nudged the original bracket into place, and forgot to re-bake? If you try to publish an older Preview after modifying the source assembly, MeshMogul's <strong>Freshness Verification Gate</strong> flags that the preview is stale relative to the current source build so you never upload yesterday's geometry by accident .</li>
+</ol><h2 id="references">Sources and technical references</h2><ul><li><a href="https://create.roblox.com/docs/reference/engine/classes/EditableMesh">EditableMesh API reference</a></li><li><a href="https://create.roblox.com/docs/reference/engine/classes/Part">Part API reference</a></li><li><a href="https://create.roblox.com/docs/parts/solid-modeling">Solid modeling</a></li><li><a href="https://create.roblox.com/docs/reference/engine/classes/MaterialVariant">MaterialVariant API reference</a></li><li><a href="https://morningforge.github.io/MeshMogul/supported-inputs/">Supported inputs</a></li><li><a href="https://morningforge.github.io/MeshMogul/how-it-works/">Supported inputs</a></li></ul><section class="guide-next"><h2>Keep building</h2><p>Before this guide: <a href="../publish-a-mesh-from-roblox-studio/">Publish a Mesh From Roblox Studio</a></p><p class="next-step">Next recommended → <a href="../compare-roblox-meshes-before-and-after/">Compare Meshes Before &amp; After</a></p><h3>Related reading</h3><ul><li><a href="../preparing-studio-builds-for-finalization/">Preparing Studio Builds for Finalization</a></li><li><a href="../how-to-turn-roblox-parts-into-a-mesh/">Turn Roblox Parts Into a Mesh</a></li><li><a href="../why-models-split-into-multiple-meshparts/">Why Models Split Into Multiple MeshParts</a></li></ul><nav class="path-progress" aria-label="From Studio Parts to Clean MeshParts"><p><a href="../#parts-to-published-mesh">From Studio Parts to Clean MeshParts</a> · Step 5 of 6</p><span>Previous: <a href="../why-models-split-into-multiple-meshparts/">Why Models Split Into Multiple MeshParts</a></span> <span>Next: <a href="../publish-a-mesh-from-roblox-studio/">Publish a Mesh From Roblox Studio</a></span></nav><p><a href="../#library">Browse all 16 guides →</a> · <a href="#main">Back to top ↑</a></p></section></article></div>
+</main><footer class="site-footer"><div><a class="brand" href="../../">MeshMogul<span class="brand-period">.</span></a><p>From Studio build to reusable mesh.</p><p class="fine">An independent tool by MorningForge.<br>Not affiliated with or endorsed by Roblox.</p><p class="fine">Copyright © 2026 MorningForge, to the extent of rights held by MorningForge. Third-party terms apply.</p></div><nav aria-label="Footer navigation"><a href="../../how-it-works/">How it works</a><a href="../../supported-inputs/">Supported inputs &amp; limits</a><a href="../">Guides</a><a href="../../faq/">FAQ</a><a href="../../changelog/">What’s New</a><a href="../../privacy/">Privacy &amp; data</a><a href="../../legal/">Legal &amp; third-party notices</a></nav><div class="footer-note"><span class="eyebrow">Built for builders.</span><p>Supported source.<br>Inspectable output.<br>Explicit publication.</p></div></footer></div></body></html>

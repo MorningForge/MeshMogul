@@ -1,0 +1,756 @@
+{
+  "schema_version": 1,
+  "tracks": [
+    {
+      "id": "build-with-ai",
+      "label": "Build with AI",
+      "anchor": "#build-with-ai",
+      "description": "Prompting, Assistant and ProceduralModel generation, and pre-bake assembly preparation."
+    },
+    {
+      "id": "understand-3d",
+      "label": "Understand 3D & Meshes",
+      "anchor": "#understand-3d",
+      "description": "Parts vs. Unions vs. MeshParts, mesh identity, shading/UVs/textures, and appearance grouping."
+    },
+    {
+      "id": "finish-and-publish",
+      "label": "Finish & Publish",
+      "anchor": "#finish-and-publish",
+      "description": "Reusable model assets, Texture Generator PBR workflows, MeshId inspection, publication, and preflight limits."
+    },
+    {
+      "id": "test-and-optimize",
+      "label": "Test & Optimize",
+      "anchor": "#test-and-optimize",
+      "description": "Before/after comparison benches, draw calls and GPU instancing, and CollisionFidelity optimization."
+    }
+  ],
+  "learning_paths": [
+    {
+      "id": "beginner-ai-to-asset",
+      "title": "From AI Prompt to Reusable Mesh Asset",
+      "slugs": [
+        "how-to-prompt-ai-for-roblox-3d-models",
+        "proceduralmodel-assistant-output-to-mesh",
+        "preparing-studio-builds-for-finalization",
+        "roblox-studio-model-to-reusable-mesh-asset",
+        "publish-a-mesh-from-roblox-studio"
+      ]
+    },
+    {
+      "id": "parts-to-published-mesh",
+      "title": "From Studio Parts to Clean MeshParts",
+      "slugs": [
+        "how-to-turn-roblox-parts-into-a-mesh",
+        "make-a-roblox-mesh-without-blender",
+        "meshid-vs-assetid-in-roblox",
+        "why-models-split-into-multiple-meshparts",
+        "preflight-and-retained-previews",
+        "publish-a-mesh-from-roblox-studio"
+      ]
+    },
+    {
+      "id": "diagnosis-and-optimization",
+      "title": "Shading, Texture Budgets, Draw Calls & Collisions",
+      "slugs": [
+        "normals-uv-seams-and-texture-budgets",
+        "roblox-studio-texture-generator",
+        "compare-roblox-meshes-before-and-after",
+        "draw-calls-instancing-and-hidden-faces",
+        "collision-fidelity-and-invisible-doorways"
+      ]
+    }
+  ],
+  "guides": [
+    {
+      "slug": "how-to-prompt-ai-for-roblox-3d-models",
+      "title": "How to Prompt AI to Build Better Roblox 3D Models",
+      "short_title": "Prompt AI for Better Roblox 3D Models",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/how-to-prompt-ai-for-roblox-3d-models/",
+      "track": "build-with-ai",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner-to-advanced",
+      "reading_time_minutes": 12,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Write AI asset briefs that keep moving pieces separate, align pivots with joints, specify stud scale, and respect MeshPart material and appearance boundaries.",
+      "prerequisites": [],
+      "next_recommended": "proceduralmodel-assistant-output-to-mesh",
+      "related_guides": [
+        "proceduralmodel-assistant-output-to-mesh",
+        "preparing-studio-builds-for-finalization",
+        "why-models-split-into-multiple-meshparts",
+        "roblox-studio-texture-generator"
+      ],
+      "symptoms": [
+        "Wheels or doors fused into chassis",
+        "Pivot rotates around the wrong origin",
+        "Wrong stud scale or orientation after import",
+        "Materials fused onto one surface"
+      ],
+      "tags": [
+        "ai-prompting",
+        "pivots",
+        "asset-brief",
+        "3d-importer",
+        "material-separation"
+      ],
+      "preserved_anchors": [
+        "#five-concepts",
+        "#size-and-pivots",
+        "#appearance",
+        "#brief",
+        "#asset-brief",
+        "#examples",
+        "#inspection",
+        "#finish",
+        "#source-boundaries"
+      ],
+      "sources": [
+        "https://create.roblox.com/docs/studio/pivot-tools",
+        "https://create.roblox.com/docs/studio/importer",
+        "https://create.roblox.com/docs/studio/texture-generator",
+        "https://devforum.roblox.com/t/texture-generator-beta/2880635/1",
+        "https://devforum.roblox.com/t/texture-generator-beta/2880635/44",
+        "https://create.roblox.com/docs/art/modeling/specifications",
+        "https://create.roblox.com/docs/art/modeling/texture-specifications",
+        "https://create.roblox.com/docs/projects/assets/packages",
+        "https://create.roblox.com/docs/performance-optimization/microprofiler",
+        "https://github.com/KhronosGroup/3DC-Asset-Creation/blob/main/asset-creation-guidelines/RealtimeAssetCreationGuidelines.md",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "proceduralmodel-assistant-output-to-mesh",
+      "title": "Prepare Roblox Assistant and ProceduralModel Output for Reuse",
+      "short_title": "Assistant & ProceduralModel to Mesh",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/proceduralmodel-assistant-output-to-mesh/",
+      "track": "build-with-ai",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner-to-intermediate",
+      "reading_time_minutes": 10,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Identify whether Assistant built raw Parts, a ProceduralModel, or a MeshPart, handle ForceGeneration and GenerationError cleanly, and respect nested ProceduralModel boundaries.",
+      "prerequisites": [
+        "how-to-prompt-ai-for-roblox-3d-models"
+      ],
+      "next_recommended": "preparing-studio-builds-for-finalization",
+      "related_guides": [
+        "how-to-prompt-ai-for-roblox-3d-models",
+        "preparing-studio-builds-for-finalization",
+        "roblox-studio-model-to-reusable-mesh-asset"
+      ],
+      "symptoms": [
+        "Generated ProceduralModel disappears or regenerates unexpectedly",
+        "ForceGeneration or GenerationError failure",
+        "Nested ProceduralModel refused by MeshMogul"
+      ],
+      "tags": [
+        "assistant",
+        "procedural-model",
+        "force-generation",
+        "mcp",
+        "ai-generation"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/assistant/guide",
+        "https://create.roblox.com/docs/parts/procedural-models",
+        "https://create.roblox.com/docs/reference/engine/classes/ProceduralModel",
+        "https://create.roblox.com/docs/studio/mcp",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "preparing-studio-builds-for-finalization",
+      "title": "Preparing Your Studio Build for Finalization: Pivots, ProceduralModels, and Clean Assemblies",
+      "short_title": "Preparing Studio Builds for Finalization",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/preparing-studio-builds-for-finalization/",
+      "track": "build-with-ai",
+      "scope": "meshmogul-workflow",
+      "difficulty": "beginner-to-intermediate",
+      "reading_time_minutes": 11,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Pre-bake assembly checklist covering Model PrimaryPart/WorldPivot origins, Folder vs. Model origin fallbacks, Transparency = 1 collider exclusion, and non-geometry child handling.",
+      "prerequisites": [
+        "proceduralmodel-assistant-output-to-mesh"
+      ],
+      "next_recommended": "roblox-studio-model-to-reusable-mesh-asset",
+      "related_guides": [
+        "how-to-prompt-ai-for-roblox-3d-models",
+        "proceduralmodel-assistant-output-to-mesh",
+        "preflight-and-retained-previews",
+        "collision-fidelity-and-invisible-doorways"
+      ],
+      "symptoms": [
+        "Baked mesh rotates around bounding center instead of hinge",
+        "Invisible collider blocks got excluded or included unexpectedly",
+        "Lights or attachments missing after bake"
+      ],
+      "tags": [
+        "pivots",
+        "primarypart",
+        "worldpivot",
+        "transparency-exclusion",
+        "pre-bake"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/studio/pivot-tools",
+        "https://create.roblox.com/docs/parts/procedural-models",
+        "https://create.roblox.com/docs/reference/engine/classes/ProceduralModel",
+        "https://morningforge.github.io/MeshMogul/how-it-works/",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "how-to-turn-roblox-parts-into-a-mesh",
+      "title": "How to Turn Roblox Parts Into a Mesh",
+      "short_title": "Turn Roblox Parts Into a Mesh",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/how-to-turn-roblox-parts-into-a-mesh/",
+      "track": "understand-3d",
+      "scope": "meshmogul-workflow",
+      "difficulty": "beginner",
+      "reading_time_minutes": 8,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Compare Model grouping, Solid Modeling Unions, and published MeshParts—and follow the safe non-destructive workflow for Studio-built geometry.",
+      "prerequisites": [],
+      "next_recommended": "make-a-roblox-mesh-without-blender",
+      "related_guides": [
+        "preparing-studio-builds-for-finalization",
+        "why-models-split-into-multiple-meshparts",
+        "compare-roblox-meshes-before-and-after"
+      ],
+      "symptoms": [
+        "Should I Group, Union, or publish a MeshPart?",
+        "Union destroyed my textures or smudged shading"
+      ],
+      "tags": [
+        "parts-to-mesh",
+        "solid-modeling",
+        "union-operation",
+        "meshpart",
+        "beginner"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/art/modeling/3d-importer",
+        "https://create.roblox.com/docs/reference/engine/classes/AssetService",
+        "https://create.roblox.com/docs/parts/solid-modeling",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/",
+        "https://morningforge.github.io/MeshMogul/how-it-works/"
+      ]
+    },
+    {
+      "slug": "make-a-roblox-mesh-without-blender",
+      "title": "How to Make a Roblox Mesh Without Blender",
+      "short_title": "Make a Roblox Mesh Without Blender",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/make-a-roblox-mesh-without-blender/",
+      "track": "understand-3d",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner",
+      "reading_time_minutes": 8,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Choose cleanly between Roblox primitive assemblies, Solid Modeling CSG, Assistant generation, MeshMogul studio bakes, and when external DCC tools like Blender become necessary.",
+      "prerequisites": [
+        "how-to-turn-roblox-parts-into-a-mesh"
+      ],
+      "next_recommended": "meshid-vs-assetid-in-roblox",
+      "related_guides": [
+        "how-to-turn-roblox-parts-into-a-mesh",
+        "meshid-vs-assetid-in-roblox",
+        "preflight-and-retained-previews"
+      ],
+      "symptoms": [
+        "Can I ship meshes without Blender?",
+        "When do I actually need Blender?"
+      ],
+      "tags": [
+        "no-blender",
+        "studio-native",
+        "3d-importer",
+        "workflow-comparison"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/art/modeling/3d-importer",
+        "https://create.roblox.com/docs/reference/engine/classes/AssetService",
+        "https://create.roblox.com/docs/parts/solid-modeling",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/",
+        "https://morningforge.github.io/MeshMogul/how-it-works/"
+      ]
+    },
+    {
+      "slug": "meshid-vs-assetid-in-roblox",
+      "title": "MeshId vs AssetId in Roblox",
+      "short_title": "MeshId vs AssetId Explained",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/meshid-vs-assetid-in-roblox/",
+      "track": "understand-3d",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner",
+      "reading_time_minutes": 8,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Separate Mesh geometry AssetIds from TextureID images, Creator Store Model packages, temporary Object-backed previews, and permissions.",
+      "prerequisites": [],
+      "next_recommended": "how-to-get-a-mesh-id-in-roblox-studio",
+      "related_guides": [
+        "how-to-get-a-mesh-id-in-roblox-studio",
+        "roblox-studio-model-to-reusable-mesh-asset",
+        "publish-a-mesh-from-roblox-studio"
+      ],
+      "symptoms": [
+        "Pasted Creator Store ID into MeshId and got an error",
+        "MeshPart shows empty MeshId in Preview",
+        "Other place fails to load private mesh asset"
+      ],
+      "tags": [
+        "meshid",
+        "assetid",
+        "textureid",
+        "permissions",
+        "editable-mesh"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/projects/assets",
+        "https://create.roblox.com/docs/art/modeling/3d-importer",
+        "https://create.roblox.com/docs/reference/engine/classes/AssetService",
+        "https://morningforge.github.io/MeshMogul/how-it-works/",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "normals-uv-seams-and-texture-budgets",
+      "title": "Planar Normals, UV Seams & Mobile Texture Budgets: Fixing Blotchy Shading and Memory Spikes",
+      "short_title": "Normals, UV Seams & Texture Budgets",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/normals-uv-seams-and-texture-budgets/",
+      "track": "understand-3d",
+      "scope": "engine-fundamentals",
+      "difficulty": "intermediate-to-advanced",
+      "reading_time_minutes": 14,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Diagnose diagonal shading smudges (split vs. welded normals), OpenGL Y+ vs. DirectX Y- normal maps, UV seams, and Roblox's 256/512/1024 texture size tiers.",
+      "prerequisites": [
+        "how-to-turn-roblox-parts-into-a-mesh"
+      ],
+      "next_recommended": "why-models-split-into-multiple-meshparts",
+      "related_guides": [
+        "why-models-split-into-multiple-meshparts",
+        "roblox-studio-texture-generator",
+        "compare-roblox-meshes-before-and-after"
+      ],
+      "symptoms": [
+        "Diagonal shadow smudge on flat box faces",
+        "Normal map bumps look inverted (DirectX vs OpenGL Y+)",
+        "Blurry textures or mobile VRAM crashes"
+      ],
+      "tags": [
+        "normals",
+        "uv-seams",
+        "opengl-y-plus",
+        "mikktspace",
+        "texture-budget",
+        "mobile-memory"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/art/modeling/texture-specifications",
+        "https://create.roblox.com/docs/art/onboarding",
+        "https://create.roblox.com/docs/reference/engine/classes/SurfaceAppearance",
+        "https://create.roblox.com/docs/parts/textures-decals",
+        "https://create.roblox.com/docs/reference/engine/classes/EditableMesh",
+        "https://create.roblox.com/docs/reference/engine/classes/EditableImage"
+      ]
+    },
+    {
+      "slug": "why-models-split-into-multiple-meshparts",
+      "title": "Why Did My Model Become 3 MeshParts? (The Single-Material Rule & Appearance Grouping)",
+      "short_title": "Why Models Split Into Multiple MeshParts",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/why-models-split-into-multiple-meshparts/",
+      "track": "understand-3d",
+      "scope": "meshmogul-workflow",
+      "difficulty": "beginner-to-intermediate",
+      "reading_time_minutes": 10,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Understand Roblox's single-material-per-MeshPart constraint, how MeshMogul keeps multi-color vertex colors together while splitting distinct materials cleanly, and MaterialVariant boundaries.",
+      "prerequisites": [
+        "how-to-turn-roblox-parts-into-a-mesh"
+      ],
+      "next_recommended": "roblox-studio-model-to-reusable-mesh-asset",
+      "related_guides": [
+        "normals-uv-seams-and-texture-budgets",
+        "roblox-studio-model-to-reusable-mesh-asset",
+        "preflight-and-retained-previews"
+      ],
+      "symptoms": [
+        "Expected 1 MeshPart but got a Model of 3 MeshParts",
+        "Multi-color stripes merged, Wood vs Metal split apart",
+        "Mapless MaterialVariant warning after insert"
+      ],
+      "tags": [
+        "appearance-grouping",
+        "single-material-rule",
+        "vertex-colors",
+        "material-variant"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/art/modeling/texture-specifications",
+        "https://create.roblox.com/docs/art/onboarding",
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/reference/engine/classes/MaterialService",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/",
+        "https://morningforge.github.io/MeshMogul/how-it-works/"
+      ]
+    },
+    {
+      "slug": "roblox-studio-model-to-reusable-mesh-asset",
+      "title": "Turn a Roblox Studio Model Into a Reusable Mesh Asset",
+      "short_title": "Studio Model to Reusable Mesh Asset",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/roblox-studio-model-to-reusable-mesh-asset/",
+      "track": "finish-and-publish",
+      "scope": "meshmogul-workflow",
+      "difficulty": "beginner",
+      "reading_time_minutes": 8,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Separate visual prop shells from interactive scripts and constraints, understand multi-MeshPart logical assets and local Assets history limits (25 recent + 100 pinned), and know when Packages fit better.",
+      "prerequisites": [
+        "preparing-studio-builds-for-finalization"
+      ],
+      "next_recommended": "publish-a-mesh-from-roblox-studio",
+      "related_guides": [
+        "how-to-turn-roblox-parts-into-a-mesh",
+        "meshid-vs-assetid-in-roblox",
+        "preflight-and-retained-previews"
+      ],
+      "symptoms": [
+        "Scripts or hinges missing after converting a Model",
+        "Exact-instance Find vs global search confusion",
+        "Local Assets library vs Roblox Packages"
+      ],
+      "tags": [
+        "reusable-asset",
+        "model-container",
+        "packages",
+        "assets-library"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/Model",
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/projects/assets/packages",
+        "https://create.roblox.com/docs/reference/engine/classes/AssetService",
+        "https://morningforge.github.io/MeshMogul/how-it-works/",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "roblox-studio-texture-generator",
+      "title": "Roblox Studio Texture Generator Guide: Fast vs Quality PBR, UVs, and Mesh Assets",
+      "short_title": "Roblox Studio Texture Generator Guide",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/roblox-studio-texture-generator/",
+      "track": "finish-and-publish",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner-to-intermediate",
+      "reading_time_minutes": 9,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Compare Fast (1K diffuse TextureID) and Quality (4K PBR SurfaceAppearance) modes, understand coherent Model texturing vs. shared atlases, and track MeshId changes when UVs update.",
+      "prerequisites": [
+        "normals-uv-seams-and-texture-budgets"
+      ],
+      "next_recommended": "how-to-get-a-mesh-id-in-roblox-studio",
+      "related_guides": [
+        "normals-uv-seams-and-texture-budgets",
+        "compare-roblox-meshes-before-and-after",
+        "publish-a-mesh-from-roblox-studio"
+      ],
+      "symptoms": [
+        "MeshId changed after generating a texture",
+        "Texture looks blurry or stretched on bevels",
+        "SurfaceAppearance overrides TextureID"
+      ],
+      "tags": [
+        "texture-generator",
+        "surface-appearance",
+        "pbr",
+        "uv-unwrap",
+        "fast-vs-quality"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/studio/texture-generator",
+        "https://create.roblox.com/docs/art/modeling/surface-appearance",
+        "https://devforum.roblox.com/t/texture-generator-beta/2880635/1",
+        "https://devforum.roblox.com/t/texture-generator-beta/2880635/44",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "how-to-get-a-mesh-id-in-roblox-studio",
+      "title": "How to Get a Mesh ID in Roblox Studio",
+      "short_title": "How to Get a Mesh ID in Studio",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/how-to-get-a-mesh-id-in-roblox-studio/",
+      "track": "finish-and-publish",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner",
+      "reading_time_minutes": 6,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Find MeshPart.MeshId or SpecialMesh.MeshId in Explorer, avoid TextureID/Model/temporary preview mistakes, and run a read-only Command Bar inspection snippet.",
+      "prerequisites": [
+        "meshid-vs-assetid-in-roblox"
+      ],
+      "next_recommended": "publish-a-mesh-from-roblox-studio",
+      "related_guides": [
+        "meshid-vs-assetid-in-roblox",
+        "roblox-studio-model-to-reusable-mesh-asset",
+        "compare-roblox-meshes-before-and-after"
+      ],
+      "symptoms": [
+        "Properties window shows no MeshId on Model or Part",
+        "MeshId field is empty on Preview MeshPart"
+      ],
+      "tags": [
+        "meshid",
+        "explorer",
+        "specialmesh",
+        "command-bar",
+        "beginner"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/reference/engine/classes/SpecialMesh",
+        "https://create.roblox.com/docs/projects/assets",
+        "https://morningforge.github.io/MeshMogul/how-it-works/"
+      ]
+    },
+    {
+      "slug": "publish-a-mesh-from-roblox-studio",
+      "title": "Publish a Mesh From Roblox Studio",
+      "short_title": "Publish a Mesh From Roblox Studio",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/publish-a-mesh-from-roblox-studio/",
+      "track": "finish-and-publish",
+      "scope": "meshmogul-workflow",
+      "difficulty": "beginner-to-intermediate",
+      "reading_time_minutes": 9,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Move safely from local EditableMesh preview to cloud MeshId publication via the 6-step Command Bar handoff, handle partial multi-group outcomes via Needs attention, and verify permissions.",
+      "prerequisites": [
+        "roblox-studio-model-to-reusable-mesh-asset"
+      ],
+      "next_recommended": "preflight-and-retained-previews",
+      "related_guides": [
+        "roblox-studio-model-to-reusable-mesh-asset",
+        "meshid-vs-assetid-in-roblox",
+        "compare-roblox-meshes-before-and-after"
+      ],
+      "symptoms": [
+        "Partial multi-group upload failure",
+        "Group permission error after publishing",
+        "Accidental duplicate uploads from rerunning Command Bar"
+      ],
+      "tags": [
+        "publish-mesh",
+        "command-bar-handoff",
+        "asset-service",
+        "needs-attention",
+        "permissions"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/AssetService",
+        "https://create.roblox.com/docs/reference/engine/classes/EditableMesh",
+        "https://create.roblox.com/docs/art/modeling/3d-importer",
+        "https://create.roblox.com/docs/projects/assets/permissions",
+        "https://morningforge.github.io/MeshMogul/how-it-works/",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    },
+    {
+      "slug": "preflight-and-retained-previews",
+      "title": "Preflight Validation, Triangle Budgets, and Retained Previews",
+      "short_title": "Preflight & Retained Previews",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/preflight-and-retained-previews/",
+      "track": "finish-and-publish",
+      "scope": "meshmogul-workflow",
+      "difficulty": "intermediate-to-advanced",
+      "reading_time_minutes": 11,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Understand Roblox's 60,000-vertex / 20,000-triangle EditableMesh limits, primitive tessellation budgets, Cylinder/Ball min-axis scaling, bounded Union/Glass support, and stale-preview freshness checks.",
+      "prerequisites": [
+        "publish-a-mesh-from-roblox-studio"
+      ],
+      "next_recommended": "compare-roblox-meshes-before-and-after",
+      "related_guides": [
+        "preparing-studio-builds-for-finalization",
+        "how-to-turn-roblox-parts-into-a-mesh",
+        "why-models-split-into-multiple-meshparts"
+      ],
+      "symptoms": [
+        "EditableMesh vertex or triangle limit exceeded",
+        "Stretched Cylinder or Ball came out circular/spherical",
+        "Mapped MaterialVariant or Decal refused in preflight"
+      ],
+      "tags": [
+        "preflight",
+        "triangle-budget",
+        "editable-mesh-limits",
+        "union-profile",
+        "freshness-gate"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/EditableMesh",
+        "https://create.roblox.com/docs/reference/engine/classes/Part",
+        "https://create.roblox.com/docs/parts/solid-modeling",
+        "https://create.roblox.com/docs/reference/engine/classes/MaterialVariant",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/",
+        "https://morningforge.github.io/MeshMogul/how-it-works/"
+      ]
+    },
+    {
+      "slug": "compare-roblox-meshes-before-and-after",
+      "title": "How to Compare Roblox Meshes Before and After Conversion",
+      "short_title": "Compare Meshes Before & After",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/compare-roblox-meshes-before-and-after/",
+      "track": "test-and-optimize",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner-to-advanced",
+      "reading_time_minutes": 10,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-02-15",
+      "summary": "Build a 3-stage comparison bench (Original vs. Preview vs. Published), run 6 fast lighting/LOD/DoubleSided checks, audit collision hulls, and verify MicroProfiler impact.",
+      "prerequisites": [
+        "publish-a-mesh-from-roblox-studio"
+      ],
+      "next_recommended": "draw-calls-instancing-and-hidden-faces",
+      "related_guides": [
+        "collision-fidelity-and-invisible-doorways",
+        "preflight-and-retained-previews",
+        "preparing-studio-builds-for-finalization"
+      ],
+      "symptoms": [
+        "Published mesh disappears at distance (RenderFidelity LOD)",
+        "Backfaces missing from underneath",
+        "Unsure whether mesh conversion actually helped performance"
+      ],
+      "tags": [
+        "qa-comparison",
+        "render-fidelity",
+        "microprofiler",
+        "doublesided",
+        "before-after"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/MeshPart",
+        "https://create.roblox.com/docs/reference/engine/enums/RenderFidelity",
+        "https://create.roblox.com/docs/reference/engine/enums/CollisionFidelity",
+        "https://create.roblox.com/docs/performance-optimization/microprofiler",
+        "https://create.roblox.com/docs/performance-optimization/performance-metrics",
+        "https://create.roblox.com/docs/studio/rendering-and-graphics-settings"
+      ]
+    },
+    {
+      "slug": "draw-calls-instancing-and-hidden-faces",
+      "title": "Draw Calls, GPU Instancing, and Hidden Faces in Roblox",
+      "short_title": "Draw Calls, Instancing & Hidden Faces",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/draw-calls-instancing-and-hidden-faces/",
+      "track": "test-and-optimize",
+      "scope": "engine-fundamentals",
+      "difficulty": "intermediate-to-advanced",
+      "reading_time_minutes": 10,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Understand GPU instancing vs. draw-call fragmentation, FastClusters rebuilds, hidden internal part faces, why over-merging hurts culling/LOD, and MicroProfiler Orange/Blue/Red bars.",
+      "prerequisites": [
+        "compare-roblox-meshes-before-and-after"
+      ],
+      "next_recommended": "collision-fidelity-and-invisible-doorways",
+      "related_guides": [
+        "why-models-split-into-multiple-meshparts",
+        "preflight-and-retained-previews",
+        "roblox-studio-model-to-reusable-mesh-asset"
+      ],
+      "symptoms": [
+        "Merging entire street made framerate worse",
+        "MicroProfiler shows Blue or Red render bars",
+        "Stacked blocks waste triangles internally"
+      ],
+      "tags": [
+        "draw-calls",
+        "gpu-instancing",
+        "fastclusters",
+        "hidden-faces",
+        "microprofiler",
+        "frustum-culling"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/performance-optimization/improve-rendering-performance",
+        "https://create.roblox.com/docs/performance-optimization/microprofiler",
+        "https://create.roblox.com/docs/reference/engine/enums/RenderFidelity",
+        "https://create.roblox.com/docs/reference/engine/classes/Model",
+        "https://create.roblox.com/docs/parts/meshes"
+      ]
+    },
+    {
+      "slug": "collision-fidelity-and-invisible-doorways",
+      "title": "Collision Fidelity and Invisible Doorways in Roblox",
+      "short_title": "Collision Fidelity & Invisible Doorways",
+      "canonical_url": "https://morningforge.github.io/MeshMogul/guides/collision-fidelity-and-invisible-doorways/",
+      "track": "test-and-optimize",
+      "scope": "engine-fundamentals",
+      "difficulty": "beginner-to-advanced",
+      "reading_time_minutes": 9,
+      "last_verified": "2026-11-15",
+      "next_review_due": "2027-05-15",
+      "summary": "Compare all 5 CollisionFidelity modes (including Tunable), stop Hull/Default from blocking doorways with the Box + 3 invisible Block Parts pattern, and cut PhysicsParts memory.",
+      "prerequisites": [
+        "draw-calls-instancing-and-hidden-faces"
+      ],
+      "next_recommended": null,
+      "related_guides": [
+        "compare-roblox-meshes-before-and-after",
+        "preparing-studio-builds-for-finalization",
+        "preflight-and-retained-previews"
+      ],
+      "symptoms": [
+        "Invisible wall blocking an open arch or doorway",
+        "High PhysicsParts memory even with CanCollide false",
+        "Cannot assign CollisionFidelity from runtime script"
+      ],
+      "tags": [
+        "collision-fidelity",
+        "tunable",
+        "physicsparts",
+        "doorway-colliders",
+        "transparency-exclusion"
+      ],
+      "preserved_anchors": [],
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/enums/CollisionFidelity",
+        "https://create.roblox.com/docs/reference/engine/classes/TriangleMeshPart",
+        "https://create.roblox.com/docs/physics/collisions",
+        "https://create.roblox.com/docs/performance-optimization/performance-metrics",
+        "https://morningforge.github.io/MeshMogul/supported-inputs/"
+      ]
+    }
+  ]
+}

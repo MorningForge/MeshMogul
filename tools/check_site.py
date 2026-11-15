@@ -4,6 +4,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit, unquote
 import re
+import json
+from build_search_index import build_index
 import argparse
 import hashlib
 import subprocess
@@ -17,11 +19,12 @@ PUBLIC_EMAIL = 'morningforge@proton.me'
 GIT_EMAIL = '311570204+MorningForge@users.noreply.github.com'
 
 class Document(HTMLParser):
-    def __init__(self, source):
+    def __init__(self, source, allow_search=False):
         super().__init__(convert_charrefs=True)
         self.links, self.ids, self.headings, self.meta = [], set(), [], {}
         self.errors, self.title, self.language, self.main = [], False, False, False
         self.resources, self.canonical = [], None
+        self.allow_search, self.script_count, self.in_script = allow_search, 0, False
         self.feed(source)
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -34,13 +37,26 @@ class Document(HTMLParser):
             if a['id'] in self.ids: self.errors.append('Duplicate ID: ' + a['id'])
             self.ids.add(a['id'])
         if tag == 'img' and 'alt' not in a: self.errors.append('Image missing alt attribute')
-        if tag == 'script': self.errors.append('Unexpected JavaScript; this site is script-free')
+        if any(key.lower().startswith('on') for key in a):
+            self.errors.append('Inline event handler is forbidden')
+        if tag == 'script':
+            self.in_script = True
+            self.script_count += 1
+            if (not self.allow_search or attrs != [('src', '../assets/foundations-search.js'), ('defer', None)]
+                    or self.script_count != 1):
+                self.errors.append('Only the reviewed deferred Foundations search script is allowed on the hub')
         if 'src' in a: self.resources.append(a['src'])
         if tag == 'link' and a.get('rel') in ('stylesheet', 'icon', 'preload'):
             self.resources.append(a.get('href', ''))
         if tag == 'link' and a.get('rel') == 'canonical': self.canonical = a.get('href')
         for key in ('href', 'src'):
             if key in a: self.links.append(a[key])
+
+    def handle_endtag(self, tag):
+        if tag == 'script': self.in_script = False
+
+    def handle_data(self, data):
+        if self.in_script and data.strip(): self.errors.append('Inline script content is forbidden')
 
 
 def main():
@@ -49,7 +65,7 @@ def main():
     args = parser.parse_args()
     errors = []
     files = sorted(p for p in ROOT.rglob('*') if p.is_file() and not any(x in p.relative_to(ROOT).parts for x in ('.git', '.local', '_site', '__pycache__')))
-    documents = {p: Document(p.read_text(encoding='utf-8')) for p in files if p.suffix == '.html'}
+    documents = {p: Document(p.read_text(encoding='utf-8'), p == ROOT / 'guides/index.html') for p in files if p.suffix == '.html'}
     link_count = 0
     for path, doc in documents.items():
         name = path.relative_to(ROOT).as_posix()
@@ -93,13 +109,13 @@ def main():
         if p.is_symlink(): errors.append(name + ': unexpected symlink')
         if p.suffix.lower() in ('.luau', '.lua', '.rbxl', '.rbxmx', '.rbxm', '.pem', '.key'):
             errors.append(name + ': non-marketing file type')
-        if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt', '.py'):
+        if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt', '.py', '.json', '.js', '.cjs'):
             content = p.read_text(encoding='utf-8')
             if re.search(r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----', content):
                 errors.append(name + ': possible credential')
-            if p.suffix == '.html' and re.search(r'/workspace/|[A-Z]:\\|docs/product-spec|Codex/Investigations|MeshLab[A-Z]', content):
+            if p.suffix in ('.html', '.json', '.js') and re.search(r'/workspace/|[A-Z]:\\|docs/product-spec|Codex/Investigations|MeshLab[A-Z]', content):
                 errors.append(name + ': private implementation reference')
-            if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt'):
+            if p.suffix in ('.html', '.css', '.svg', '.md', '.yml', '.xml', '.txt', '.json', '.js', '.cjs'):
                 emails = set(re.findall(r'[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}', content))
                 if emails - {PUBLIC_EMAIL, GIT_EMAIL}: errors.append(name + ': unapproved email (value omitted)')
                 if re.search(r'(?:[A-Z]:[\\/]|/(?:Users|home|workspace)/|docs/product-spec|Codex/Investigations)', content):
@@ -182,10 +198,43 @@ def main():
     for track in ('build-with-ai', 'understand-3d', 'finish-and-publish', 'test-and-optimize'):
         if track not in documents[ROOT / 'guides/index.html'].ids:
             errors.append('guides/index.html: missing Foundations track: ' + track)
-    card_routes = re.findall(r'<li><a href="([^"]+/)">', guide_index)
+    card_routes = re.findall(r'<li data-guide="[^"]+"><a href="([^"]+/)">', guide_index)
     guide_routes = {p.parent.name + '/' for p in (ROOT / 'guides').glob('*/index.html')}
     if set(card_routes) != guide_routes or len(card_routes) != len(guide_routes):
         errors.append('Foundations tracks must discover every guide exactly once')
+    catalog = json.loads((ROOT / 'assets/foundations-catalog.json').read_text())
+    entries = catalog['guides']
+    slugs = {g['slug'] for g in entries}
+    if len(entries) != 16 or {s + '/' for s in slugs} != guide_routes:
+        errors.append('Foundations catalog must match all 16 published guides')
+    for g in entries:
+        route = ORIGIN + PROJECT_BASE + 'guides/' + g['slug'] + '/'
+        if g['canonical_url'] != route: errors.append('Foundations catalog canonical mismatch')
+        doc = documents[ROOT / 'guides' / g['slug'] / 'index.html']
+        if any(anchor.lstrip('#') not in doc.ids for anchor in g['preserved_anchors']):
+            errors.append('Foundations required fragment missing: ' + g['slug'])
+        for related in [*g['prerequisites'], *g['related_guides'], g['next_recommended']]:
+            if related and related not in slugs: errors.append('Invalid catalog cross-link')
+        source = (ROOT / 'guides' / g['slug'] / 'index.html').read_text()
+        if ('Documentation reviewed' not in source or g['last_verified'] not in source
+                or g['next_review_due'] not in source): errors.append('Missing genuine review metadata')
+        if re.search(r'VISUAL INSTRUCTION|Visual production instruction|\{#[^}]+\}|\[DOCUMENTED|\[OBSERVED', source):
+            errors.append('Editorial instruction or evidence label leaked into article')
+    if len(catalog['learning_paths']) != 3: errors.append('Expected three learning paths')
+    for path in catalog['learning_paths']:
+        if path['id'] not in documents[ROOT / 'guides/index.html'].ids or any(s not in slugs for s in path['slugs']):
+            errors.append('Learning path does not resolve')
+    if (ROOT / 'assets/foundations-search-index.json').read_text() != build_index():
+        errors.append('Full-text search index is stale')
+    if documents[ROOT / 'guides/index.html'].script_count != 1:
+        errors.append('Foundations hub must load exactly one reviewed search script')
+    scripts = {p.relative_to(ROOT).as_posix() for p in files if p.suffix == '.js'}
+    if scripts != {'assets/foundations-search.js'}:
+        errors.append('Unexpected JavaScript file; only Foundations search is authorized')
+    # Pin the inspected implementation, not a generic local-script exemption.
+    search = (ROOT / 'assets/foundations-search.js').read_bytes()
+    if hashlib.sha256(search).hexdigest() != 'c0e43c3f495d9786d291dc5f1504df52f4a0f023aacb528c969726a0e75e5d80':
+        errors.append('Foundations search changed; security/privacy review and digest update required')
     css = (ROOT / 'assets/site.css').read_text(encoding='utf-8')
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')

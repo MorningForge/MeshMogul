@@ -70,11 +70,20 @@ separately authorized actions.
 
 ## Foundations routes and review
 
-The existing `/guides/` page is the Foundations entry, with four tracks and one
-new cornerstone route: `/guides/how-to-prompt-ai-for-roblox-3d-models/`. The
-existing recursive Guides allowlist includes its downloadable
-`ai-asset-brief.txt`; no workflow or hosting change is needed. Confirm that the
-field and download match, keyboard selection works, and both fit narrow layouts.
-The root `FOUNDATIONS.md` is a source-only editorial/handoff document and is not
-part of the Pages staging allowlist. These intended routes are not live merely
-because they exist on the PR branch.
+The existing `/guides/` page is the Foundations entry, with four subjects,
+three learning paths, and sixteen articles (ten preserved routes plus six new
+routes). The existing recursive Guides and assets allowlist includes the
+unchanged downloadable `ai-asset-brief.txt`, the local search script, the public
+catalog, and generated full-text index. No workflow or hosting change is needed.
+
+Run `python3 tools/build_search_index.py --check` and
+`python3 tools/test_search_policy.py` alongside the site checker. Search is a
+progressive enhancement: verify full static browsing with JavaScript disabled,
+local search/filters with it enabled, and fallback after an index-load failure.
+Use `node tools/check_foundations_browser.cjs` with development Playwright and
+Chromium for repeatable local browser checks. See `FOUNDATIONS.md` for results,
+review screenshots, accessibility limits, and the eight native capture blockers.
+
+`FOUNDATIONS.md`, `review/`, and tooling remain outside the Pages staging
+allowlist. Candidate routes are not live merely because they exist on a draft
+PR branch. Merge and deployment require separate authorization.

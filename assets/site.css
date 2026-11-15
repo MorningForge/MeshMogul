@@ -22,3 +22,77 @@ h1,h2,h3{overflow-wrap:anywhere}
 @media(max-width:1100px){.site-header nav{order:3;flex-basis:100%;justify-content:flex-start;margin-left:0}.header-cta{margin-left:auto}}
 @media(max-width:760px){.site-header{gap:16px 10px}.header-cta{font-size:.72rem;padding:9px 10px}.header-cta span{margin-left:6px}.site-header nav{gap:16px}.release-section{grid-template-columns:1fr;gap:24px;padding:40px 0}.license-text{padding:16px;font-size:.75rem}}
 @media(max-width:380px){.header-cta{width:100%;margin-left:0;order:4}.site-header nav{order:3}}
+
+/* Foundations uses the site palette and adds progressive discovery and reading chrome. */
+.article-layout>.prose{min-width:0;width:100%}
+.prose a{overflow-wrap:anywhere}
+[hidden]{display:none!important}
+.foundations-heading{max-width:900px;padding-bottom:56px}
+.foundations-heading h1{font-size:clamp(2.7rem,5.6vw,4.7rem);max-width:800px}
+.learning-paths,.symptom-section,.library-section{padding:48px 0;border-top:1px solid var(--line)}
+.path-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.path-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:0 24px;align-self:start}
+.path-card summary{padding:26px 0;list-style:none}
+.path-card summary::-webkit-details-marker{display:none}
+.path-card summary .eyebrow{color:var(--gold);font-size:.65rem}
+.path-title,.path-description{display:block}
+.path-title{font-size:1.3rem;line-height:1.35;margin:20px 0 16px;letter-spacing:-.02em}
+.path-description{font-size:.9rem;font-weight:400;line-height:1.7;color:var(--muted);margin-bottom:22px}
+.path-card ol{font-size:.88rem;padding:0 0 16px 20px}
+.path-card li{margin:16px 0}
+.symptom-links{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);gap:0 30px}
+.symptom-links a{display:flex;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.symptom-index{columns:2;column-gap:48px;font-size:.9rem}
+.symptom-index li{break-inside:avoid}
+.search-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto;gap:18px;align-items:end}
+.search-fields>div{min-width:0}
+.search-fields label{display:block;font-size:.85rem;font-weight:600;margin-bottom:8px}
+.search-fields input,.search-fields select,.search-fields button{width:100%;min-height:48px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--text);font:inherit;padding:10px 12px}
+.search-fields input{font-size:.95rem}
+.search-fields button{cursor:pointer;color:var(--teal)}
+.search-fields :is(input,select,button):focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+#search-help,#search-status{font-size:.85rem;color:var(--muted);margin:12px 0}
+#empty-results{border-left:2px solid var(--gold);padding:20px;background:var(--panel)}
+.library-section .foundations-tracks{margin:22px 0 36px;gap:24px}
+.library-section .guide-track>h3{font-size:1.7rem;margin-bottom:14px}
+.library-section .guide-grid h4{font-size:1.35rem;line-height:1.4;color:var(--text);letter-spacing:-.025em;margin:20px 0 14px;overflow-wrap:anywhere}
+.guide-grid .guide-scope{font-size:.7rem;color:var(--gold);margin-bottom:20px}
+.library-note{max-width:780px;padding-bottom:48px;color:var(--muted)}
+.article-heading{max-width:1000px;padding-bottom:32px}
+.article-heading h1{font-size:clamp(2.1rem,4.1vw,3.5rem);max-width:980px}
+.article-meta{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 14px}
+.article-meta span{font-size:.75rem;background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:4px 10px}
+.review-date{font-size:.8rem;color:var(--muted)}
+.article-toc{align-self:start;position:sticky;top:24px;border-block:1px solid var(--line);max-height:calc(100vh - 48px);overflow-y:auto}
+.article-toc summary{font-size:.9rem;padding:16px 0}
+.article-toc nav{display:flex;flex-direction:column;gap:14px;padding:4px 0 20px}
+.article-toc a{font-size:.8rem;line-height:1.5;text-decoration:none;color:var(--muted)}
+.article-toc a:hover{color:var(--teal)}
+.prose .evidence-note{font-size:.85rem;margin-bottom:30px}
+.evidence-note summary{font-size:.85rem;padding:14px 0}
+.evidence-note p{font-size:.85rem;padding-right:0}
+.takeaways{padding:22px 24px!important;background:var(--panel);border-left:2px solid var(--gold);margin-bottom:32px}
+.takeaways h2{font-size:1.2rem;margin:0 0 16px}
+.takeaways ul{padding-left:20px;margin-bottom:0}
+.takeaways li{font-size:.95rem}
+.prose h2{margin-top:48px;line-height:1.3}
+.prose .takeaways h2{margin-top:0}
+.prose h3{margin-top:28px;line-height:1.4}
+.prose pre{max-width:100%;overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:20px;font:.83rem/1.7 ui-monospace,monospace;tab-size:2}
+.prose pre code{font:inherit;padding:0;background:none;white-space:pre;overflow-wrap:normal}
+.prose blockquote{margin:24px 0;padding:4px 0 4px 22px;border-left:2px solid var(--teal);color:var(--body)}
+.prose blockquote p:last-child{margin-bottom:0}
+.code-caption{font-size:.75rem;color:var(--gold);margin-top:28px;margin-bottom:8px}
+.prose .table-wrap{margin:24px 0}
+.prose .table-wrap table{min-width:580px}
+.prose table :is(th,td):first-child{min-width:150px}
+.prose :is(pre,.table-wrap):focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.guide-next{margin-top:48px;padding-top:12px;border-top:1px solid var(--line)}
+.next-step{font-size:1.15rem}
+.path-progress{font-size:.85rem;border-top:1px solid var(--line);padding:20px 0}
+.path-progress p{margin-bottom:12px}
+.path-progress span{display:block;margin-top:10px}
+@media(min-width:761px){.article-layout{grid-template-columns:210px minmax(0,1fr);gap:56px}}
+@media(max-width:1000px){.search-fields{grid-template-columns:1fr 1fr}.search-query{grid-column:1/-1}.search-fields button{width:auto}.path-grid{gap:12px}.path-card{padding:0 18px}}
+@media(max-width:760px){.path-grid,.symptom-links{grid-template-columns:1fr}.symptom-index{columns:1}.learning-paths,.symptom-section,.library-section{padding:34px 0}.article-toc{position:static;max-height:none}.article-layout{gap:12px}.article-heading h1{font-size:2.1rem}.takeaways{padding:20px 18px!important}.prose pre{padding:14px}.library-section .guide-grid{margin-bottom:34px}.article-meta{gap:6px}.foundations-heading{padding-bottom:36px}}
+@media(max-width:380px){.search-fields{grid-template-columns:1fr}.search-query{grid-column:auto}.search-fields button{width:100%}.article-heading h1{font-size:1.95rem}}
