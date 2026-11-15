@@ -46,11 +46,46 @@ const fs=require('fs');
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
    assert(!overflow,'page overflow '+width+' '+route);
    assert(await page.locator('h1').count()===1,'h1 '+route);
+   for(const image of await page.locator('.foundation-visual img').all()){
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(el=>el.decode());
+    assert(await image.evaluate(el=>el.naturalWidth>0&&el.naturalHeight>0),'visual image decode '+route);
+    assert((await image.getAttribute('alt')||'').length>20,'meaningful visual alt '+route);
+    assert(await image.getAttribute('loading')==='lazy','lazy visual '+route);
+    assert(await image.getAttribute('srcset'),'responsive visual '+route);
+   }
+   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overflow after image decode '+width+' '+route);
+   const visual=page.locator('.foundation-visual');
+   if(await visual.count()){
+    const id=await visual.getAttribute('id');
+    await page.locator('#main').focus();
+    await visual.screenshot({path:`.local/${id}-${width}.png`});
+   }
   }
   for(const [name,route] of [['hub','guides/'],['article','guides/how-to-prompt-ai-for-roblox-3d-models/'],['technical','guides/collision-fidelity-and-invisible-doorways/']]){
    await page.goto(root+route);await page.screenshot({path:`.local/${name}-${width}.png`,fullPage:true});
   }
  }
+ assert(!calls.some(u=>u.endsWith('.mp4')),'video downloaded before playback');
+ const visualGuides=cat.guides.filter(g=>fs.readFileSync('guides/'+g.slug+'/index.html','utf8').includes('class="foundation-visual"'));
+ assert(visualGuides.length===8,'eight visual stations');
+ // Exercise the delivered clips through to completion; motion is always opt-in.
+ for(const guide of visualGuides){
+  await page.goto(root+'guides/'+guide.slug+'/');
+  const video=page.locator('.visual-motion video');if(!await video.count())continue;
+  assert(await video.getAttribute('preload')==='none','no eager clip preload');
+  assert(await video.getAttribute('autoplay')===null,'no automatic motion');
+  assert(await video.getAttribute('controls')!==null,'native video controls');
+  await page.locator('.visual-motion summary').click();
+  await video.evaluate(async el=>{el.loop=false;await el.play()});
+  await page.waitForFunction(()=>document.querySelector('.visual-motion video').ended);
+  assert(await video.evaluate(el=>el.currentTime>3&&el.videoWidth===960&&!el.error),'complete clip playback');
+ }
+ const reduced=await browser.newContext({reducedMotion:'reduce',viewport:{width:320,height:900}});
+ const still=await reduced.newPage();await still.goto(root+'guides/how-to-prompt-ai-for-roblox-3d-models/');
+ assert(await still.locator('video').evaluate(el=>el.paused&&!el.autoplay),'reduced motion stays still');
+ assert(await still.locator('.visual-motion').getAttribute('open')===null,'motion starts collapsed');
+ await reduced.close();
  // JS-free navigation and the complete brief remain usable.
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:900}});const plain=await nojs.newPage();
  await plain.goto(root+'guides/');assert(await plain.locator('[data-guide]:visible').count()===16,'nojs cards');assert(!await plain.locator('#search-controls').isVisible(),'nojs search hidden');
@@ -65,7 +100,7 @@ const fs=require('fs');
  assert(calls.every(u=>u.startsWith(root)),'external browser request');
  assert((await context.cookies()).length===0,'cookies');
  assert((await context.storageState()).origins.length===0,'browser storage');
- console.log('PASS: search title/terms/symptoms/full text, combined filters, empty/reset, safe text, keyboard order, accessibility labels/live status, 17 direct routes × 3 widths without page overflow, no-JS paths/brief, failed index fallback, no external requests/cookies.');
- fs.writeFileSync('.local/browser-evidence.json',JSON.stringify({viewports:[1280,390,320],directRoutes:17,errors,networkDestinations:[...new Set(calls)],searchAccessibleTree:ax},null,2));
+ console.log('PASS: search title/terms/symptoms/full text, combined filters, empty/reset, safe text, keyboard order, accessibility labels/live status, 17 direct routes × 3 widths without page overflow, all eight visual stations decoded with alt/lazy/srcset, both silent clips played to completion, opt-in/reduced motion, no-JS paths/brief, failed index fallback, no external requests/cookies.');
+ fs.writeFileSync('.local/browser-evidence.json',JSON.stringify({viewports:[1280,390,320],directRoutes:17,visualStations:8,clipsPlayed:2,errors,networkDestinations:[...new Set(calls)],searchAccessibleTree:ax},null,2));
  await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

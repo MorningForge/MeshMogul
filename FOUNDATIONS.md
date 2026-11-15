@@ -1,9 +1,9 @@
 # MeshMogul Foundations candidate
 
 This candidate expands the existing Guides section into a free, 16-article
-Roblox engineering library. It is ready for Lead website technical and visual
-review; **final visual acceptance remains blocked by eight native Studio
-captures**. Merge, Pages deployment, and Roblox asset publication are not part
+Roblox engineering library. All eight visual topics are now integrated from the supplied Studio capture
+collection. The candidate is ready for Product Owner aesthetic review, with
+the specific authenticity limitations below. Merge, Pages deployment, and Roblox asset publication are not part
 of this candidate.
 
 ## Implemented
@@ -32,13 +32,15 @@ of this candidate.
 The existing site branding, commercial pages, pricing, product limitations,
 release history, license notices, and legal page are preserved. Shared CSS adds
 Foundations components and improves containment of long article content.
-No native Studio screenshot, observed benchmark, or generated asset is claimed.
+The visual additions use actual Studio scene captures. Staged teaching fixtures
+are explicitly labeled; no measured performance result or unverified plugin
+state is presented as runtime proof.
 
 ## Verification
 
 Completed in Chromium on the local project-path preview:
 
-- `python3 tools/check_site.py`: 25 HTML pages, 1,093 links/assets, 24 sitemap
+- `python3 tools/check_site.py`: 25 HTML pages, 1,112 links/assets, 24 sitemap
   entries; route, canonical, anchor, heading, alt, release, legal, privacy,
   public-content, and runtime-resource checks pass.
 - `python3 tools/build_search_index.py --check`: generated index matches all
@@ -76,29 +78,79 @@ Browser screenshots are website evidence, not Roblox Studio evidence:
 
 These review files and this report are outside the Pages staging allowlist.
 
-## Native visuals outstanding
+## Eight-station visual intake and delivery
 
-No official native Roblox Studio tool is available in the implementation
-session. Existing website media does not establish any of these eight specific
-comparisons. No protected place was modified, no paid generation was initiated,
-and no Roblox assets were published. Missing captures are omitted from the
-article layout, rather than represented by simulated UI or evidence placeholders.
+All 48 supplied assets exist and match their manifest byte sizes and SHA-256
+hashes. The directory contains 44 PNGs (including 11 motion frames), two GIFs,
+and two MP4 frame sequences. Station 04 has six motion frames; the capture
+report's five-frame summary was inaccurate. No original was edited or moved.
+The collection also contains eight manifests and one progress report, which
+are metadata rather than part of the 48-media-file total.
 
-| Required visual | What remains to capture | Specific blocker |
-| --- | --- | --- |
-| spec-01 · AI asset brief | Gate center pivot versus hinge pivot, matched rotation | Native Studio viewport and pivot tools unavailable |
-| spec-02 · Texture Generator | Same geometry, Fast 1K versus Quality 4K PBR, Properties and Explorer; verify current UV-control wording | Native Texture Generator UI and authorized generation session unavailable |
-| spec-03 · Rendering | Stacked-block cutaway versus stretched block, paired with genuine MicroProfiler indicators | Native scene/wireframe and profiler capture unavailable |
-| spec-04 · Collision | Hull/Default, precise decomposition, and three simple doorway colliders; current Tunable visualization check | Native collision overlay and disposable scene unavailable |
-| spec-05 · Surface data | Split/welded normals, Y+/Y− lighting comparison, and texture tiers | Native controlled shading and normal-map comparison unavailable |
-| spec-06 · Grouping | Mixed-color Plastic, Wood, and Glass source versus three grouped outputs with Explorer inset | Native current MeshMogul Preview and Explorer unavailable |
-| spec-07 · Preflight | Primitive budgets and retained blank-MeshId Preview beside a genuine stale-source warning | Native current MeshMogul preflight/freshness UI unavailable |
-| spec-08 · Preparation | Deliberate Model pivot/PrimaryPart alignment versus wrong origin, matched rotation | Native Studio pivot/viewport comparison unavailable |
+| Station | Media files | Website treatment | Article |
+| --- | ---: | --- | --- |
+| 01 · Gate pivot | 10 | Leaf-center / hinge-edge crops and optional motion sequence | [AI asset brief](guides/how-to-prompt-ai-for-roblox-3d-models/#visual-01) |
+| 02 · Texture Generator | 6 | Fast / Quality surface crops retaining native completion toasts | [Texture Generator](guides/roblox-studio-texture-generator/#visual-02) |
+| 03 · Hidden geometry | 4 | Stacked / stretched wall crops, excluding unmeasured draw-call signs | [Rendering costs](guides/draw-calls-instancing-and-hidden-faces/#visual-03) |
+| 04 · Doorway collision | 11 | Filled / open frame crops and optional staged avatar sequence | [Doorway collision](guides/collision-fidelity-and-invisible-doorways/#visual-04) |
+| 05 · Normals and budgets | 5 | Three panels: edges, map direction, texture tiers | [Surface data](guides/normals-uv-seams-and-texture-budgets/#visual-05) |
+| 06 · Appearance grouping | 4 | Mixed-source / appearance-domain fixture crops | [Multi-material groups](guides/why-models-split-into-multiple-meshparts/#visual-06) |
+| 07 · Preflight and Preview | 4 | Primitive row / staged freshness-warning comparison | [Preflight](guides/preflight-and-retained-previews/#visual-07) |
+| 08 · Assembly pivot | 4 | Distant / intentional origin comparison | [Assembly preparation](guides/preparing-studio-builds-for-finalization/#visual-08) |
 
-The authoritative production brief and manuscripts differ in example scenes
-for spec-06 and spec-08. The capture queue above follows the production brief;
-no replacement scene has been asserted as native proof. Do not treat the
-candidate as visually complete until the captures are reviewed and integrated.
+Seventeen panels use 32 metadata-free WebP files, with responsive variants
+where the source resolution permits. Two silent H.264 clips use the existing
+FFmpeg encoding and ffprobe QA approach. Total optimized media: 625,015 bytes
+(about 610 KiB), including every image variant and both clips. The clips are
+collapsed, user-controlled, looping, and `preload="none"`; nothing autoplays.
+Images have descriptive alt text, explicit dimensions, lazy loading, and
+asynchronous decoding. HTML labels reflow into a single column on mobile.
+
+[Source attribution and derivative identities](assets/foundations/attribution.json)
+record all 48 source hashes and all 34 output hashes, crop rectangles, dimensions,
+encoding settings, sizes, and clip durations. They contain no private paths,
+account details, raw manifests, or asset IDs. Public image metadata is empty;
+video metadata contains only encoding/container information. No raw captures
+or GIFs were added to the website.
+
+### Evidence boundaries
+
+- **Actual captured evidence:** Studio scene geometry and appearance; native
+  re-texturing completion toasts in station 02. Other full-window source captures
+  include native Studio overlays. Capture provenance does not establish every
+  technical claim written on an in-world sign.
+- **Educational illustrations:** pivot arrows and rotation arcs; stacked-block
+  cutaways; colored collision volumes and staged avatar routes; normals/map
+  direction marks and texture tiers; grouping hierarchy boards; and the
+  freshness/blank-MeshId board. These remain useful lessons and are labeled as
+  illustrations in the article captions.
+- **Not independently established by this collection:** measured draw-call or
+  frame-time savings; active collision settings or a physics-driven walkthrough;
+  controlled split-normal/normal-map shading or a UV layout; current generation
+  mode controls, map assignments, resolution, or UV settings; an actual
+  MeshMogul conversion and native Explorer output count; a genuine stale-source
+  refusal or blank MeshId in Properties; and actual pivot/PrimaryPart property
+  values or post-finalization pivot retention. These are specific proof gaps,
+  not reasons to discard the accepted captures or repeat the capture sessions.
+- The supplied MP4s contain short stepped frame sequences, not continuous
+  runtime recordings. Captions and playback descriptions preserve that distinction.
+
+### Media verification
+
+The expanded browser suite checks all eight visual stations at 1280, 390, and
+320 pixels: images decode, alt text and responsive sources exist, and pages
+remain free of horizontal overflow. Screenshots of all 24 station/width
+combinations were captured, with desktop and mobile examples visually reviewed.
+The review corrected the doorway, texture-tier, and grouping crops. Both clips
+played through to completion in Chromium with no audio stream. No MP4 request
+occurs before playback; reduced-motion starts still. Existing search, safe-text,
+keyboard, accessible-name, no-JavaScript, failed-index, local-network-only,
+no-cookie, and no-storage checks still pass. Source hashes were checked again
+after production, and each derivative matches its recorded hash and dimensions.
+
+Website implementation and technical verification are complete for this
+candidate. Product Owner aesthetic acceptance remains pending. Native proof
+limitations remain disclosed; merge, deployment, and publication are not authorized.
 
 ## Maintenance and rerunning checks
 
@@ -116,7 +168,11 @@ verification additionally uses Playwright and Chromium as development tools;
 these are not loaded by the website. Serve the repository under `/MeshMogul/`
 and run `node tools/check_foundations_browser.cjs`. Set `FOUNDATIONS_BASE_URL`
 and `CHROMIUM_PATH` when using a different local preview or Chromium location.
-The browser check writes temporary screenshots to ignored `.local/`.
+The browser check writes temporary screenshots to ignored `.local/`, including
+`visual-01` through `visual-08` at each required width. On Windows use UTF-8
+Python mode (`PYTHONUTF8=1`) and LF checkout text for the existing exact-byte
+script digest and downloadable-brief checks. Playwright is a local development
+tool; it adds no website dependency.
 
 Search is intentionally plain text, case-insensitive and punctuation-tolerant;
 all words must match within an article. It does not use fuzzy or semantic

@@ -96,3 +96,24 @@ h1,h2,h3{overflow-wrap:anywhere}
 @media(max-width:1000px){.search-fields{grid-template-columns:1fr 1fr}.search-query{grid-column:1/-1}.search-fields button{width:auto}.path-grid{gap:12px}.path-card{padding:0 18px}}
 @media(max-width:760px){.path-grid,.symptom-links{grid-template-columns:1fr}.symptom-index{columns:1}.learning-paths,.symptom-section,.library-section{padding:34px 0}.article-toc{position:static;max-height:none}.article-layout{gap:12px}.article-heading h1{font-size:2.1rem}.takeaways{padding:20px 18px!important}.prose pre{padding:14px}.library-section .guide-grid{margin-bottom:34px}.article-meta{gap:6px}.foundations-heading{padding-bottom:36px}}
 @media(max-width:380px){.search-fields{grid-template-columns:1fr}.search-query{grid-column:auto}.search-fields button{width:100%}.article-heading h1{font-size:1.95rem}}
+
+/* Studio capture field notes: HTML labels stay readable at narrow widths. */
+.foundation-visual{margin:26px 0 38px;border-block:1px solid var(--line);padding:28px 0!important}
+.foundation-visual>h2{max-width:25ch;margin-top:14px}
+.foundation-visual figure{margin:24px 0 0}
+.visual-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.visual-panel{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.visual-label{padding:14px 16px;margin:0!important;color:var(--text)!important;font-size:.9rem;font-weight:650;border-bottom:2px solid var(--teal)}
+.visual-panel:first-child .visual-label{border-color:var(--gold)}
+.visual-panel img{width:100%;aspect-ratio:3/2;object-fit:contain;background:#0b1118}
+.visual-explanation{padding:14px 16px;margin:0!important;font-size:.9rem;line-height:1.55}
+.foundation-visual figcaption{margin-top:18px;color:var(--muted);font-size:.87rem;line-height:1.65}
+.visual-kind{display:block;margin-bottom:8px;color:var(--gold);font-weight:650}
+.visual-motion{margin-top:20px;border:1px solid var(--line);padding:0 16px;border-radius:4px}
+.visual-motion summary{padding:16px 0;font-size:.95rem;min-height:48px}
+.visual-motion p{padding:0;font-size:.87rem}
+.visual-motion video{display:block;width:100%;height:auto;margin:0 0 16px;background:#0b1118}
+@media(max-width:760px){.visual-panels{grid-template-columns:1fr}.visual-panel img{max-height:none}.visual-label,.visual-explanation{padding:12px 14px}.foundation-visual>h2{font-size:1.5rem}.foundation-visual figcaption{font-size:.88rem}}
+#visual-04 .visual-panel img{aspect-ratio:1}
+#visual-05 .visual-panel:last-child{grid-column:1/-1}
+#visual-05 .visual-panel:last-child img{aspect-ratio:3/1}

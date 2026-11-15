@@ -1,0 +1,876 @@
+{
+  "collection": "MeshMogul Foundations v1",
+  "capture_date": "2026-11-15",
+  "attribution": "Studio demonstration captures by MorningForge; captured scene illustrations and native UI are distinguished in article captions. Third-party terms remain applicable.",
+  "treatment": "Crops and WebP compression only; labels and explanations are accessible HTML. Motion clips are silent H.264 transcodes of supplied frame sequences using FFmpeg, with ffprobe QA. No generated or reconstructed Studio UI.",
+  "sources": [
+    {
+      "station": "01",
+      "file": "01-gate-correct-hinge-original.png",
+      "bytes": 1436037,
+      "sha256": "2569475a382e03af5db7598c8fa8d8874d62a95b937731dc994eac85ca38dd2b",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-motion-frame-01.png",
+      "bytes": 1504261,
+      "sha256": "71c648cd8677cb1d124a38324d65c1969fb0a7d0120b86eeecfe82fe1c0adaf6",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-motion-frame-02.png",
+      "bytes": 1510775,
+      "sha256": "02e492b9f74b369928bce02635d4c9d1b5895b0a5ebaef670a96f6cc6d145e20",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-motion-frame-03.png",
+      "bytes": 1515455,
+      "sha256": "0e62d85ed8d33f41dced403fa945d962d16757550043e0e01c903ccac9b0f61d",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-motion-frame-04.png",
+      "bytes": 1519775,
+      "sha256": "53c4a286d6a665a4e91ca88a266cdb2f271202f706c95c555805e50a4665a99f",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-motion-frame-05.png",
+      "bytes": 1525824,
+      "sha256": "c81310be989628830edb21de6001c7949fafe03232a27e1da0fe7057cdaeccb0",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-opening-animation.gif",
+      "bytes": 6313156,
+      "sha256": "47b2554ed644d79a59364122e51ec116e7e261fa404e1554378a32342e002f55",
+      "classification": "derived animated GIF"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-overview-pair.png",
+      "bytes": 1525824,
+      "sha256": "c81310be989628830edb21de6001c7949fafe03232a27e1da0fe7057cdaeccb0",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-rotation-original.mp4",
+      "bytes": 466643,
+      "sha256": "ae14bef19484c629e2b89b2e137b1e800db34464384434cc2af4e3a73a850f5e",
+      "classification": "supplied MP4 frame sequence"
+    },
+    {
+      "station": "01",
+      "file": "01-gate-wrong-pivot-original.png",
+      "bytes": 1423040,
+      "sha256": "0d504784f8cd2ccb0b9da2f5781b13daa634cde37e1e1b0325c10250a296b046",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "02",
+      "file": "02-texture-fast-mode-original.png",
+      "bytes": 460234,
+      "sha256": "cf8df5e618effa899b9dadfdbebeeb53823ee3a51eb44e3b2dd89a48a414dbb2",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "02",
+      "file": "02-texture-generator-4way-comparison.png",
+      "bytes": 539976,
+      "sha256": "2b2621f1051ab722c6c47faa9b375d40c5e0bef8a302bcbfa2ebf8ef1705d159",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "02",
+      "file": "02-texture-generator-pair-overview.png",
+      "bytes": 1637493,
+      "sha256": "e869ff39000a9073c6c24b09fa38d48b11d80a0a9bbf18fa7b35b7601b5dc573",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "02",
+      "file": "02-texture-generator-skew-contrast.png",
+      "bytes": 601948,
+      "sha256": "e3d56e09b6623cf94a5cea6535ee44fe9c2cf95f52d2642842ccaa093e2162a7",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "02",
+      "file": "02-texture-generator-ui-upgrade-pill.png",
+      "bytes": 583152,
+      "sha256": "8cad42f35b0e7b4041b66df17ac5d87d8fed6d0a04d2cfb041e8d77088744c5a",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "02",
+      "file": "02-texture-quality-mode-original.png",
+      "bytes": 446895,
+      "sha256": "f151f86bbd2f62b96ca51fe86c2e07febc29e0a2c7975698be6e7d4e9ab8fadb",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "03",
+      "file": "03-hidden-geometry-correct-single-original.png",
+      "bytes": 400686,
+      "sha256": "f6c67d7cae98132ffefc6af80ab913c27c3e300a1ef157c9cb6df8bf752ec8b4",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "03",
+      "file": "03-hidden-geometry-overview-pair.png",
+      "bytes": 461433,
+      "sha256": "d92742f87f91b6cce6c26171d435e3805be3bc63bc145396aa8a7ee9600cb1ba",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "03",
+      "file": "03-hidden-geometry-studio-viewport-proof.png",
+      "bytes": 86450,
+      "sha256": "d1d4c4168c72b1ec386062a28583f00e526ffc98a82b67a47092ee3466336f51",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "03",
+      "file": "03-hidden-geometry-wrong-stacked-original.png",
+      "bytes": 431102,
+      "sha256": "f6a3f5f3c536a04053193f45af1f507105b3773ca89821d2103128aad816a437",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-motion-frame-01.png",
+      "bytes": 1713546,
+      "sha256": "009dc10667b08aeef1f50be105338a93b68d22476bea397dab83c2463663848c",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-motion-frame-02.png",
+      "bytes": 1710352,
+      "sha256": "6638f74883a2e0a67a22da2bf975d6184c6b9651fad6f9e89a394fff9b0d0695",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-motion-frame-03.png",
+      "bytes": 1698523,
+      "sha256": "b15d944eb69319129c3215922b648414efd60d59098f26d0178f652694a7b04f",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-motion-frame-04.png",
+      "bytes": 1689659,
+      "sha256": "f774571135e37b0d7f0e2ec5a400d26ad67be91afedb02cd0f9d19f91693100c",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-motion-frame-05.png",
+      "bytes": 1688675,
+      "sha256": "f277ac39849738478fdeea5810b9beb392895c6c2fd7f83c90cfd0996aa76bf5",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-motion-frame-06.png",
+      "bytes": 1848527,
+      "sha256": "47fc2b35ef163d53abde0eb1ce037239b0bd984341e2257252be567ba5da8546",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-door-walking-animation.gif",
+      "bytes": 3315745,
+      "sha256": "36c42cf692543aa99e0e00712921c5baa17f2a50ceab486ced3f61f141c8a8b4",
+      "classification": "derived animated GIF"
+    },
+    {
+      "station": "04",
+      "file": "04-door-walking-original.mp4",
+      "bytes": 570362,
+      "sha256": "2b4b5f7ac495276484fa1e15fa8699d924998eab56f052d1bd978d9e83efa834",
+      "classification": "supplied MP4 frame sequence"
+    },
+    {
+      "station": "04",
+      "file": "04-doorway-correct-decomposed-original.png",
+      "bytes": 1454907,
+      "sha256": "48244f016b875eb9297cd09a4a2feaa7014fe3e14c5f7b7beb88215b5f9f7dbb",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-doorway-overview-pair.png",
+      "bytes": 1688468,
+      "sha256": "1fb78985f80f6a270678207164026c41037942cd8a1bdf84dd87940940bf9b3a",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "04",
+      "file": "04-doorway-wrong-solid-original.png",
+      "bytes": 1353096,
+      "sha256": "22eda9a5499e8dc34b73d19e6c63c795a0317f43a5a56c545029e4191da204df",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "05",
+      "file": "05-normals-closeup-smudge-proof.png",
+      "bytes": 632308,
+      "sha256": "8e9d4dc7bc21d7129d83f09bc429e26c6e89b1c2a3b46ecc3ee9bc3463ddc87b",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "05",
+      "file": "05-normals-overview-3part.png",
+      "bytes": 927497,
+      "sha256": "3d7fcd2dbb4ddaed1bf9521e33a1f241f2e5275414256a9d0a5be4dfc5ce2168",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "05",
+      "file": "05-normals-part-a-split-vs-welded.png",
+      "bytes": 873211,
+      "sha256": "b8e8709f7e57f13737feab32368d9fdafc9e91ddafddd253a85a5609fcc27be7",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "05",
+      "file": "05-normals-part-b-opengl-vs-directx.png",
+      "bytes": 932323,
+      "sha256": "e05d14e937ae66c1f3456f6b4ef2ddefef8f5f2c670576ecc601ed92d02a365c",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "05",
+      "file": "05-normals-part-c-texture-tiers.png",
+      "bytes": 840230,
+      "sha256": "fea5b440d94264d53bfc975c7dc3af52e47bca55d99a2a25becd7c07c5b86989",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "06",
+      "file": "06-multimaterial-explorer-inset-original.png",
+      "bytes": 561669,
+      "sha256": "e48d42d3ffed369e23bfee2f5ac3e3198386e4cee72bc64dce67211013a3da5b",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "06",
+      "file": "06-multimaterial-grouped-meshparts-original.png",
+      "bytes": 754791,
+      "sha256": "10e00236fe04a30cd74bcfb4b239aba6535a897ec70b850c2069379db6488c8e",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "06",
+      "file": "06-multimaterial-overview-pair.png",
+      "bytes": 838038,
+      "sha256": "d6477d01428787afe57e6c56ac9eaa1229f737454c2a09dc3b913c27397c5bf4",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "06",
+      "file": "06-multimaterial-source-model-original.png",
+      "bytes": 759233,
+      "sha256": "d93cd9a99064f36b15a2b95fe5c11c2170bbd74226d84f4083bad9a35bf7cbc5",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "07",
+      "file": "07-preflight-freshness-gate-warning-original.png",
+      "bytes": 694250,
+      "sha256": "ea4d1a310e8cdbfe9db76ee117dac0eee04ac0931d0efa8daff706d6e2199a8a",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "07",
+      "file": "07-preflight-overview-pair.png",
+      "bytes": 813434,
+      "sha256": "41595bd1ab3fbd485c351853831aadb99219de6148a01f96ca714325d9eebd1e",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "07",
+      "file": "07-preflight-primitive-budgets-original.png",
+      "bytes": 669060,
+      "sha256": "ae66f03ff0d73bf31364ecf6c7d376d318a1dc1f64322aa2fe64f2321f9e09ea",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "07",
+      "file": "07-preflight-retained-preview-blank-meshid-proof.png",
+      "bytes": 556382,
+      "sha256": "32ffd91b3a15a0af921dac1193563d462bcb5bb8feb60cb464bfcab64dc37e9d",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "08",
+      "file": "08-assembly-pivot-correct-primarypart-original.png",
+      "bytes": 649071,
+      "sha256": "11d18b6bbafe7842894654c7ce78fa20e218950a76315fb27706f70ad0972667",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "08",
+      "file": "08-assembly-pivot-overview-pair.png",
+      "bytes": 797493,
+      "sha256": "236800b68370b55e6ff30673a51ff4546aa9f5454307c9be236a702edffde071",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "08",
+      "file": "08-assembly-pivot-rotation-arc-proof.png",
+      "bytes": 938486,
+      "sha256": "f442c30bda40d94427419258826ac1d106d8ed91d6b083c16c1094730ea6bcf8",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    },
+    {
+      "station": "08",
+      "file": "08-assembly-pivot-wrong-distant-origin-original.png",
+      "bytes": 671877,
+      "sha256": "599481dde415a6a58eaf578671262dd025c489037737f21e1c2bbaf3c72a4401",
+      "classification": "Studio scene capture; staged diagrams and annotations may be present"
+    }
+  ],
+  "derivatives": [
+    {
+      "file": "gate-center-400.webp",
+      "bytes": 14828,
+      "sha256": "9831bb2ce74851ed610e6d36d648e6bf64832f1602d61dffc7dbc0ffdaba8828",
+      "source": "01-gate-overview-pair.png",
+      "source_sha256": "c81310be989628830edb21de6001c7949fafe03232a27e1da0fe7057cdaeccb0",
+      "crop_pixels": [
+        224,
+        38,
+        841,
+        487
+      ],
+      "width": 400,
+      "height": 291,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "gate-center-617.webp",
+      "bytes": 27446,
+      "sha256": "e853fcc09a4b3226ac9796de13a6e9b0a850c0cf3cf315bf91a17e9ff08e67f5",
+      "source": "01-gate-overview-pair.png",
+      "source_sha256": "c81310be989628830edb21de6001c7949fafe03232a27e1da0fe7057cdaeccb0",
+      "crop_pixels": [
+        224,
+        38,
+        841,
+        487
+      ],
+      "width": 617,
+      "height": 449,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "gate-hinge-400.webp",
+      "bytes": 13776,
+      "sha256": "a0c4eeb60662b73860b7515ba7d6b496107054d7f345e5de6e0f472ca22b8872",
+      "source": "01-gate-overview-pair.png",
+      "source_sha256": "c81310be989628830edb21de6001c7949fafe03232a27e1da0fe7057cdaeccb0",
+      "crop_pixels": [
+        953,
+        38,
+        1569,
+        487
+      ],
+      "width": 400,
+      "height": 292,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "gate-hinge-616.webp",
+      "bytes": 25132,
+      "sha256": "ab88f3efab672d7e60313eba80cc5bb0615d66bf4c7ca11e3329f2c0ee85681b",
+      "source": "01-gate-overview-pair.png",
+      "source_sha256": "c81310be989628830edb21de6001c7949fafe03232a27e1da0fe7057cdaeccb0",
+      "crop_pixels": [
+        953,
+        38,
+        1569,
+        487
+      ],
+      "width": 616,
+      "height": 449,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "gate-pivot-motion.mp4",
+      "bytes": 105190,
+      "sha256": "b2b97d8689c93e70c0eb04e8490b513b1b8e81fd6a91e2f26ef5fb8c41467e14",
+      "source": "01-gate-rotation-original.mp4",
+      "source_sha256": "ae14bef19484c629e2b89b2e137b1e800db34464384434cc2af4e3a73a850f5e",
+      "encoding": "H.264 CRF 25, 960px, 12fps, yuv420p, silent, faststart; metadata removed",
+      "duration": "4.500000"
+    },
+    {
+      "file": "texture-fast-261.webp",
+      "bytes": 11202,
+      "sha256": "5bbaa66c927d00d8ff8dc782e1d7c8b3acaad39cca7ee96900a442c1685cf5d2",
+      "source": "02-texture-generator-ui-upgrade-pill.png",
+      "source_sha256": "8cad42f35b0e7b4041b66df17ac5d87d8fed6d0a04d2cfb041e8d77088744c5a",
+      "crop_pixels": [
+        241,
+        68,
+        502,
+        305
+      ],
+      "width": 261,
+      "height": 237,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "texture-quality-286.webp",
+      "bytes": 12676,
+      "sha256": "84ca924350178751fe109f9eca4c9833d9155e4b480d5c50ea6f2abc73ec23d5",
+      "source": "02-texture-generator-ui-upgrade-pill.png",
+      "source_sha256": "8cad42f35b0e7b4041b66df17ac5d87d8fed6d0a04d2cfb041e8d77088744c5a",
+      "crop_pixels": [
+        502,
+        68,
+        788,
+        305
+      ],
+      "width": 286,
+      "height": 237,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "geometry-stacked-400.webp",
+      "bytes": 9646,
+      "sha256": "5667c59b48702260234b1da3e19b666888cdafcba61c8f2121748a0356eff7af",
+      "source": "03-hidden-geometry-overview-pair.png",
+      "source_sha256": "d92742f87f91b6cce6c26171d435e3805be3bc63bc145396aa8a7ee9600cb1ba",
+      "crop_pixels": [
+        336,
+        190,
+        803,
+        502
+      ],
+      "width": 400,
+      "height": 267,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "geometry-stacked-467.webp",
+      "bytes": 12168,
+      "sha256": "1992c0713ac644ed76743c802e45570d9e383d9e2449bfb79e99cf79be1ac635",
+      "source": "03-hidden-geometry-overview-pair.png",
+      "source_sha256": "d92742f87f91b6cce6c26171d435e3805be3bc63bc145396aa8a7ee9600cb1ba",
+      "crop_pixels": [
+        336,
+        190,
+        803,
+        502
+      ],
+      "width": 467,
+      "height": 312,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "geometry-single-400.webp",
+      "bytes": 5042,
+      "sha256": "8039527a7108dcd319601dff4b26a10d39d18c0a3b66da6301338085b9951d99",
+      "source": "03-hidden-geometry-overview-pair.png",
+      "source_sha256": "d92742f87f91b6cce6c26171d435e3805be3bc63bc145396aa8a7ee9600cb1ba",
+      "crop_pixels": [
+        971,
+        190,
+        1420,
+        502
+      ],
+      "width": 400,
+      "height": 278,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "geometry-single-449.webp",
+      "bytes": 5806,
+      "sha256": "87ea2cbc4cd761d8ad52d1442f35891f21dee752c470b3ee3d06ec9241add7ac",
+      "source": "03-hidden-geometry-overview-pair.png",
+      "source_sha256": "d92742f87f91b6cce6c26171d435e3805be3bc63bc145396aa8a7ee9600cb1ba",
+      "crop_pixels": [
+        971,
+        190,
+        1420,
+        502
+      ],
+      "width": 449,
+      "height": 312,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "doorway-solid-400.webp",
+      "bytes": 20548,
+      "sha256": "b76cd44df2adbdb18fbbd8961e92146f7ffe306b24088f2806e06730c80384f7",
+      "source": "04-doorway-overview-pair.png",
+      "source_sha256": "1fb78985f80f6a270678207164026c41037942cd8a1bdf84dd87940940bf9b3a",
+      "crop_pixels": [
+        435,
+        91,
+        968,
+        563
+      ],
+      "width": 400,
+      "height": 354,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "doorway-solid-529.webp",
+      "bytes": 30554,
+      "sha256": "5ea6e481e2d949c4c12b3abb0f56c4ce2869e1681e42aa570b8456b16c50253d",
+      "source": "04-doorway-overview-pair.png",
+      "source_sha256": "1fb78985f80f6a270678207164026c41037942cd8a1bdf84dd87940940bf9b3a",
+      "crop_pixels": [
+        435,
+        91,
+        968,
+        563
+      ],
+      "width": 529,
+      "height": 468,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "doorway-open-400.webp",
+      "bytes": 18104,
+      "sha256": "bb43e344239d680111510c585f7560e7c2834238e04bcd9f8f8da915ad206df5",
+      "source": "04-doorway-overview-pair.png",
+      "source_sha256": "1fb78985f80f6a270678207164026c41037942cd8a1bdf84dd87940940bf9b3a",
+      "crop_pixels": [
+        847,
+        91,
+        1380,
+        563
+      ],
+      "width": 400,
+      "height": 354,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "doorway-open-530.webp",
+      "bytes": 27370,
+      "sha256": "c46fa09e5a36c70160a1500915048de909133fe10832b370dfdac0ad1c99ad89",
+      "source": "04-doorway-overview-pair.png",
+      "source_sha256": "1fb78985f80f6a270678207164026c41037942cd8a1bdf84dd87940940bf9b3a",
+      "crop_pixels": [
+        847,
+        91,
+        1380,
+        563
+      ],
+      "width": 530,
+      "height": 469,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "doorway-motion.mp4",
+      "bytes": 178501,
+      "sha256": "658d79921c6d4ba02e844fdc7dfbc556ce412e2b89dedfb2b426ced3b8380a49",
+      "source": "04-door-walking-original.mp4",
+      "source_sha256": "2b4b5f7ac495276484fa1e15fa8699d924998eab56f052d1bd978d9e83efa834",
+      "encoding": "H.264 CRF 25, 960px, 12fps, yuv420p, silent, faststart; metadata removed",
+      "duration": "4.000000"
+    },
+    {
+      "file": "normals-edges-400.webp",
+      "bytes": 3842,
+      "sha256": "00d66e75d07fae762b0b2a692b2c290405cd4a05754df830763b676327d0767d",
+      "source": "05-normals-closeup-smudge-proof.png",
+      "source_sha256": "8e9d4dc7bc21d7129d83f09bc429e26c6e89b1c2a3b46ecc3ee9bc3463ddc87b",
+      "crop_pixels": [
+        662,
+        46,
+        1740,
+        533
+      ],
+      "width": 400,
+      "height": 181,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "normals-edges-800.webp",
+      "bytes": 8354,
+      "sha256": "e09c0e9ea58f6c16e39af3668d92c1a28b1b2caf0ff7e71325cbc4668abc8949",
+      "source": "05-normals-closeup-smudge-proof.png",
+      "source_sha256": "8e9d4dc7bc21d7129d83f09bc429e26c6e89b1c2a3b46ecc3ee9bc3463ddc87b",
+      "crop_pixels": [
+        662,
+        46,
+        1740,
+        533
+      ],
+      "width": 800,
+      "height": 361,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "normals-direction-400.webp",
+      "bytes": 2282,
+      "sha256": "ad08412bbab971056d437901e0778a09ee85021ed1dd4f178c2021af8d959607",
+      "source": "05-normals-part-b-opengl-vs-directx.png",
+      "source_sha256": "e05d14e937ae66c1f3456f6b4ef2ddefef8f5f2c670576ecc601ed92d02a365c",
+      "crop_pixels": [
+        662,
+        175,
+        1229,
+        434
+      ],
+      "width": 400,
+      "height": 183,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "normals-direction-567.webp",
+      "bytes": 3280,
+      "sha256": "3297f1acd782f5d7d1c5f0af2ebf4293cd25694d1cb3d1fbe57426b7c35641b1",
+      "source": "05-normals-part-b-opengl-vs-directx.png",
+      "source_sha256": "e05d14e937ae66c1f3456f6b4ef2ddefef8f5f2c670576ecc601ed92d02a365c",
+      "crop_pixels": [
+        662,
+        175,
+        1229,
+        434
+      ],
+      "width": 567,
+      "height": 259,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "texture-budget-400.webp",
+      "bytes": 4122,
+      "sha256": "0961fb566fbdfc60c5549959efeafa6809e8e771f99c10f8201cdd84252d09f6",
+      "source": "05-normals-part-c-texture-tiers.png",
+      "source_sha256": "fea5b440d94264d53bfc975c7dc3af52e47bca55d99a2a25becd7c07c5b86989",
+      "crop_pixels": [
+        586,
+        198,
+        1399,
+        457
+      ],
+      "width": 400,
+      "height": 127,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "texture-budget-800.webp",
+      "bytes": 8278,
+      "sha256": "5e9ff457b9e6bf9f0ed584f92fa7d6d3ef8b082f620272ba86e869a684f70d83",
+      "source": "05-normals-part-c-texture-tiers.png",
+      "source_sha256": "fea5b440d94264d53bfc975c7dc3af52e47bca55d99a2a25becd7c07c5b86989",
+      "crop_pixels": [
+        586,
+        198,
+        1399,
+        457
+      ],
+      "width": 800,
+      "height": 255,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "grouping-source-400.webp",
+      "bytes": 2492,
+      "sha256": "a1b19d3577edb119fed61f9425b3206fbe393e071466cbbc9459a9f766b8b3aa",
+      "source": "06-multimaterial-source-model-original.png",
+      "source_sha256": "d93cd9a99064f36b15a2b95fe5c11c2170bbd74226d84f4083bad9a35bf7cbc5",
+      "crop_pixels": [
+        567,
+        114,
+        1324,
+        586
+      ],
+      "width": 400,
+      "height": 249,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "grouping-source-757.webp",
+      "bytes": 5674,
+      "sha256": "f2e5ece1f2bba558726ee6be6009051d8825e0210e1182b9b8dea8ed0880f59e",
+      "source": "06-multimaterial-source-model-original.png",
+      "source_sha256": "d93cd9a99064f36b15a2b95fe5c11c2170bbd74226d84f4083bad9a35bf7cbc5",
+      "crop_pixels": [
+        567,
+        114,
+        1324,
+        586
+      ],
+      "width": 757,
+      "height": 472,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "grouping-output-400.webp",
+      "bytes": 3506,
+      "sha256": "81e551a126d25dfb82e2740ffcde0e635976bc247feb5d3e7fa5a64b2de09136",
+      "source": "06-multimaterial-grouped-meshparts-original.png",
+      "source_sha256": "10e00236fe04a30cd74bcfb4b239aba6535a897ec70b850c2069379db6488c8e",
+      "crop_pixels": [
+        586,
+        23,
+        1437,
+        563
+      ],
+      "width": 400,
+      "height": 254,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "grouping-output-800.webp",
+      "bytes": 8242,
+      "sha256": "5df86ab034c965cb1ad18fa9e350de7e7ef1382b33a07c6695e4f1d025581bef",
+      "source": "06-multimaterial-grouped-meshparts-original.png",
+      "source_sha256": "10e00236fe04a30cd74bcfb4b239aba6535a897ec70b850c2069379db6488c8e",
+      "crop_pixels": [
+        586,
+        23,
+        1437,
+        563
+      ],
+      "width": 800,
+      "height": 508,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "preflight-primitives-400.webp",
+      "bytes": 3206,
+      "sha256": "b0c49050e131480444454754dab8773aab3afea3a812869abb9f118a56c5567c",
+      "source": "07-preflight-primitive-budgets-original.png",
+      "source_sha256": "ae66f03ff0d73bf31364ecf6c7d376d318a1dc1f64322aa2fe64f2321f9e09ea",
+      "crop_pixels": [
+        473,
+        137,
+        1607,
+        594
+      ],
+      "width": 400,
+      "height": 161,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "preflight-primitives-800.webp",
+      "bytes": 6838,
+      "sha256": "d592f14a9482e76187d0510a0f615c0a570bd4e17a3c5a811e98b1750882f6c6",
+      "source": "07-preflight-primitive-budgets-original.png",
+      "source_sha256": "ae66f03ff0d73bf31364ecf6c7d376d318a1dc1f64322aa2fe64f2321f9e09ea",
+      "crop_pixels": [
+        473,
+        137,
+        1607,
+        594
+      ],
+      "width": 800,
+      "height": 322,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "preflight-freshness-400.webp",
+      "bytes": 6574,
+      "sha256": "4db1de9545105b6953bffe817e1fbd5f291e1c1cc9954d7cad0f3f7986abce01",
+      "source": "07-preflight-retained-preview-blank-meshid-proof.png",
+      "source_sha256": "32ffd91b3a15a0af921dac1193563d462bcb5bb8feb60cb464bfcab64dc37e9d",
+      "crop_pixels": [
+        95,
+        23,
+        1513,
+        639
+      ],
+      "width": 400,
+      "height": 174,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "preflight-freshness-800.webp",
+      "bytes": 13534,
+      "sha256": "52f1f6403526bb4f4e2b693cabca2e3dc0b3dd9c6557151619b3d5156b8fd35c",
+      "source": "07-preflight-retained-preview-blank-meshid-proof.png",
+      "source_sha256": "32ffd91b3a15a0af921dac1193563d462bcb5bb8feb60cb464bfcab64dc37e9d",
+      "crop_pixels": [
+        95,
+        23,
+        1513,
+        639
+      ],
+      "width": 800,
+      "height": 348,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "assembly-distant-400.webp",
+      "bytes": 5146,
+      "sha256": "f1e8ee82056f3f723a3ff50abb70b4b1793d861db98a89b1cf3fc727bee73b30",
+      "source": "08-assembly-pivot-overview-pair.png",
+      "source_sha256": "236800b68370b55e6ff30673a51ff4546aa9f5454307c9be236a702edffde071",
+      "crop_pixels": [
+        378,
+        198,
+        964,
+        525
+      ],
+      "width": 400,
+      "height": 223,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "assembly-distant-586.webp",
+      "bytes": 8726,
+      "sha256": "959b5a9c21dd32df9e0649db785b1ff6ef820c9012c78b4b7b94eba1cd6623e8",
+      "source": "08-assembly-pivot-overview-pair.png",
+      "source_sha256": "236800b68370b55e6ff30673a51ff4546aa9f5454307c9be236a702edffde071",
+      "crop_pixels": [
+        378,
+        198,
+        964,
+        525
+      ],
+      "width": 586,
+      "height": 327,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "assembly-aligned-400.webp",
+      "bytes": 4874,
+      "sha256": "7a7e038aca50f19aaf30901eb09d5ca449151d2bf20833ed547e793d548e2a1d",
+      "source": "08-assembly-pivot-overview-pair.png",
+      "source_sha256": "236800b68370b55e6ff30673a51ff4546aa9f5454307c9be236a702edffde071",
+      "crop_pixels": [
+        964,
+        198,
+        1551,
+        525
+      ],
+      "width": 400,
+      "height": 223,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    },
+    {
+      "file": "assembly-aligned-587.webp",
+      "bytes": 8056,
+      "sha256": "f44b86f2b6cdfefacbc12f53c1543077776adf9ef5e2983e3e3bedb48ac3182a",
+      "source": "08-assembly-pivot-overview-pair.png",
+      "source_sha256": "236800b68370b55e6ff30673a51ff4546aa9f5454307c9be236a702edffde071",
+      "crop_pixels": [
+        964,
+        198,
+        1551,
+        525
+      ],
+      "width": 587,
+      "height": 327,
+      "encoding": "WebP quality 84, method 6; no metadata"
+    }
+  ]
+}
