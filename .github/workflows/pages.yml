@@ -14,13 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check static pages and project-path links
-        run: python3 tools/check_site.py
+        run: python3 .github/scripts/check_site.py
       - name: Prepare public files only
         run: |
           mkdir _site
-          cp index.html 404.html robots.txt sitemap.xml .nojekyll LICENSE.md THIRD_PARTY_NOTICES.md _site/
-          cp -R assets how-it-works supported-inputs guides faq changelog privacy legal _site/
-          rm _site/assets/media/README.md
+          cp -R site/. _site/
+          cp LICENSE.md _site/
+          rm -f _site/assets/media/README.md
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

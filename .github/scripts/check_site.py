@@ -9,7 +9,8 @@ import hashlib
 import subprocess
 import xml.etree.ElementTree as ET
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
+SITE_DIR = ROOT / 'site'
 PROJECT_BASE = '/MeshMogul/'
 ORIGIN = 'https://morningforge.github.io'
 STORE = 'https://create.roblox.com/store/asset/126445067739142'
@@ -48,11 +49,11 @@ def main():
     parser.add_argument('--check-git-identity', action='store_true', help='Check effective author and committer identity immediately before committing')
     args = parser.parse_args()
     errors = []
-    files = sorted(p for p in ROOT.rglob('*') if p.is_file() and not any(x in p.relative_to(ROOT).parts for x in ('.git', '.local', '_site', '__pycache__')))
-    documents = {p: Document(p.read_text(encoding='utf-8')) for p in files if p.suffix == '.html'}
+    site_files = sorted(p for p in SITE_DIR.rglob('*') if p.is_file() and not any(x in p.relative_to(SITE_DIR).parts for x in ('.git', '.local', '_site', '__pycache__')))
+    documents = {p: Document(p.read_text(encoding='utf-8')) for p in site_files if p.suffix == '.html'}
     link_count = 0
     for path, doc in documents.items():
-        name = path.relative_to(ROOT).as_posix()
+        name = path.relative_to(SITE_DIR).as_posix()
         errors.extend(name + ': ' + e for e in doc.errors)
         if not (doc.title and doc.language and doc.main): errors.append(name + ': missing title, language, or main')
         for key in ('description', 'viewport', 'og:title', 'og:description', 'og:type', 'twitter:title', 'twitter:description'):
@@ -79,16 +80,30 @@ def main():
             url = urlsplit(urljoin(ORIGIN + request, ref))
             if not url.path.startswith(PROJECT_BASE):
                 errors.append(name + ': link escapes project path: ' + ref); continue
-            target = ROOT / unquote(url.path[len(PROJECT_BASE):])
+            rel_target = unquote(url.path[len(PROJECT_BASE):])
+            target = SITE_DIR / rel_target
             if target.is_dir(): target /= 'index.html'
-            if not target.is_file(): errors.append(name + ': missing local target: ' + ref)
+            if not target.is_file():
+                # Allow root-level documents such as LICENSE.md when staged at deploy time
+                root_target = ROOT / rel_target
+                if root_target.is_file():
+                    target = root_target
+                else:
+                    errors.append(name + ': missing local target: ' + ref)
             elif url.fragment and target in documents and unquote(url.fragment) not in documents[target].ids:
                 errors.append(name + ': missing anchor: ' + ref)
     ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
-    urls = {n.text for n in ET.parse(ROOT / 'sitemap.xml').findall('s:url/s:loc', ns)}
-    expected = {ORIGIN + PROJECT_BASE + (p.relative_to(ROOT).as_posix()[:-10] if p.name == 'index.html' else p.relative_to(ROOT).as_posix()) for p in documents if p.name != '404.html'}
+    urls = {n.text for n in ET.parse(SITE_DIR / 'sitemap.xml').findall('s:url/s:loc', ns)}
+    expected = {ORIGIN + PROJECT_BASE + (p.relative_to(SITE_DIR).as_posix()[:-10] if p.name == 'index.html' else p.relative_to(SITE_DIR).as_posix()) for p in documents if p.name != '404.html'}
     if urls != expected: errors.append('Sitemap does not match indexable HTML pages')
-    for p in files:
+    all_repo_text_files = [
+        *site_files,
+        ROOT / 'README.md',
+        ROOT / 'AGENTS.md',
+        ROOT / 'LICENSE.md',
+    ]
+    for p in all_repo_text_files:
+        if not p.is_file(): continue
         name = p.relative_to(ROOT).as_posix()
         if p.is_symlink(): errors.append(name + ': unexpected symlink')
         if p.suffix.lower() in ('.luau', '.lua', '.rbxl', '.rbxmx', '.rbxm', '.pem', '.key'):
@@ -107,11 +122,11 @@ def main():
                 repositories = re.findall(r'MorningForge/([A-Za-z0-9_.-]+)', content)
                 if any(repo != 'MeshMogul' for repo in repositories):
                     errors.append(name + ': unapproved repository reference (value omitted)')
-            if p.suffix == '.html' and '1.1.0' in content and name != 'changelog/index.html':
+            if p.suffix == '.html' and '1.1.0' in content and name != 'site/changelog/index.html':
                 errors.append(name + ': stale version outside historical release notes')
     # The current release must be explicit; historical release notes remain intact.
-    home = (ROOT / 'index.html').read_text(encoding='utf-8')
-    changelog = (ROOT / 'changelog/index.html').read_text(encoding='utf-8')
+    home = (SITE_DIR / 'index.html').read_text(encoding='utf-8')
+    changelog = (SITE_DIR / 'changelog/index.html').read_text(encoding='utf-8')
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
     if 'Current release · MeshMogul 1.3.0' not in home or 'changelog/#release-1-3-0' not in home:
         errors.append('index.html: missing current MeshMogul 1.3.0 identity or release link')
@@ -124,12 +139,12 @@ def main():
         'https://morningforge.github.io/MeshMogul/supported-inputs/',
         'https://github.com/MorningForge/MeshMogul/issues',
     ):
-        if link not in readme: errors.append('README.md: missing customer link')
+        if link not in readme: errors.append('README.md: missing customer link: ' + link)
     if not re.search(r'available on (?:the )?Roblox Creator Store', changelog, re.I) or not re.search(r'available on (?:the )?Roblox Creator Store', home, re.I):
         errors.append('current release pages must state Creator Store availability')
     for rel in ('index.html', 'changelog/index.html'):
-        doc = documents[ROOT / rel]
-        page_source = (ROOT / rel).read_text(encoding='utf-8')
+        doc = documents[SITE_DIR / rel]
+        page_source = (SITE_DIR / rel).read_text(encoding='utf-8')
         if (not re.search(r'<title>[^<]*MeshMogul 1\.3\.0[^<]*</title>', page_source)
                 or any('1.3.0' not in doc.meta.get(key, '') for key in ('og:title', 'description', 'og:description', 'twitter:title', 'twitter:description'))):
             errors.append(rel + ': title or social metadata does not identify MeshMogul 1.3.0')
@@ -145,14 +160,14 @@ def main():
         for required in ('solid Union/CSG', 'transparent Glass Union', 'frame-sliced', 'cancellation', 'predate 1.3'):
             if required not in current_notes:
                 errors.append('changelog/index.html: missing bounded 1.3 release distinction: ' + required)
-    compatibility = (ROOT / 'supported-inputs/index.html').read_text(encoding='utf-8')
+    compatibility = (SITE_DIR / 'supported-inputs/index.html').read_text(encoding='utf-8')
     for required in ('Glass support is bounded', 'Editor responsiveness:', 'Conversion time:', 'Mesh complexity:', 'Runtime performance:'):
         if required not in compatibility:
             errors.append('supported-inputs/index.html: missing compatibility or measurement distinction: ' + required)
     provisional_121 = re.compile(r'(?:candidate|pending|unverified|not yet released|awaiting verification)[^<.]{0,120}1\.2\.1|1\.2\.1[^<.]{0,120}(?:candidate|pending|unverified|not yet released|awaiting verification)', re.I)
     for path in [*documents, ROOT / 'README.md']:
         content = path.read_text(encoding='utf-8')
-        if path != ROOT / 'changelog/index.html':
+        if path != SITE_DIR / 'changelog/index.html':
             if '1.2.1' in content:
                 errors.append(path.relative_to(ROOT).as_posix() + ': stale 1.2.1 outside historical release notes')
             for stale in ('Glass is refused', 'MeshMogul excludes direct Union conversion', 'Direct Union/CSG conversion is excluded'):
@@ -164,14 +179,14 @@ def main():
         content = path.read_text(encoding='utf-8')
         if re.search(r'(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)[^<.]{0,120}1\.2\.0|1\.2\.0[^<.]{0,120}(?:provisional|proposed|upcoming|not yet released|not yet confirmed|candidate)', content, re.I):
             errors.append(path.relative_to(ROOT).as_posix() + ': 1.2.0 is described as unreleased')
-    guide_index = (ROOT / 'guides/index.html').read_text(encoding='utf-8')
+    guide_index = (SITE_DIR / 'guides/index.html').read_text(encoding='utf-8')
     for route in ('proceduralmodel-assistant-output-to-mesh', 'roblox-studio-texture-generator', 'compare-roblox-meshes-before-and-after', 'how-to-prompt-ai-for-roblox-3d-models'):
         if route + '/' not in guide_index:
             errors.append('guides/index.html: missing practical guide navigation: ' + route)
-        guide = ROOT / 'guides' / route / 'index.html'
+        guide = SITE_DIR / 'guides' / route / 'index.html'
         if not guide.is_file() or 'https://create.roblox.com/docs/' not in guide.read_text(encoding='utf-8'):
             errors.append('guides/' + route + ': missing guide or official Roblox references')
-    brief_dir = ROOT / 'guides/how-to-prompt-ai-for-roblox-3d-models'
+    brief_dir = SITE_DIR / 'guides/how-to-prompt-ai-for-roblox-3d-models'
     brief_page = (brief_dir / 'index.html').read_text(encoding='utf-8')
     brief_field = re.search(r'<textarea\b[^>]*id="asset-brief"[^>]*>(.*?)</textarea>', brief_page, re.S)
     from html import unescape
@@ -180,17 +195,17 @@ def main():
     if 'id="foundations"' not in guide_index:
         errors.append('guides/index.html: missing Foundations discovery point')
     for track in ('build-with-ai', 'understand-3d', 'finish-and-publish', 'test-and-optimize'):
-        if track not in documents[ROOT / 'guides/index.html'].ids:
+        if track not in documents[SITE_DIR / 'guides/index.html'].ids:
             errors.append('guides/index.html: missing Foundations track: ' + track)
     card_routes = re.findall(r'<li><a href="([^"]+/)">', guide_index)
-    guide_routes = {p.parent.name + '/' for p in (ROOT / 'guides').glob('*/index.html')}
+    guide_routes = {p.parent.name + '/' for p in (SITE_DIR / 'guides').glob('*/index.html')}
     if set(card_routes) != guide_routes or len(card_routes) != len(guide_routes):
         errors.append('Foundations tracks must discover every guide exactly once')
-    css = (ROOT / 'assets/site.css').read_text(encoding='utf-8')
+    css = (SITE_DIR / 'assets/site.css').read_text(encoding='utf-8')
     if re.search(r'\.header-cta\s*\{[^}]*display\s*:\s*none', css): errors.append('Mobile acquisition CTA is hidden')
     if re.search(r'@import\b|url\(\s*[\'"]?(?:https?:)?//', css): errors.append('External CSS runtime dependency')
-    legal = (ROOT / 'legal/index.html').read_text(encoding='utf-8')
-    notices = (ROOT / 'THIRD_PARTY_NOTICES.md').read_text(encoding='utf-8')
+    legal = (SITE_DIR / 'legal/index.html').read_text(encoding='utf-8')
+    notices = (SITE_DIR / 'THIRD_PARTY_NOTICES.md').read_text(encoding='utf-8')
     canonical_notice = '# MeshMogul — third-party software notices' + notices.split('# MeshMogul — third-party software notices', 1)[1]
     if hashlib.sha256(canonical_notice.encode()).hexdigest() != '3f230d0ab0c1c21eec8dc62e655149aea942cfe357032c8b25f5e5556b5e0cf6':
         errors.append('Release notice text differs from the approved full notice document')
@@ -206,8 +221,8 @@ def main():
         if 'Permission is hereby granted' not in block or 'SOFTWARE.' not in block or 'THE SOFTWARE IS PROVIDED "AS IS"' not in block:
             errors.append('Incomplete MIT permission or disclaimer')
     workflow = (ROOT / '.github/workflows/pages.yml').read_text(encoding='utf-8')
-    if 'LICENSE.md THIRD_PARTY_NOTICES.md _site/' not in workflow or 'privacy legal _site/' not in workflow:
-        errors.append('Pages staging omits legal documents or route')
+    if 'cp -R site/. _site/' not in workflow or 'cp LICENSE.md _site/' not in workflow:
+        errors.append('Pages staging omits site content or license document')
     if 'cp -R . ' in workflow or 'cp -R *' in workflow: errors.append('Pages staging is too broad')
     if args.check_git_identity:
         for role in ('AUTHOR', 'COMMITTER'):
